@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 1.4 — Estudo de caso real: 30 dias com Hermes | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-emerald-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-emerald-400">Trilha 1</a><span>/</span>
+    <span class="text-emerald-400">Módulo 1.4</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">MÓDULO 1.4</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">📈 Estudo de caso real — 30 dias com Hermes</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Uma pessoa real (dev freelancer, 1 notebook, 1 VPS de USD 6/mês) usando Hermes por 30 dias: o que automatizou, skills que criou, custo OpenRouter mensal e lições aprendidas — com números honestos.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">~45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Básico</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Caso</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- TIMELINE GERAL -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">🗓️</span> Timeline de 30 dias — visão geral</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-dark-800/60 rounded-lg p-4 border border-dark-600"><div class="text-emerald-400 font-bold mb-1">Semana 1</div><div class="text-sm text-neutral-300">Setup, primeira conversa, configurar OpenRouter</div></div>
+        <div class="bg-dark-800/60 rounded-lg p-4 border border-dark-600"><div class="text-emerald-400 font-bold mb-1">Semana 2</div><div class="text-sm text-neutral-300">3 skills criadas, hábito formado</div></div>
+        <div class="bg-dark-800/60 rounded-lg p-4 border border-dark-600"><div class="text-emerald-400 font-bold mb-1">Semana 3</div><div class="text-sm text-neutral-300">Telegram conectado, agente "no bolso"</div></div>
+        <div class="bg-dark-800/60 rounded-lg p-4 border border-dark-600"><div class="text-emerald-400 font-bold mb-1">Semana 4</div><div class="text-sm text-neutral-300">VPS + Honcho, deploy permanente</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 1 -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">📅 Semana 1 — Setup e primeiras conversas</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Dia 1 instalou em 12 minutos. Dia 2 a 7 foi <strong class="text-emerald-400">descoberta pura</strong>: testar o que o agente fazia bem e onde travava. Nenhuma skill criada ainda — só conversa, leitura de arquivos e pedidos de pesquisa.</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">D1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Instalação local</h4>
+          <p class="text-sm text-neutral-400 mb-3"><code class="text-emerald-400">pipx install hermes-agent</code> + chave OpenRouter — 12 min do zero.</p>
+          <p class="text-neutral-300 text-sm">Comando: <code>hermes init</code> criou <code>~/.hermes/config.yaml</code>. Primeira pergunta: "explique o que você consegue fazer". Resposta veio em ~3s.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">D3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Primeira tarefa real</h4>
+          <p class="text-sm text-neutral-400 mb-3">Resumir 4 PDFs técnicos (~80 páginas no total) para nota de decisão.</p>
+          <p class="text-neutral-300 text-sm">Demorou 4 min, custou USD 0.18 com <code>claude-sonnet-4.6</code>. Substituiu ~2h de leitura. Já valeu a chave.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">D6</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Primeira frustração</h4>
+          <p class="text-sm text-neutral-400 mb-3">Tentou usar para refactor de monorepo TypeScript de 40k linhas. Travou contexto.</p>
+          <p class="text-neutral-300 text-sm">Lição: Hermes não substitui IDE. Voltou ao Cursor para essa frente; manteve Hermes para pesquisa e tarefas pontuais.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Comandos rodados na semana 1
+$ pipx install hermes-agent              # instala CLI
+$ hermes init                            # cria config + asks for OPENROUTER_API_KEY
+$ hermes chat                            # inicia sessão interativa
+> resume estes 4 PDFs: ./docs/*.pdf      # 4min, USD 0.18
+> qual a diferença entre RAG e fine-tuning?  # 12s, USD 0.01</code></pre>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Métricas semana 1</h3>
+      <ul class="space-y-2 text-neutral-300 text-sm">
+        <li>• <strong>42</strong> sessões iniciadas</li>
+        <li>• <strong>~480k</strong> tokens consumidos</li>
+        <li>• <strong>USD 3.20</strong> de custo OpenRouter</li>
+        <li>• <strong>0</strong> skills criadas ainda</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 2 -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">⚙️ Semana 2 — Primeiras skills automáticas</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Na terceira repetição do mesmo pedido ("formate este changelog em release notes"), o agente <strong class="text-emerald-400">sugeriu criar uma skill</strong>. Aceito. Em seguida, mais duas surgiram organicamente.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/skills/format-release-notes.md (criada via "skill propose")
+---
+name: format-release-notes
+description: Converte CHANGELOG.md em release notes prontas para GitHub
+tools: [fs.read, fs.write]
+---
+1. Ler CHANGELOG.md
+2. Pegar seção mais recente (entre primeira ## e a próxima ##)
+3. Reescrever em tom claro, agrupar por tipo (feat/fix/chore)
+4. Salvar em release-notes.md</code></pre>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+        <div class="text-emerald-400 font-bold mb-2">📝 format-release-notes</div>
+        <p class="text-xs text-neutral-400">Uso: ~3x/semana · Economia: 15min cada</p>
+      </div>
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+        <div class="text-emerald-400 font-bold mb-2">📨 reply-email-pt</div>
+        <p class="text-xs text-neutral-400">Uso: ~5x/dia · Economia: 5min cada</p>
+      </div>
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+        <div class="text-emerald-400 font-bold mb-2">🔍 audit-pr-diff</div>
+        <p class="text-xs text-neutral-400">Uso: ~2x/dia · Economia: 20min cada</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Acertos no design da skill</h4>
+        <ul class="space-y-2 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Descrição enxuta (1 linha) → discovery rápida</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Lista explícita de <code>tools</code> permitidas</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Passos numerados, sem ambiguidade</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Versionar em git junto com dotfiles</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ Erros que custaram tempo</h4>
+        <ul class="space-y-2 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Aceitar toda sugestão de skill (virou lixo)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Descrições genéricas → conflito de discovery</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Não documentar inputs esperados</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Esquecer de fazer commit no dotfiles</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 3 -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">📱 Semana 3 — Integração Telegram pessoal</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Ponto de inflexão. Até aqui o agente vivia no terminal. Conectar Telegram colocou ele <strong class="text-emerald-400">no bolso</strong> — frequência de uso triplicou.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/config.yaml — adicionar channel Telegram
+channels:
+  - type: telegram
+    token: "${TELEGRAM_BOT_TOKEN}"
+    allowed_user_ids: [123456789]   # whitelist de chat IDs
+
+# rodar como serviço
+$ hermes serve --channels telegram
+[INFO] Telegram bot online: @meu_hermes_bot
+[INFO] Sessions persisted to ~/.hermes/sessions/</code></pre>
+    </div>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">📲</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Casos de uso típicos no mobile</h4>
+          <p class="text-neutral-300 text-sm">"Resume esse artigo: [link]", "Lembre-me amanhã às 9h", "Como digo X em alemão B1?", "Calcule prazo desse contrato".</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">🔗</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Sessão unificada</h4>
+          <p class="text-neutral-300 text-sm">Começar pesquisa no Telegram durante o almoço → continuar no terminal à tarde. O <code>session_id</code> persiste; o contexto não some.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica de segurança</h3>
+      <p class="text-neutral-300 text-sm">Sempre use <code>allowed_user_ids</code> com whitelist do seu chat ID. Sem isso, qualquer pessoa que descobrir o bot consome sua chave OpenRouter. Aprendi na pele — perdi USD 4 numa noite.</p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 4 -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">💰 Custo real — Breakdown OpenRouter</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">A grande pergunta de quem começa: <strong class="text-emerald-400">quanto vai custar?</strong> Aqui vai o número real dos 30 dias completos, com modelos misturados por tarefa.</p>
+
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border border-dark-600 rounded-xl overflow-hidden">
+        <thead class="bg-dark-700/60 text-emerald-400">
+          <tr>
+            <th class="text-left p-3 font-semibold">Modelo</th>
+            <th class="text-left p-3 font-semibold">Uso típico</th>
+            <th class="text-right p-3 font-semibold">Tokens (M)</th>
+            <th class="text-right p-3 font-semibold">USD/M in</th>
+            <th class="text-right p-3 font-semibold">USD/M out</th>
+            <th class="text-right p-3 font-semibold">Custo mês</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-dark-600 text-neutral-300">
+          <tr><td class="p-3 font-medium">claude-sonnet-4.6</td><td class="p-3">Raciocínio profundo, resumos</td><td class="p-3 text-right">2.8</td><td class="p-3 text-right">3.00</td><td class="p-3 text-right">15.00</td><td class="p-3 text-right text-emerald-400">USD 14.20</td></tr>
+          <tr><td class="p-3 font-medium">gpt-5-mini</td><td class="p-3">Tarefas rápidas, classificação</td><td class="p-3 text-right">5.1</td><td class="p-3 text-right">0.25</td><td class="p-3 text-right">2.00</td><td class="p-3 text-right text-emerald-400">USD 3.60</td></tr>
+          <tr><td class="p-3 font-medium">llama-4-scout (free)</td><td class="p-3">Testes, chat casual</td><td class="p-3 text-right">3.2</td><td class="p-3 text-right">0.00</td><td class="p-3 text-right">0.00</td><td class="p-3 text-right text-emerald-400">USD 0.00</td></tr>
+          <tr><td class="p-3 font-medium">qwen3-coder</td><td class="p-3">Code review, scripts</td><td class="p-3 text-right">1.4</td><td class="p-3 text-right">0.40</td><td class="p-3 text-right">1.60</td><td class="p-3 text-right text-emerald-400">USD 1.85</td></tr>
+          <tr class="bg-dark-700/40 font-semibold"><td class="p-3" colspan="5">Total mês</td><td class="p-3 text-right text-emerald-400">USD 19.65</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Métricas consolidadas — 30 dias</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div><div class="text-2xl font-bold text-blue-400">12.5M</div><div class="text-xs text-neutral-400">tokens totais</div></div>
+        <div><div class="text-2xl font-bold text-blue-400">312</div><div class="text-xs text-neutral-400">sessões</div></div>
+        <div><div class="text-2xl font-bold text-blue-400">14</div><div class="text-xs text-neutral-400">skills criadas</div></div>
+        <div><div class="text-2xl font-bold text-blue-400">USD 19.65</div><div class="text-xs text-neutral-400">OpenRouter</div></div>
+      </div>
+    </div>
+
+    <p class="text-neutral-300 mb-4 text-sm">Faixa típica observada na comunidade Discord: <strong class="text-emerald-400">USD 15–40/mês</strong> para uso pessoal intenso. Quem fica abaixo: usa muito modelo free + cache de prompt. Quem passa de USD 40: roda o agente em loop para pesquisa contínua ou tem skill com payload gigante.</p>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Como manter o custo baixo</h3>
+      <ul class="space-y-2 text-neutral-300 text-sm">
+        <li>• Roteie por tarefa: classificação no <code>gpt-5-mini</code>, raciocínio no <code>claude-sonnet</code>.</li>
+        <li>• Ative cache de prompt do OpenRouter (até 90% off em chamadas repetidas).</li>
+        <li>• Configure <code>max_tokens</code> conservador — 2k cobre 95% dos casos.</li>
+        <li>• Use modelo <em>free</em> para testes; só promova ao caro quando o protótipo estiver pronto.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 5 -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🎯 ROI — Tempo economizado vs investido</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Custo é fácil de medir; ROI exige honestidade. Aqui vai a contabilidade dos 30 dias <strong class="text-emerald-400">com investimento incluído</strong> (setup, configurações, retrabalho).</p>
+
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border border-dark-600 rounded-xl overflow-hidden">
+        <thead class="bg-dark-700/60 text-emerald-400">
+          <tr>
+            <th class="text-left p-3 font-semibold">Item</th>
+            <th class="text-right p-3 font-semibold">Tempo (h)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-dark-600 text-neutral-300">
+          <tr><td class="p-3">Setup inicial + config OpenRouter + Telegram</td><td class="p-3 text-right text-red-400">−3.0</td></tr>
+          <tr><td class="p-3">Criação e curadoria de 14 skills</td><td class="p-3 text-right text-red-400">−5.5</td></tr>
+          <tr><td class="p-3">Troubleshooting (Telegram, VPS, Honcho)</td><td class="p-3 text-right text-red-400">−2.5</td></tr>
+          <tr><td class="p-3">Leitura de docs + Discord</td><td class="p-3 text-right text-red-400">−4.0</td></tr>
+          <tr class="bg-red-900/15"><td class="p-3 font-semibold">Subtotal investido</td><td class="p-3 text-right font-bold text-red-400">−15.0 h</td></tr>
+          <tr><td class="p-3">Resumos automáticos (4×/sem × 4 sem)</td><td class="p-3 text-right text-emerald-400">+10.5</td></tr>
+          <tr><td class="p-3">Emails respondidos via skill</td><td class="p-3 text-right text-emerald-400">+8.0</td></tr>
+          <tr><td class="p-3">Code reviews assistidos</td><td class="p-3 text-right text-emerald-400">+12.0</td></tr>
+          <tr><td class="p-3">Pesquisas técnicas no Telegram</td><td class="p-3 text-right text-emerald-400">+6.5</td></tr>
+          <tr class="bg-emerald-900/15"><td class="p-3 font-semibold">Subtotal economizado</td><td class="p-3 text-right font-bold text-emerald-400">+37.0 h</td></tr>
+          <tr class="bg-dark-700/40 font-bold"><td class="p-3">Saldo líquido (mês 1)</td><td class="p-3 text-right text-emerald-400 text-lg">+22.0 h</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="text-neutral-300 mb-4 text-sm">Mês 2 em diante o investimento cai para ~2h/mês (manutenção). Saldo esperado: <strong class="text-emerald-400">+35h/mês</strong>. A USD 20/mês de OpenRouter, isso é USD 0.57 por hora economizada — barato até para quem cobra USD 25/h.</p>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Expectativas realistas</h3>
+      <ul class="space-y-2 text-neutral-300 text-sm">
+        <li>• Mês 1 é <strong>negativo</strong> em alguns dias — paciência.</li>
+        <li>• ROI só aparece quando você forma o hábito de delegar.</li>
+        <li>• Tarefas onde o agente erra <em>silenciosamente</em> custam mais do que economizam — revise output crítico.</li>
+        <li>• Não conta como "tempo economizado" se você gastou em outra distração depois.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 6 -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🧠 Lições aprendidas — O que faria diferente</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">30 dias depois, com café e honestidade: <strong class="text-emerald-400">o que valeu, o que falhou, o que mudaria</strong> se começasse de novo amanhã.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ O que faria igual</h4>
+        <ul class="space-y-3 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Começar pelo terminal antes de ligar canais</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Esperar 3 repetições antes de criar skill</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Versionar <code>~/.hermes/</code> em git privado</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>OpenRouter como provider único no início</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Whitelist de chat IDs desde o dia 1</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ O que mudaria</h4>
+        <ul class="space-y-3 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Subiria VPS na semana 1, não na 4</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Configuraria limite de gasto no OpenRouter (USD 30 cap)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Não aceitaria toda skill sugerida — 5 das 14 viraram lixo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Honcho desde o início, não como add-on no fim</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mediria tempo desde o dia 1, não de memória</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Checklist mínimo para os seus primeiros 30 dias</h3>
+      <ul class="space-y-2 text-neutral-300 text-sm">
+        <li>☐ <strong>D1:</strong> <code>pipx install hermes-agent</code> + chave OpenRouter + 5 conversas exploratórias</li>
+        <li>☐ <strong>D2–7:</strong> usar SÓ pelo terminal; identificar 3 tarefas repetitivas</li>
+        <li>☐ <strong>D8–10:</strong> criar primeira skill; versionar em git</li>
+        <li>☐ <strong>D11–14:</strong> conectar 1 canal (Telegram) com whitelist</li>
+        <li>☐ <strong>D15–21:</strong> subir em VPS (USD 6/mês) para uso 24/7</li>
+        <li>☐ <strong>D22–28:</strong> ligar Honcho para memória de longo prazo</li>
+        <li>☐ <strong>D30:</strong> revisar custo, podar skills lixo, decidir próximo provider</li>
+      </ul>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">🔗</span> Onde aprender mais</h3>
+      <ul class="space-y-2 text-neutral-300 text-sm">
+        <li>• Docs oficiais: <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" class="text-sky-400 hover:underline">hermes-agent.nousresearch.com/docs</a></li>
+        <li>• Repo + issues: <a href="https://github.com/NousResearch/hermes-agent" target="_blank" class="text-sky-400 hover:underline">github.com/NousResearch/hermes-agent</a></li>
+        <li>• Discord Nous Research: <a href="https://discord.gg/NousResearch" target="_blank" class="text-sky-400 hover:underline">discord.gg/NousResearch</a></li>
+        <li>• Exemplo AWS Bedrock: <a href="https://github.com/aws-samples/sample-host-hermesagent-on-amazon-bedrock-agentcore" target="_blank" class="text-sky-400 hover:underline">aws-samples/sample-host-hermesagent-on-amazon-bedrock-agentcore</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- RESUMO FINAL -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Setup leva 12 minutos:</strong> <span class="text-neutral-300">pipx + chave OpenRouter já te dá agente funcional no terminal.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Skills surgem do uso, não do plano:</strong> <span class="text-neutral-300">espere 3 repetições antes de codificar a primeira skill.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Telegram é o multiplicador:</strong> <span class="text-neutral-300">conectar canal externo triplica frequência de uso.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Custo real: USD 15–40/mês:</strong> <span class="text-neutral-300">USD 19.65 num mês intenso, com mistura de Claude, GPT, Llama e Qwen via OpenRouter.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">ROI líquido positivo a partir do mês 1:</strong> <span class="text-neutral-300">~22h economizadas após descontar 15h de investimento.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">5 das 14 skills viraram lixo:</strong> <span class="text-neutral-300">curadoria mensal é parte do trabalho — não aceite tudo que o agente sugere.</span></div></div>
+      </div>
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+        <h3 class="font-semibold text-emerald-400 mb-2">Próxima trilha:</h3>
+        <p class="text-neutral-300">Trilha 2 — Arquitetura Interna. Hora de abrir a caixa preta: como o loop de raciocínio se encaixa com Honcho, skills, channels e tool gateway.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+        <a href="../trilha2/index.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">Próxima Trilha →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+
+</body>
+</html>

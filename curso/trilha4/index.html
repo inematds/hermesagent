@@ -106,9 +106,9 @@
     <h1 class="text-3xl sm:text-4xl font-bold mb-4">🛠️ Manutenção e Operação</h1>
     <p class="text-lg text-neutral-400 max-w-3xl">Manter Hermes Agent saudável em produção. <code class="text-amber-400">hermes doctor</code> para diagnóstico, <code class="text-amber-400">hermes update</code> para atualizar, gestão de logs, backup de memória/skills, gestão de API keys e troubleshooting dos erros mais comuns.</p>
     <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">2</div><div class="text-xs text-neutral-400">Módulos</div></div>
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">12</div><div class="text-xs text-neutral-400">Tópicos</div></div>
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">~1h30</div><div class="text-xs text-neutral-400">Duração</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">4</div><div class="text-xs text-neutral-400">Módulos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">24</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">~3h</div><div class="text-xs text-neutral-400">Duração</div></div>
       <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Médio</div><div class="text-xs text-neutral-400">Nível</div></div>
     </div>
   </div>
@@ -128,6 +128,16 @@
         <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold text-sm">4.2</span><span class="text-xs text-neutral-500">~45 min</span></div>
         <h3 class="font-semibold mb-1 group-hover:text-amber-400 transition-colors">💾 Backup, segurança e monitoramento</h3>
         <p class="text-xs text-neutral-400">Backup, keys, incident response</p>
+      </a>
+      <a href="#modulo-4-3" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold text-sm">4.3</span><span class="text-xs text-neutral-500">~50 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-amber-400 transition-colors">💰 Custo, billing e otimização</h3>
+        <p class="text-xs text-neutral-400">60-80% economia mensal</p>
+      </a>
+      <a href="#modulo-4-4" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold text-sm">4.4</span><span class="text-xs text-neutral-500">~45 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-amber-400 transition-colors">🔄 Estratégia de upgrade</h3>
+        <p class="text-xs text-neutral-400">Channels, staging, rollback</p>
       </a>
     </div>
   </section>
@@ -344,6 +354,216 @@
     </div>
   </div>
 
+  <div id="modulo-4-3" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold">4.3</span><span class="text-xs text-neutral-500">~50 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">💰 Custo, billing e otimização (60-80% economia)</h3>
+      <p class="text-neutral-400 text-sm">Dashboard OpenRouter, alertas de budget, routing por tarefa, prompt caching e fallback dinâmico.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">📊</span>
+          <div><span class="font-medium">Dashboard OpenRouter</span><span class="text-neutral-500 text-sm ml-2">- onde olhar custos</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Painel oficial em <code class="text-amber-400">openrouter.ai/activity</code> com custo, tokens, cache hit e modelo por requisição.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem dashboard você otimiza no escuro. É a fonte da verdade para decidir o que mexer.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Activity, Credits, Keys com credit limit, API <code class="text-amber-400">/credits</code> e <code class="text-amber-400">/generations</code>.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">🚨</span>
+          <div><span class="font-medium">Alertas de budget</span><span class="text-neutral-500 text-sm ml-2">- 70/90/100% + hard stop</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Três camadas: aviso suave (70%), aviso duro (90%) e parada total (100%) + <code class="text-amber-400">daily_usd_limit</code> local no Hermes.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem alerta, a primeira notícia é a fatura. Camadas dão tempo de investigar antes do estouro.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Auto-recarga desligada, runaway costs por loop infinito, <code class="text-amber-400">max_tool_iterations</code>.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">🎯</span>
+          <div><span class="font-medium">Modelo certo por tarefa</span><span class="text-neutral-500 text-sm ml-2">- Haiku/Sonnet/Opus</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Routing por tipo de tarefa em <code class="text-amber-400">config.yaml</code>: Haiku 4.5 para classify, Sonnet 4.6 default, Opus 4.7 só para raciocínio pesado.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Opus é 15× mais caro que Haiku. Usar Opus para classify queima dinheiro sem ganho.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Preços OpenRouter por 1M tokens, <code class="text-amber-400">model_routing.tasks</code>, eval antes de trocar.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">💾</span>
+          <div><span class="font-medium">Prompt caching</span><span class="text-neutral-500 text-sm ml-2">- 90% off em tokens repetidos</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Mecanismo Anthropic que dá ~90% de desconto em tokens de input que se repetem entre chamadas (system, tools, RAG fixo).</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">É a otimização mais lucrativa por linha de config. Corta facilmente 40-50% do gasto sozinha.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Prefixo estável, TTL de 5 min, mínimo 1024 tokens, <code class="text-amber-400">cache_discount</code> nas métricas.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🔄</span>
+          <div><span class="font-medium">Fallback dinâmico</span><span class="text-neutral-500 text-sm ml-2">- cair para modelo barato em load</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Cadeia primary → fallbacks no <code class="text-amber-400">model_routing</code>: troca para provedor barato em 429/5xx/timeout.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Mantém o agente vivo em outage e evita fatura disparada por re-tentativa em loop.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Trigger por rate_limit/5xx, <code class="text-amber-400">max_retries</code>, log de demotion, 1-shot &gt; few-shot.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">📈</span>
+          <div><span class="font-medium">Caso real</span><span class="text-neutral-500 text-sm ml-2">- US$ 120 → US$ 28/mês</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Auditoria passo-a-passo de instalação típica: routing + caching + max_iterations + 1-shot, com números reais.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Mostra a ordem de aplicação e o impacto de cada etapa. Replicável em qualquer setup.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Baseline, -50% routing, -40% adicional caching, -22% adicional loops, total -76,7%.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-4-3')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-4-3.html" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
+  <div id="modulo-4-4" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold">4.4</span><span class="text-xs text-neutral-500">~45 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">🔄 Estratégia de upgrade ao longo de meses</h3>
+      <p class="text-neutral-400 text-sm">Channels, changelog, staging, janela, rollback e calendário anual para manter Hermes saudável por anos.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">📅</span>
+          <div><span class="font-medium">Release channels</span><span class="text-neutral-500 text-sm ml-2">- stable vs beta vs nightly</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Três canais de release: stable (mensal), beta (quinzenal), nightly (HEAD diário). Cada um com risco e cadência próprios.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Prod em nightly é convite à quebra; dev em stable atrasa em features. Escolha por máquina.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Pin exato (<code class="text-amber-400">==X.Y.Z</code>), <code class="text-amber-400">--pre</code>, instalação via git, <code class="text-amber-400">hermes version --verbose</code>.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">📋</span>
+          <div><span class="font-medium">Changelog discipline</span><span class="text-neutral-500 text-sm ml-2">- ler antes de upgrade</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Hábito de ler o CHANGELOG inteiro entre versão atual e alvo antes de instalar.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">90% dos incidentes pós-upgrade são causados por não ter lido. 5 min poupam horas.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">BREAKING, Removed, Migration, Deprecated, Security. Major sempre quebra.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">🧪</span>
+          <div><span class="font-medium">Staging</span><span class="text-neutral-500 text-sm ml-2">- instância paralela para testar</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Segundo Hermes em <code class="text-amber-400">HERMES_HOME</code> separado, com cópia de memória e key dev, para validar antes de promover.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Staging é barato (sem máquina extra) e captura 80% dos bugs antes de tocar produção.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm"><code class="text-amber-400">pipx install --suffix</code>, <code class="text-amber-400">VACUUM INTO</code>, smoke tests reais, 24-48h em paralelo.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">⏱️</span>
+          <div><span class="font-medium">Janela de upgrade</span><span class="text-neutral-500 text-sm ml-2">- quando agendar</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Bloco de tempo planejado para o upgrade, com pessoas disponíveis e baixa demanda.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Hora ruim transforma incidente recuperável em catástrofe (sexta à noite, véspera de feriado).</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Terça/quarta manhã, evitar sexta, considerar fuso de usuários, avisar antes.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🔙</span>
+          <div><span class="font-medium">Rollback strategy</span><span class="text-neutral-500 text-sm ml-2">- voltar com segurança</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Mecanismo do Hermes para voltar à versão anterior em &lt; 60 segundos, com snapshot por update.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Rollback bom é rollback ensaiado. Descobrir como reverter durante incidente é tarde.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm"><code class="text-amber-400">hermes rollback --to LAST</code>, retenção de snapshots, sinais que pedem rollback.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">📅</span>
+          <div><span class="font-medium">Calendário anual</span><span class="text-neutral-500 text-sm ml-2">- Q1 audit, Q2 minor, Q3 security, Q4 major</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Quatro blocos de 1-3h por ano com ritmo previsível: audit completo, minor update, audit de custo+security, major window.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Manutenção saudável é ritmo, não heroísmo. Sem calendário, vira congelamento na v0.8.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Cadência típica Nous Research (patch 2sem, minor 2 meses, major anual), <code class="text-amber-400">pip-audit</code>, playbook 10 passos.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-4-4')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-4-4.html" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
 </main>
 
 <div id="modal-4-1" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
@@ -363,6 +583,26 @@
       <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
     </div>
     <iframe src="modulo-4-2.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-4-3" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-amber-400 font-bold">4.3</span><span class="font-semibold">Custo, billing e otimização</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-4-3.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-4-4" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-amber-400 font-bold">4.4</span><span class="font-semibold">Estratégia de upgrade ao longo de meses</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-4-4.html" class="flex-1 w-full rounded-b-xl"></iframe>
   </div>
 </div>
 

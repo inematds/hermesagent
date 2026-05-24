@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 3.4 — Troubleshooting de setup | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124,58,237,0.18); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🪽</span>
+            <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3</a><span>/</span>
+      <span class="text-purple-400">Módulo 3.4</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.4</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🚨 Troubleshooting de setup — Top 20 erros</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Os <strong class="text-purple-400">20 erros mais comuns</strong> na instalação: sintoma → diagnóstico → fix. Salve essa página — reduz drasticamente tempo de suporte na comunidade Discord da Nous Research.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">20</div><div class="text-xs text-neutral-400">Erros</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">~45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Inter.</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Suporte</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- INTRO: diagnóstico em 5 min -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6">
+        <h2 class="text-lg font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">⏱️</span> Diagnóstico em 5 minutos — rode SEMPRE primeiro</h2>
+        <div class="space-y-6">
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">1</span></div>
+            <div class="flex-1 bg-dark-800 rounded-xl p-4 border border-dark-600">
+              <h4 class="font-semibold text-white mb-1">hermes doctor</h4>
+              <p class="text-sm text-neutral-400">Roda 30+ checks: Python, deps, provider, canais, disco, permissões. 90% dos erros aparecem aqui.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">2</span></div>
+            <div class="flex-1 bg-dark-800 rounded-xl p-4 border border-dark-600">
+              <h4 class="font-semibold text-white mb-1">HERMES_DEBUG=1 hermes ...</h4>
+              <p class="text-sm text-neutral-400">Rerode o comando que falha com debug ligado. Stack trace completo + payload de cada chamada externa.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">3</span></div>
+            <div class="flex-1 bg-dark-800 rounded-xl p-4 border border-dark-600">
+              <h4 class="font-semibold text-white mb-1">tail -f ~/.hermes/logs/hermes.log</h4>
+              <p class="text-sm text-neutral-400">Acompanhe em outro terminal enquanto reproduz. Mensagens nível ERROR e WARN dizem onde olhar.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 1: PYTHON -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🐍 Python e dependências</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Erros #1 a #4. Quase sempre versão errada de Python ou conflito de pacote global.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#1 · Python 3.10 ou inferior</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>ERROR: hermes-agent requires Python &gt;=3.11.0,
+but you have 3.10.12. Aborting.</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> distros antigas (Ubuntu 22.04 vem com 3.10) não atendem.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt install python3.12 python3.12-venv
+python3.12 -m venv ~/.hermes/venv
+source ~/.hermes/venv/bin/activate
+pip install hermes-agent</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#2 · pip externally-managed</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>error: externally-managed-environment
+× This environment is externally managed
+╰─&gt; To install Python packages system-wide, try apt...</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> Debian 12 / Ubuntu 24.04 bloqueiam pip global (PEP 668).</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong> use venv ou pipx, NUNCA <code>--break-system-packages</code>.</p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>sudo apt install pipx
+pipx install hermes-agent
+pipx ensurepath</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#3 · Virtualenv ativado errado</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>bash: hermes: command not found</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> instalou no venv, abriu novo terminal sem reativar.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code># diagnóstico
+which hermes && pip show hermes-agent
+
+# fix permanente — adicione ao ~/.bashrc
+echo 'source ~/.hermes/venv/bin/activate' &gt;&gt; ~/.bashrc</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#4 · Conflito tiktoken / numpy</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>ImportError: numpy.core.multiarray failed to import
+(tiktoken installed against numpy 1.x, runtime has 2.x)</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> wheel pré-compilada de tiktoken contra numpy antigo.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>pip install --upgrade --force-reinstall \
+  tiktoken numpy
+hermes doctor</code></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: CONECTIVIDADE -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔌 Conectividade — firewall, DNS, proxy</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Erros #5 a #7. Comuns em VPN corporativa, Wi-Fi de hotel, container Docker mal configurado.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#5 · Timeout em openrouter.ai</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>httpx.ConnectTimeout: timed out
+  while connecting to https://openrouter.ai/api/v1/chat/completions</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> firewall corporativo bloqueia ou proxy não está sendo respeitado.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Diagnóstico:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>curl -v https://openrouter.ai/api/v1/models
+# se falhar:
+export HTTPS_PROXY=http://proxy.empresa:3128
+export HTTP_PROXY=http://proxy.empresa:3128
+hermes config set network.trust_env true</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#6 · DNS quebrado (Termux/WSL)</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>socket.gaierror: [Errno -3] Temporary failure
+  in name resolution</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> <code>/etc/resolv.conf</code> vazio ou apontando pra DNS interno.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>cat /etc/resolv.conf
+echo "nameserver 1.1.1.1" | sudo tee /etc/resolv.conf
+# WSL: desabilita auto-gen
+sudo tee /etc/wsl.conf &lt;&lt;'EOF'
+[network]
+generateResolvConf = false
+EOF</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#7 · SSL CERT_VERIFY_FAILED</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED]
+certificate verify failed: unable to get local issuer certificate</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> CA bundle desatualizado ou proxy MITM (Zscaler, Netskope).</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>pip install --upgrade certifi
+# com MITM corporativo:
+export REQUESTS_CA_BUNDLE=/etc/ssl/certs/empresa-root.pem
+export SSL_CERT_FILE=/etc/ssl/certs/empresa-root.pem</code></div>
+        </div>
+      </div>
+
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Nunca faça</h3>
+        <p class="text-neutral-300">NUNCA passe <code>verify=False</code> ou <code>HERMES_INSECURE_SSL=1</code> em produção pra "resolver" SSL. Isso aceita qualquer certificado — qualquer atacante MITM lê suas API keys em texto puro. Arrume o CA bundle.</p>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: AUTENTICAÇÃO -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔐 Autenticação — keys e tokens inválidos</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Erros #8 a #10. Tipicamente copy/paste com espaço, token vencido, ou scope errado.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#8 · OpenRouter 401 Unauthorized</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>openrouter.AuthenticationError: 401 Unauthorized
+  {"error": {"message": "No auth credentials found",
+    "code": 401}}</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> key com espaço extra, key revogada, ou env var não exportada.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code># verifica o que está carregado
+hermes config get provider.openrouter.api_key
+# (mostra sk-or-v1-***** se ok, vazio se não)
+
+# testa direto
+curl -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+  https://openrouter.ai/api/v1/auth/key</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#9 · Telegram token inválido</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>telegram.error.InvalidToken: Invalid token
+  {"ok":false,"error_code":401,"description":"Unauthorized"}</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> token sem os <code>:</code>, revogado no BotFather, ou de outro bot.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code># formato correto: 10dígitos:35caracteres
+# teste direto:
+curl https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/getMe
+# se 401 → @BotFather → /token → escolhe bot → /revoke + /token</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#10 · Discord 403 / intent faltando</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>discord.errors.PrivilegedIntentsRequired:
+  Shard ID None is requesting privileged intents
+  that have not been explicitly enabled in the
+  developer portal.</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> esqueceu de ativar MESSAGE CONTENT INTENT.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong> discord.com/developers/applications → seu bot → Bot → toggle "MESSAGE CONTENT INTENT" → Save → reinicie <code>hermes channel restart discord</code>.</p>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#11 · Slack invalid_auth</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>slack_sdk.errors.SlackApiError:
+  The request to the Slack API failed.
+  {'ok': False, 'error': 'invalid_auth'}</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> trocou <code>xoxb-</code> (bot) por <code>xapp-</code> (app), ou app não foi reinstalada após mudar scopes.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong> api.slack.com/apps → Install App → Reinstall to Workspace; reconfirme <code>SLACK_BOT_TOKEN=xoxb-...</code> e <code>SLACK_APP_TOKEN=xapp-...</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: FILESYSTEM -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">💾 Sistema de arquivos — permissões, disco, paths</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Erros #12 a #14. Quase sempre <code>~/.hermes/</code> com dono errado ou disco cheio sem você notar.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#12 · Permission denied em ~/.hermes</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>PermissionError: [Errno 13] Permission denied:
+  '/home/nei/.hermes/config.toml'</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> rodou <code>sudo hermes setup</code> uma vez, agora arquivos pertencem a root.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>sudo chown -R $USER:$USER ~/.hermes
+chmod 700 ~/.hermes
+chmod 600 ~/.hermes/config.toml ~/.hermes/.env</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#13 · Disco cheio (no space left)</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>OSError: [Errno 28] No space left on device
+  while writing ~/.hermes/memory/alice.db</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> logs e embeddings crescendo sem limite.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Diagnóstico:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>df -h ~
+du -sh ~/.hermes/* | sort -h
+hermes maintenance compact --vacuum
+hermes maintenance prune-logs --older-than 30d</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#14 · Path com espaço (Windows)</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>FileNotFoundError: 'C:\\Users\\Nei
+Maldaner\\.hermes\\config.toml'
+The system cannot find the path specified.</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> usuário Windows com espaço no nome quebra parsers Python antigos.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong> mude <code>HERMES_HOME</code> pra path sem espaço.</p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>setx HERMES_HOME "C:\hermes"
+# reabra PowerShell
+hermes setup</code></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: MODELO -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🤖 Modelo / provider — não existe, rate limit, fallback</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Erros #15 a #17. Modelos do OpenRouter mudam de nome e free tiers têm rate-limit agressivo.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#15 · Model not found</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>openrouter.NotFoundError: 404
+  {"error":{"message":"No allowed providers
+  are available for the selected model",
+  "code":404}}</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> nome do modelo errado (ex: <code>claude-sonnet-4</code> ao invés de <code>anthropic/claude-sonnet-4.5</code>) ou modelo descontinuado.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>hermes models list --provider openrouter | grep claude
+# ou direto:
+curl https://openrouter.ai/api/v1/models | jq '.data[].id' | grep -i claude</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#16 · 429 Rate limit</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>openrouter.RateLimitError: 429 Too Many Requests
+  {"error":{"message":"Rate limit exceeded:
+   free-models-per-day","code":429}}</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> modelos <code>:free</code> têm limite de 20 req/min e 200/dia.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong> configure fallback chain pra cair em modelo pago automaticamente.</p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>hermes config set model.fallback '[
+  "meta-llama/llama-3.3-70b-instruct:free",
+  "anthropic/claude-haiku-4.5",
+  "openai/gpt-4o-mini"
+]'</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#17 · Context length exceeded</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>openrouter.BadRequestError: 400
+  This model's maximum context length is
+  128000 tokens. However, you requested 142318 tokens.</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> histórico cresceu demais ou anexou arquivos grandes.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code># compressão automática
+hermes config set memory.auto_compress true
+hermes config set memory.compress_at_pct 70
+
+# zera contexto da sessão atual
+hermes chat /clear</code></div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Sintoma → modelo provável</h3>
+        <ul class="space-y-2 text-neutral-300 text-sm">
+          <li><strong>Resposta vazia + sem erro:</strong> modelo recusou silenciosamente (content filter). Tente outro.</li>
+          <li><strong>Respostas curtíssimas:</strong> <code>max_tokens</code> muito baixo. Default no Hermes: 4096.</li>
+          <li><strong>Respostas em inglês quando você fala PT:</strong> system prompt do modelo dominou. Force <code>response_language: "pt-BR"</code>.</li>
+          <li><strong>Custo subiu 10x sem motivo:</strong> fallback caiu num modelo caro. Veja <code>hermes usage --by-model</code>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: RUNTIME -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🌐 Runtime — porta, processo, crash</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Erros #18 a #20. Aparecem quando você roda como serviço (systemd, supervisor, Docker).</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#18 · Porta 7777 ocupada</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>OSError: [Errno 98] Address already in use
+  Could not bind to ('0.0.0.0', 7777)</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> outro Hermes (ou processo) já está na porta.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Diagnóstico:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>ss -tlnp | grep 7777
+# ou no macOS:
+lsof -i :7777
+
+# mata o velho:
+hermes stop --force
+# ou:
+kill $(lsof -ti:7777)
+
+# muda a porta:
+hermes config set server.port 7778</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#19 · Processo zumbi (PID inválido)</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>hermes status
+  STATE: running (PID 14523)
+  but: ps -p 14523 → no such process
+  → state file ~/.hermes/hermes.pid is stale</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> processo morreu sem limpar PID file (kill -9, crash, oom).</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Fix:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>hermes stop --clean-state
+rm -f ~/.hermes/hermes.pid ~/.hermes/hermes.sock
+hermes start</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-red-400 mb-2">#20 · Crash silencioso (systemd)</h3>
+          <div class="bg-dark-900 rounded p-3 text-xs text-red-300 font-mono mb-3"><code>systemctl status hermes
+  ● hermes.service - Hermes Agent
+     Active: failed (Result: exit-code) since ...
+     Process: 14523 ExecStart=/usr/local/bin/hermes start
+              (code=exited, status=137)</code></div>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-purple-400">Causa:</strong> exit 137 = killed por OOM. Logs do app não capturam.</p>
+          <p class="text-neutral-300 text-sm mb-2"><strong class="text-emerald-400">Diagnóstico real:</strong></p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>journalctl -u hermes -n 100 --no-pager
+dmesg | grep -i 'killed process'
+# fix: limita memória do hermes
+hermes config set runtime.max_memory_mb 2048
+sudo systemctl edit hermes
+# adicione:
+#   [Service]
+#   MemoryMax=3G
+sudo systemctl daemon-reload
+sudo systemctl restart hermes</code></div>
+        </div>
+
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h3 class="font-semibold text-emerald-400 mb-2">Bônus · hermes doctor --deep</h3>
+          <p class="text-neutral-300 text-sm mb-2">Quando NADA acima funciona:</p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>HERMES_DEBUG=1 hermes doctor --deep \
+  --include-network \
+  --include-permissions \
+  --export ~/hermes-diag.json
+
+# Envie esse JSON pro Discord da Nous Research:
+# https://discord.gg/NousResearch
+# Canal #hermes-support</code></div>
+        </div>
+      </div>
+
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> NUNCA "limpa tudo e reinstala"</h3>
+        <p class="text-neutral-300">A reação reflexa de apagar <code>~/.hermes/</code> destrói memórias, prompts customizados e configs de TODOS os tenants. Antes de qualquer "rm -rf", rode <code>hermes backup create --full</code>. Restauração leva 30 segundos; perda de 6 meses de memória, irreversível.</p>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — sempre HERMES_DEBUG=1 primeiro</h3>
+        <p class="text-neutral-300">Antes de abrir issue ou perguntar no Discord, rerode com <code>HERMES_DEBUG=1</code>. 80% das vezes a mensagem extra resolve sozinho. Quando precisa pedir ajuda, cole APENAS o stack trace + 10 linhas antes — ninguém lê paste de 500 linhas.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Diagnóstico em 5 min</strong><p class="text-neutral-400 text-sm"><code>hermes doctor</code> → <code>HERMES_DEBUG=1</code> → <code>tail -f logs</code></p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Python &amp; deps</strong><p class="text-neutral-400 text-sm">3.11+, pipx ou venv, nunca <code>--break-system-packages</code></p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Conectividade</strong><p class="text-neutral-400 text-sm">proxy via <code>HTTPS_PROXY</code>, DNS 1.1.1.1, <code>REQUESTS_CA_BUNDLE</code> em MITM</p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Auth dos canais</strong><p class="text-neutral-400 text-sm">curl /getMe pra Telegram, MESSAGE CONTENT intent pra Discord</p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Filesystem &amp; disco</strong><p class="text-neutral-400 text-sm"><code>chown</code> sem sudo, <code>maintenance prune-logs</code> regular</p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Runtime estável</strong><p class="text-neutral-400 text-sm"><code>ss -tlnp</code>, <code>journalctl</code>, limite de memória no systemd</p></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Próxima trilha:</h3>
+          <p class="text-neutral-300">T4 — 🛠️ Manutenção: updates, logs, debugging contínuo e como manter sua instalação saudável a longo prazo.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+          <a href="../trilha4/index.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">Próximo →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTopic(button) {
+      const item = button.closest('.topic-item');
+      const exp = item.querySelector('.topic-explanation');
+      const card = button.closest('.bg-dark-800');
+      card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+      exp.classList.toggle('active');
+    }
+    function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+    function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    const themeToggle = document.getElementById('theme-toggle');
+    const dIcon = document.getElementById('theme-toggle-dark-icon');
+    const lIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+    else { lIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => {
+      dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>

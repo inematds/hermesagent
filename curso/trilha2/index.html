@@ -104,9 +104,9 @@
     <h1 class="text-3xl sm:text-4xl font-bold mb-4">🏗️ Arquitetura Interna</h1>
     <p class="text-lg text-neutral-400 max-w-3xl">Como o Hermes Agent funciona por dentro: TUI, gateway multi-canal, sistema de toolsets, 40+ ferramentas nativas, loop de aprendizado fechado, memória persistente com FTS5 e Honcho, e suporte a 200+ modelos via OpenRouter.</p>
     <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">2</div><div class="text-xs text-neutral-400">Módulos</div></div>
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">12</div><div class="text-xs text-neutral-400">Tópicos</div></div>
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">~2h</div><div class="text-xs text-neutral-400">Duração</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">4</div><div class="text-xs text-neutral-400">Módulos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">24</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">~4h</div><div class="text-xs text-neutral-400">Duração</div></div>
       <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Inter.</div><div class="text-xs text-neutral-400">Nível</div></div>
     </div>
   </div>
@@ -126,6 +126,16 @@
         <div class="flex items-center justify-between mb-2"><span class="text-blue-400 font-bold text-sm">2.2</span><span class="text-xs text-neutral-500">~60 min</span></div>
         <h3 class="font-semibold mb-1 group-hover:text-blue-400 transition-colors">🧠 Loop de Aprendizado e Memória</h3>
         <p class="text-xs text-neutral-400">Skills autônomas, FTS5, Honcho</p>
+      </a>
+      <a href="#modulo-2-3" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-blue-400 font-bold text-sm">2.3</span><span class="text-xs text-neutral-500">~50 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-blue-400 transition-colors">🔬 Anatomia de uma requisição</h3>
+        <p class="text-xs text-neutral-400">Trace end-to-end, 6 hops, latências</p>
+      </a>
+      <a href="#modulo-2-4" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-blue-400 font-bold text-sm">2.4</span><span class="text-xs text-neutral-500">~50 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-blue-400 transition-colors">🛡️ Segurança e privacidade</h3>
+        <p class="text-xs text-neutral-400">Injection, exfiltration, supply chain</p>
       </a>
     </div>
   </section>
@@ -342,6 +352,216 @@
     </div>
   </div>
 
+  <div id="modulo-2-3" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-blue-400 font-bold">2.3</span><span class="text-xs text-neutral-500">~50 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">🔬 Anatomia de uma requisição (trace end-to-end)</h3>
+      <p class="text-neutral-400 text-sm">Trace passo-a-passo de uma mensagem do Telegram até a resposta, com timing real de cada hop.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">📨</span>
+          <div><span class="font-medium">Hop 1 — Telegram → Webhook</span><span class="text-neutral-500 text-sm ml-2">- ~30ms, dominado por rede</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">POST HTTPS do Telegram Bot API para o endpoint registrado em setWebhook, com payload JSON do update.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Único hop fora do seu controle — entender o budget de 5s do Telegram impede retry duplicado.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">TLS keep-alive, secret_token, deduplicação por update_id, ack &lt;5s, processamento async.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">🚪</span>
+          <div><span class="font-medium">Hop 2 — Gateway router → toolset</span><span class="text-neutral-500 text-sm ml-2">- ~5ms, tudo em RAM</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Normalização do update em Message interno + lookup do toolset/profile do usuário no registry.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Lookup remoto aqui é anti-padrão (200ms+); RAM-first mantém o hop trivial.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Adapter pattern, registry warm cache, lazy-load, /reload para refresh.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">🧠</span>
+          <div><span class="font-medium">Hop 3 — Memory FTS5 + context build</span><span class="text-neutral-500 text-sm ml-2">- ~50-200ms, mora 80% da otimização</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Monta o contexto para o LLM: últimas N mensagens, fatos via FTS5/BM25, user representation do Honcho, system prompts.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Hop mais variável — é onde caching, top-K e Honcho local/cloud mudam P95 em ordem de magnitude.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">BM25 ranking, porter tokenizer, cache de user_repr (TTL 5min), prompt caching cross-provider.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🤖</span>
+          <div><span class="font-medium">Hop 4 — LLM inference</span><span class="text-neutral-500 text-sm ml-2">- TTFT + tokens/s, varia por modelo</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Chamada ao provider via OpenRouter; latência = TTFT + (output_tokens / tokens_per_sec).</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Hop dominante; escolher Haiku vs Sonnet vs Opus por intenção corta 60-80% de custo e latência.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">TTFT P50 vs P99, cold-start em :free, router por intenção, streaming UX.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🛠️</span>
+          <div><span class="font-medium">Hop 5 — Tool execution + re-prompt</span><span class="text-neutral-500 text-sm ml-2">- Cada round-trip = +1 Hop 4</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Quando o LLM retorna tool_calls, executor roda (em paralelo se independentes) e re-prompta o modelo com os outputs.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Cadeias de 3 tools = 10-18s reais; entender isso = não prometer "rápido" pro usuário.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">asyncio.gather, paralelismo grátis se independente, streaming feedback intermediário.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">✅</span>
+          <div><span class="font-medium">Hop 6 — Resposta + memory write</span><span class="text-neutral-500 text-sm ml-2">- ~80ms, fire-and-forget</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">sendMessage para o Telegram + INSERT em SQLite (com trigger FTS5) + enqueue de reflexão assíncrona.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Memory write NUNCA deve bloquear o usuário; reflection é background.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">WAL mode, asyncio.create_task, editMessageText para streaming, retry exponencial em 429.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-2-3')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-2-3.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
+  <div id="modulo-2-4" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-blue-400 font-bold">2.4</span><span class="text-xs text-neutral-500">~50 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">🛡️ Modelo de segurança e privacidade</h3>
+      <p class="text-neutral-400 text-sm">Onde dados vivem, o que vaza, ameaças reais e hardening mínimo de produção.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">🗺️</span>
+          <div><span class="font-medium">Mapa de dados</span><span class="text-neutral-500 text-sm ml-2">- Local vs OpenRouter vs Honcho cloud</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Inventário de onde cada byte do Hermes vive (disco local, env, providers, Honcho) e quem pode ler.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem este mapa você não sabe o que vaza ao trocar de modelo ou habilitar Honcho cloud.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Local-first, redação PII pré-prompt, zero-retention SKUs, secret manager vs .env.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">🔐</span>
+          <div><span class="font-medium">Threat model</span><span class="text-neutral-500 text-sm ml-2">- 4 atacantes realistas</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Catálogo priorizado: usuário malicioso, conteúdo web envenenado, skill maliciosa, provider comprometido.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem threat model concreto, "segurança" vira teatro — você protege o que não é alvo e ignora o alvo real.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Probabilidade × impacto, isolamento por session_id, rate-limit por user, allowlist por toolset.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">💉</span>
+          <div><span class="font-medium">Prompt injection</span><span class="text-neutral-500 text-sm ml-2">- OWASP LLM #1 em 2025</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Instruções escondidas em conteúdo que o agente lê (HTML invisível, comentários em código, metadados).</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Mesmo modelos fortes obedecem em ~20% dos casos — defesa em camadas, não confiança no LLM.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Tags untrusted_content, strip de HTML invisível, allowlist de domínios, scanner de exfiltration.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🕵️</span>
+          <div><span class="font-medium">Exfiltration via tool</span><span class="text-neutral-500 text-sm ml-2">- Read+write = confused deputy</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Read tool pega segredo, write tool manda para fora — Tool Gateway tem que quebrar essa cadeia.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">É o vetor mais explorado em 2025 contra agentes autônomos — vale mais que qualquer SAST.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Separation of duties, profiles read-only vs write, allowlist em web_fetch, deny em paths sensíveis.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">📦</span>
+          <div><span class="font-medium">Supply chain</span><span class="text-neutral-500 text-sm ml-2">- Skills de terceiros = código de estranho</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">SKILL.md + scripts arbitrários instalados de repos externos rodam com suas permissões.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Typosquat e payloads em postinstall.sh já aconteceram — npm/pypi-style de risco no Hermes.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Audit manual + grep de payload, sandbox VM, pin por commit SHA, kill-switch no YAML.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🛡️</span>
+          <div><span class="font-medium">Hardening</span><span class="text-neutral-500 text-sm ml-2">- Sandbox, allowlist, audit logs</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-blue-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Config mínima de produção: firejail/bubblewrap, egress filtrado, audit log append-only.</p></div>
+            <div><span class="text-blue-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem isso, incident response é "rezar e rotacionar tudo" — com isso, blast-radius é contível.</p></div>
+            <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">chattr +a, caps drop, seccomp, network namespace, aprovação humana para tools críticas.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-2-4')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-2-4.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
 </main>
 
 <div id="modal-2-1" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
@@ -361,6 +581,26 @@
       <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
     </div>
     <iframe src="modulo-2-2.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-2-3" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-blue-400 font-bold">2.3</span><span class="font-semibold">🔬 Anatomia de uma requisição</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-2-3.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-2-4" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-blue-400 font-bold">2.4</span><span class="font-semibold">🛡️ Segurança e privacidade</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-2-4.html" class="flex-1 w-full rounded-b-xl"></iframe>
   </div>
 </div>
 

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 1.3 — Glossário e mental model | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-emerald-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-emerald-400">Trilha 1</a><span>/</span>
+    <span class="text-emerald-400">Módulo 1.3</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">MÓDULO 1.3</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">📖 Glossário e mental model</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Vocabulário do Hermes (agent, skill, tool, MCP, gateway, toolset, session, memory, provider) numa página só — destrava quem trava em jargão. Definições curtas, comparações honestas e um diagrama integrando tudo.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">~40</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Básico</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Ref.</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- SEÇÃO 1 -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🤖 Agent vs LLM vs Assistente</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Os três termos andam juntos, mas <strong class="text-emerald-400">não são sinônimos</strong>. Um LLM gera texto; um assistente embrulha um LLM com prompt; um agente vai além — observa, decide, executa ferramentas e mantém estado entre turnos.</p>
+
+    <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">💡</span> Três níveis de capacidade</h3>
+      <ul class="space-y-3 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span><strong>LLM:</strong> função pura <code class="text-emerald-400">texto → texto</code>. Sem memória, sem ferramentas. Ex.: <code>llama-4-scout</code>, <code>claude-sonnet-4.6</code>.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span><strong>Assistente:</strong> LLM + system prompt + janela de chat. Lembra dentro da conversa, esquece ao fechar. Ex.: ChatGPT free.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span><strong>Agente:</strong> assistente + tools + loop de raciocínio + memória persistente. Ex.: Hermes Agent.</span></li>
+      </ul>
+    </div>
+
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border border-dark-600 rounded-xl overflow-hidden">
+        <thead class="bg-dark-700/60 text-emerald-400">
+          <tr>
+            <th class="text-left p-3 font-semibold">Característica</th>
+            <th class="text-left p-3 font-semibold">LLM puro</th>
+            <th class="text-left p-3 font-semibold">Assistente</th>
+            <th class="text-left p-3 font-semibold">Agente (Hermes)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-dark-600 text-neutral-300">
+          <tr><td class="p-3 font-medium">Estado entre turnos</td><td class="p-3">❌</td><td class="p-3">Em uma sessão</td><td class="p-3">Persistente (Honcho)</td></tr>
+          <tr><td class="p-3 font-medium">Executa ações</td><td class="p-3">❌</td><td class="p-3">Limitado</td><td class="p-3">✅ via tools</td></tr>
+          <tr><td class="p-3 font-medium">Decide próximo passo</td><td class="p-3">❌</td><td class="p-3">❌</td><td class="p-3">✅ ReAct loop</td></tr>
+          <tr><td class="p-3 font-medium">Multi-canal</td><td class="p-3">❌</td><td class="p-3">UI única</td><td class="p-3">✅ adapters</td></tr>
+          <tr><td class="p-3 font-medium">Custo típico</td><td class="p-3">Token</td><td class="p-3">Assinatura</td><td class="p-3">Token + infra leve</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica de leitura</h3>
+      <p class="text-neutral-300">Sempre que alguém disser "agente" mas a coisa não tem memória persistente nem chama ferramentas externas, é só um <strong>assistente com nome bonito</strong>. Use essa régua antes de comparar produtos.</p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 2 -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">🛠️ Tool vs Skill — quando usar cada um</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">A confusão #1 entre iniciantes. <strong class="text-emerald-400">Tool é um verbo</strong> que o agente pode invocar (uma função). <strong class="text-emerald-400">Skill é uma receita</strong> que orquestra tools, prompts e regras para resolver uma tarefa repetitiva.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h4 class="font-bold text-emerald-400 mb-3">🛠️ Tool</h4>
+        <ul class="space-y-2 text-neutral-300 text-sm">
+          <li><strong>Granularidade:</strong> atômica (1 ação)</li>
+          <li><strong>Exemplo:</strong> <code class="text-emerald-400">http.get</code>, <code class="text-emerald-400">fs.read</code>, <code class="text-emerald-400">shell.exec</code></li>
+          <li><strong>Quem cria:</strong> dev (código Python/JS)</li>
+          <li><strong>Discovery:</strong> registrada no toolset</li>
+          <li><strong>Reuso:</strong> múltiplas skills usam a mesma</li>
+        </ul>
+      </div>
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h4 class="font-bold text-emerald-400 mb-3">📚 Skill</h4>
+        <ul class="space-y-2 text-neutral-300 text-sm">
+          <li><strong>Granularidade:</strong> tarefa (N passos)</li>
+          <li><strong>Exemplo:</strong> "publicar release no GitHub"</li>
+          <li><strong>Quem cria:</strong> usuário (markdown + frontmatter)</li>
+          <li><strong>Discovery:</strong> auto-descoberta por descrição</li>
+          <li><strong>Reuso:</strong> compartilhável via agentskills.io</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Tool: definida em Python, registrada no toolset
+@tool
+def http_get(url: str) -> str:
+    """Faz GET HTTP e retorna o body."""
+    return requests.get(url).text
+
+# Skill: definida em markdown, descoberta por descrição
+---
+name: github-release
+description: Publica uma release nova no GitHub a partir do CHANGELOG.
+tools: [shell.exec, fs.read, http.get]
+---
+1. Ler CHANGELOG.md
+2. Extrair versão da seção topo
+3. Rodar: gh release create vX.Y.Z --notes "..."</code></pre>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Quando criar TOOL</h4>
+        <ul class="space-y-3 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Precisa acessar API/SDK novo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Quer controle de tipos/validação</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Ação será usada por várias skills</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Performance importa (sem overhead de LLM)</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✓ Quando criar SKILL</h4>
+        <ul class="space-y-3 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Orquestra tools existentes</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>É uma rotina/procedimento humano</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Quer iteração rápida (sem deploy)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Vai compartilhar com outros usuários</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 3 -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">🔌 MCP vs Tool Gateway — protocolos vs implementação</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">MCP (Model Context Protocol) é um <strong class="text-emerald-400">padrão aberto</strong> de comunicação entre agentes e servidores de ferramentas. Tool Gateway é a <strong class="text-emerald-400">implementação local</strong> do Hermes que fala MCP (e outros protocolos) com o mundo externo.</p>
+
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border border-dark-600 rounded-xl overflow-hidden">
+        <thead class="bg-dark-700/60 text-emerald-400">
+          <tr>
+            <th class="text-left p-3 font-semibold">Aspecto</th>
+            <th class="text-left p-3 font-semibold">MCP</th>
+            <th class="text-left p-3 font-semibold">Tool Gateway</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-dark-600 text-neutral-300">
+          <tr><td class="p-3 font-medium">Natureza</td><td class="p-3">Protocolo (spec)</td><td class="p-3">Processo (binário)</td></tr>
+          <tr><td class="p-3 font-medium">Criador</td><td class="p-3">Anthropic (aberto)</td><td class="p-3">Hermes Agent runtime</td></tr>
+          <tr><td class="p-3 font-medium">Camada</td><td class="p-3">Transporte (JSON-RPC)</td><td class="p-3">Aplicação (multiplexador)</td></tr>
+          <tr><td class="p-3 font-medium">Fala com</td><td class="p-3">Servidor MCP</td><td class="p-3">MCP, REST, gRPC, shell</td></tr>
+          <tr><td class="p-3 font-medium">Onde roda</td><td class="p-3">Qualquer agente compatível</td><td class="p-3">Dentro do Hermes</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Por que importa</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>200+</strong> servidores MCP públicos disponíveis (filesystem, GitHub, Slack, Postgres…)</li>
+        <li><strong>1</strong> Tool Gateway no Hermes consome qualquer um deles sem código</li>
+        <li><strong>0</strong> linhas de Python para adicionar uma fonte nova — basta apontar a URL</li>
+      </ul>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># config.yaml — Tool Gateway consumindo 3 servidores MCP
+tool_gateway:
+  mcp_servers:
+    - name: filesystem
+      command: npx -y @modelcontextprotocol/server-filesystem /workspace
+    - name: github
+      command: npx -y @modelcontextprotocol/server-github
+      env: { GITHUB_TOKEN: "${GITHUB_TOKEN}" }
+    - name: postgres
+      command: uvx mcp-server-postgres
+      env: { DB_URL: "${DATABASE_URL}" }</code></pre>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 4 -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">📡 Gateway vs Channel vs Provider — confusões comuns</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Três palavras com "porta" no nome, três camadas diferentes. <strong class="text-emerald-400">Provider</strong> é de onde vem o cérebro (LLM). <strong class="text-emerald-400">Channel</strong> é por onde o humano fala. <strong class="text-emerald-400">Gateway</strong> é por onde o agente acessa o mundo.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+        <div class="text-emerald-400 font-bold mb-2">🧠 Provider</div>
+        <p class="text-sm text-neutral-300 mb-3">Backend de LLM. Devolve completion para o agente.</p>
+        <ul class="text-xs text-neutral-400 space-y-1">
+          <li>• OpenRouter</li>
+          <li>• Anthropic direto</li>
+          <li>• OpenAI direto</li>
+          <li>• Ollama (local)</li>
+        </ul>
+      </div>
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+        <div class="text-emerald-400 font-bold mb-2">📱 Channel</div>
+        <p class="text-sm text-neutral-300 mb-3">Interface humana. Entrega mensagens em ambos sentidos.</p>
+        <ul class="text-xs text-neutral-400 space-y-1">
+          <li>• CLI</li>
+          <li>• Telegram bot</li>
+          <li>• Slack adapter</li>
+          <li>• Discord adapter</li>
+        </ul>
+      </div>
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+        <div class="text-emerald-400 font-bold mb-2">🔌 Gateway</div>
+        <p class="text-sm text-neutral-300 mb-3">Multiplexador de tools. Conecta agente a serviços externos.</p>
+        <ul class="text-xs text-neutral-400 space-y-1">
+          <li>• MCP servers</li>
+          <li>• REST APIs</li>
+          <li>• Shell local</li>
+          <li>• Plugins próprios</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Mnemônico que funciona</h4>
+        <ul class="space-y-3 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Provider = de onde vem a inteligência</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Channel = por onde entra/sai o humano</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Gateway = por onde sai/entra o mundo externo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Você pode ter N de cada um simultaneamente</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ Erros típicos</h4>
+        <ul class="space-y-3 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>"Provider Telegram" — Telegram é channel, não provider</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>"Channel GitHub" — GitHub é gateway/tool, não channel</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>"Gateway Claude" — Claude é provider (modelo)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Misturar config de provider com config de gateway no YAML</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 5 -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">💾 Session vs Memory vs Context — escopos temporais</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">A trinca temporal. <strong class="text-emerald-400">Context</strong> dura uma chamada de LLM. <strong class="text-emerald-400">Session</strong> dura uma conversa. <strong class="text-emerald-400">Memory</strong> dura para sempre (ou até você apagar).</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Context (segundos)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Janela do modelo na chamada atual. Limitada por <code class="text-emerald-400">max_tokens</code> do provider (128k–1M).</p>
+          <p class="text-neutral-300 text-sm">Tudo aqui é enviado a cada turno. Cobra token. Esquece após resposta.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Session (minutos a horas)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Identificador único por conversa (<code class="text-emerald-400">session_id</code>). Acumula histórico de turnos e estado intermediário.</p>
+          <p class="text-neutral-300 text-sm">Persiste enquanto o usuário "continuar". Pode ser sumarizado para caber no context.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Memory (dias a anos)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Fatos consolidados via Honcho ou backend de vetor. Sobrevive entre sessões e canais.</p>
+          <p class="text-neutral-300 text-sm">Recuperada por busca semântica e injetada no context quando relevante.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Regra de ouro de custo</h3>
+      <p class="text-neutral-300">Context custa token <strong>a cada turno</strong>. Memory custa storage <strong>uma vez</strong>. Sempre que algo for usado mais de 3 vezes, mova de context para memory — economia direta na fatura OpenRouter.</p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 6 -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🧩 Mental model completo</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Junte tudo num diagrama. O <strong class="text-emerald-400">Agent Loop</strong> no centro orquestra: recebe mensagem do channel, lê memory + session, chama provider, decide tool no gateway, escreve de volta.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code>┌──────────────┐         ┌──────────────────────────────┐         ┌────────────┐
+│   CHANNEL    │ ──msg──▶│         AGENT LOOP           │◀─tool───│  GATEWAY   │
+│ (Telegram,   │         │                              │         │ (MCP, REST,│
+│  Slack, CLI) │◀─reply──│  ┌────────────────────────┐  │──call──▶│  shell)    │
+└──────────────┘         │  │  1. read session       │  │         └─────┬──────┘
+                         │  │  2. fetch memory       │  │               │
+       ┌─────────────────│  │  3. build context      │  │               ▼
+       │                 │  │  4. call provider      │  │      ┌──────────────┐
+       ▼                 │  │  5. parse tool calls   │  │      │ External APIs│
+┌──────────────┐         │  │  6. execute via gw     │  │      │ (GitHub, DB, │
+│   SESSION    │◀────────│  │  7. observe & loop     │  │      │  filesystem) │
+│  (in-memory) │         │  └────────────────────────┘  │      └──────────────┘
+└──────┬───────┘         └──────┬───────────────────────┘
+       │                        │
+       ▼                        ▼
+┌──────────────┐         ┌──────────────┐
+│   MEMORY     │         │   PROVIDER   │
+│   (Honcho)   │         │ (OpenRouter, │
+│              │         │  Ollama)     │
+└──────────────┘         └──────────────┘</code></pre>
+    </div>
+
+    <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">🔑</span> Glossário-relâmpago</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+        <div class="text-neutral-300"><strong class="text-emerald-400">Agent:</strong> runtime que decide e age em loop.</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">LLM:</strong> função texto→texto (Provider).</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Tool:</strong> função executável atômica.</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Toolset:</strong> grupo de tools registradas.</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Skill:</strong> receita markdown que usa tools.</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">MCP:</strong> protocolo aberto agent↔tools.</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Tool Gateway:</strong> processo Hermes que fala MCP+REST+shell.</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Channel:</strong> interface humana (Telegram, CLI).</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Provider:</strong> origem do LLM (OpenRouter).</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Session:</strong> conversa com ID e histórico.</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Memory:</strong> fatos persistentes (Honcho).</div>
+        <div class="text-neutral-300"><strong class="text-emerald-400">Context:</strong> tokens enviados ao LLM agora.</div>
+      </div>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Falsos amigos — cuidado</h3>
+      <ul class="space-y-2 text-neutral-300 text-sm">
+        <li>• <strong>"Memory" do ChatGPT</strong> ≠ Memory do Hermes (Honcho é vetor + grafo, não só array de fatos).</li>
+        <li>• <strong>"Plugin" do ChatGPT</strong> ≠ Tool do Hermes (plugins usam OpenAPI, tools usam MCP).</li>
+        <li>• <strong>"Skill" da Alexa</strong> ≠ Skill do Hermes (Alexa = aplicativo de voz; Hermes = receita textual).</li>
+        <li>• <strong>"Agent" do LangChain</strong> ≃ Agent do Hermes, mas Hermes embute memory + channels nativos.</li>
+      </ul>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">🔗</span> Referências oficiais</h3>
+      <ul class="space-y-2 text-neutral-300 text-sm">
+        <li>• Docs Hermes: <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" class="text-sky-400 hover:underline">hermes-agent.nousresearch.com/docs</a></li>
+        <li>• Repo: <a href="https://github.com/NousResearch/hermes-agent" target="_blank" class="text-sky-400 hover:underline">github.com/NousResearch/hermes-agent</a></li>
+        <li>• Spec MCP: <a href="https://modelcontextprotocol.io" target="_blank" class="text-sky-400 hover:underline">modelcontextprotocol.io</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- RESUMO FINAL -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Agent ≠ LLM ≠ Assistente:</strong> <span class="text-neutral-300">só agente tem loop, tools e memory persistente.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Tool é verbo, Skill é receita:</strong> <span class="text-neutral-300">tools em código, skills em markdown — tools são reutilizadas por várias skills.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">MCP é spec, Tool Gateway é processo:</strong> <span class="text-neutral-300">o gateway fala MCP, REST e shell sem você escrever Python.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Provider/Channel/Gateway são três portas distintas:</strong> <span class="text-neutral-300">inteligência, humano e mundo externo — nunca confunda.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Context/Session/Memory são três escopos temporais:</strong> <span class="text-neutral-300">segundos, horas e anos respectivamente.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Mental model = Agent Loop no centro:</strong> <span class="text-neutral-300">orquestra channel ↔ memory ↔ provider ↔ gateway.</span></div></div>
+      </div>
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+        <h3 class="font-semibold text-emerald-400 mb-2">Próximo módulo:</h3>
+        <p class="text-neutral-300">Módulo 1.4 — 📈 Estudo de caso real: 30 dias com Hermes. Como ficou na prática para uma pessoa real: custo, skills criadas, lições aprendidas.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+        <a href="modulo-1-4.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">Próximo Módulo →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+
+</body>
+</html>

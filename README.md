@@ -6,16 +6,16 @@ Curso completo em português sobre o **Hermes Agent** da [Nous Research](https:/
 
 ## Estrutura
 
-6 trilhas progressivas · 12 módulos · 72 tópicos · ~10h de conteúdo
+6 trilhas progressivas · **24 módulos** · **144 tópicos** · **~21h** de conteúdo
 
-| Trilha | Tema | Nível | Duração |
-|--------|------|-------|---------|
-| T1 🪽 Fundamentos | O que é, posicionamento, casos de uso | Básico | ~1h30 |
-| T2 🏗️ Arquitetura | TUI, gateway, toolsets, MCP, memória, FTS5, Honcho | Intermediário | ~2h |
-| T3 ⚙️ Instalação | Linux, macOS, WSL2, Termux, Windows, providers, canais | Básico | ~1h30 |
-| T4 🛠️ Manutenção | doctor, update, logs, backup, segurança, monitoramento | Intermediário | ~1h30 |
-| T5 🚀 Deployment | 7 backends + AWS Bedrock AgentCore com Firecracker | Avançado | ~2h |
-| T6 🧩 Extensibilidade | Skills próprias, MCP servers, Tool Gateway, contribuição | Avançado | ~2h |
+| Trilha | Tema | Módulos | Duração |
+|--------|------|---------|---------|
+| T1 🪽 Fundamentos | Definição, posicionamento, casos, glossário, estudo de caso 30 dias | 4 | ~3h |
+| T2 🏗️ Arquitetura | TUI, gateway, MCP, memória, FTS5, anatomia de requisição, segurança | 4 | ~4h |
+| T3 ⚙️ Instalação | Linux/macOS/WSL2/Termux/Windows, providers, multi-tenancy, top 20 erros | 4 | ~3h |
+| T4 🛠️ Manutenção | doctor/update/logs/backup/security + custos (-60%) + upgrade strategy | 4 | ~3h |
+| T5 🚀 Deployment | 7 backends, AWS Bedrock AgentCore, observabilidade OTel, CI/CD GitHub Actions | 4 | ~4h |
+| T6 🧩 Extensibilidade | Skills + MCP + Tool Gateway + padrões avançados + MCP server próprio | 4 | ~4h |
 
 ## Como rodar localmente
 

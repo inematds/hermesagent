@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 3.3 — Multi-usuário e multi-tenancy | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .bg-purple-500\/10 { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:bg-purple-500\/30:hover { background-color: rgba(124,58,237,0.18); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">🪽</span>
+            <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3</a><span>/</span>
+      <span class="text-purple-400">Módulo 3.3</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">👥 Multi-usuário e multi-tenancy</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Rode <strong class="text-purple-400">1 instância</strong> de Hermes para família, time ou pequena empresa, isolando memórias, skills e API keys por pessoa. Sem vazamento entre usuários, sem custo duplicado, com auditoria.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">~45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Inter.</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Avançado</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1: MODELO DE USUÁRIO -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">👤 Modelo de usuário — Como o Hermes separa contextos</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O Hermes usa um conceito de <strong class="text-purple-400">tenant</strong> (=usuário lógico) que carrega ID, namespace de memória, profile e quota. Toda mensagem entra pelo router de canal, é resolvida para um tenant e aí <strong class="text-purple-400">tudo</strong> — memória, skills, secrets, logs — fica escopado a ele.</p>
+
+      <h3 class="text-lg font-semibold mb-3">Diagrama: 1 instância → N usuários → N namespaces</h3>
+      <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code>                    ┌──────────────────────────┐
+                    │   Hermes Agent (1 proc)  │
+                    │  port 7777, PID 14523    │
+                    └─────────────┬────────────┘
+                                  │
+        ┌─────────────────────────┼─────────────────────────┐
+        │                         │                         │
+   ┌────▼────┐              ┌─────▼────┐              ┌─────▼────┐
+   │ tenant: │              │ tenant:  │              │ tenant:  │
+   │  alice  │              │  bob     │              │  carol   │
+   │ (mãe)   │              │ (filho)  │              │ (pai)    │
+   └────┬────┘              └─────┬────┘              └─────┬────┘
+        │                         │                         │
+   ┌────▼────────┐         ┌──────▼──────┐          ┌───────▼─────┐
+   │ memory/     │         │ memory/     │          │ memory/     │
+   │   alice.db  │         │   bob.db    │          │   carol.db  │
+   │ skills/alice│         │ skills/bob  │          │ skills/carol│
+   │ secrets:    │         │ secrets:    │          │ secrets:    │
+   │  OR_KEY_A   │         │  OR_KEY_B   │          │  OR_KEY_C   │
+   │ quota: $20  │         │ quota: $5   │          │ quota: $50  │
+   └─────────────┘         └─────────────┘          └─────────────┘
+</code></pre>
+      </div>
+
+      <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-4 flex items-center"><span class="mr-2">💡</span> Resolução de tenant</h3>
+        <p class="text-neutral-300 mb-3">Toda mensagem que chega num canal passa por <code>tenant_resolver</code>. A ordem padrão:</p>
+        <ul class="space-y-2 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">1.</span><span>Match exato em <code>users.&lt;canal&gt;.&lt;id&gt;</code> no config</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">2.</span><span>Fallback pra tenant <code>default</code> (se permitido)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-purple-400 mt-1">3.</span><span>Rejeição com mensagem "user not authorized" (se <code>strict_users: true</code>)</span></li>
+        </ul>
+      </div>
+
+      <h3 class="text-lg font-semibold mb-3">Feature × tipo de isolamento</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full text-sm border border-dark-600 rounded-lg overflow-hidden">
+          <thead class="bg-dark-700/50">
+            <tr>
+              <th class="text-left p-3 border-b border-dark-600">Feature</th>
+              <th class="text-left p-3 border-b border-dark-600">Isolamento</th>
+              <th class="text-left p-3 border-b border-dark-600">Onde mora</th>
+            </tr>
+          </thead>
+          <tbody class="text-neutral-300">
+            <tr class="border-b border-dark-600"><td class="p-3">Histórico de chat</td><td class="p-3 text-purple-400">Total</td><td class="p-3"><code>~/.hermes/memory/&lt;tenant&gt;.db</code></td></tr>
+            <tr class="border-b border-dark-600"><td class="p-3">Memória semântica</td><td class="p-3 text-purple-400">Total</td><td class="p-3"><code>~/.hermes/embeddings/&lt;tenant&gt;/</code></td></tr>
+            <tr class="border-b border-dark-600"><td class="p-3">API keys (OpenRouter etc)</td><td class="p-3 text-purple-400">Total</td><td class="p-3">Keyring + <code>secrets/&lt;tenant&gt;.enc</code></td></tr>
+            <tr class="border-b border-dark-600"><td class="p-3">Skills privadas</td><td class="p-3 text-purple-400">Total</td><td class="p-3"><code>skills/&lt;tenant&gt;/</code></td></tr>
+            <tr class="border-b border-dark-600"><td class="p-3">Skills compartilhadas</td><td class="p-3 text-blue-400">Compartilhado</td><td class="p-3"><code>skills/shared/</code></td></tr>
+            <tr class="border-b border-dark-600"><td class="p-3">Modelo / provider</td><td class="p-3 text-blue-400">Override por user</td><td class="p-3"><code>profiles/&lt;tenant&gt;.toml</code></td></tr>
+            <tr><td class="p-3">Logs de auditoria</td><td class="p-3 text-blue-400">Compartilhado (tagged)</td><td class="p-3"><code>logs/audit.jsonl</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2: API KEYS POR USUÁRIO -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔑 API keys por usuário — OpenRouter sub-keys ou múltiplas</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Você tem 3 caminhos, do mais simples ao mais escalável. A escolha errada vira <strong class="text-purple-400">factura inflada</strong> no fim do mês.</p>
+
+      <div class="space-y-6 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">A</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+            <h4 class="font-semibold text-white mb-2">1 chave master + limite por user (mais barato)</h4>
+            <p class="text-sm text-neutral-400 mb-3">Você mantém UMA <code>sk-or-...</code> da conta principal e o Hermes aplica <code>quota.monthly_usd</code> por tenant.</p>
+            <p class="text-neutral-300 text-sm">Bom pra: família, equipe &lt;5 pessoas, confiança alta.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">B</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+            <h4 class="font-semibold text-white mb-2">OpenRouter sub-keys (recomendado)</h4>
+            <p class="text-sm text-neutral-400 mb-3">Em <a href="https://openrouter.ai/settings/keys" target="_blank" class="text-sky-400">openrouter.ai/settings/keys</a> crie 1 sub-key por pessoa, com limite mensal próprio. Isolamento <strong>de verdade</strong> — fatura mostra gasto por chave.</p>
+            <p class="text-neutral-300 text-sm">Bom pra: time, clientes, qualquer ambiente com auditoria.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">C</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+            <h4 class="font-semibold text-white mb-2">Cada usuário traz a própria chave (BYOK)</h4>
+            <p class="text-sm text-neutral-400 mb-3">Cada pessoa cria conta no OpenRouter e cadastra a chave dela via <code>hermes user secrets set</code>. Você não paga nada além do hosting.</p>
+            <p class="text-neutral-300 text-sm">Bom pra: SaaS interno, instalação compartilhada open source.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="text-lg font-semibold mb-3">Comando real — cadastrando chave por user</h3>
+      <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># Cria tenant
+hermes user create alice --display "Alice Maldaner" --quota 20.00
+
+# Cadastra chave da Alice (vai pro keyring com namespace dela)
+hermes user secrets set alice OPENROUTER_API_KEY sk-or-v1-alice-************
+
+# Override de modelo padrão só pra Alice
+hermes user config set alice model.default "anthropic/claude-sonnet-4.5"
+
+# Lista
+hermes user list
+  NAME    QUOTA     USED   MODEL                          STATUS
+  alice   $20.00   $3.42   anthropic/claude-sonnet-4.5    active
+  bob     $5.00    $0.18   meta-llama/llama-3.3-70b:free  active
+  carol   $50.00   $47.10  openai/gpt-4o                  ⚠ near-limit</code></pre>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ FAZER</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Sub-keys OpenRouter por pessoa (B)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Quota mensal hard no Hermes <strong>E</strong> no provider</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Rotacionar chaves a cada 90 dias</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Alertar usuário em 80% da quota</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ NÃO fazer</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>1 chave compartilhada sem quota — fatura explode</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Salvar chaves em <code>.env</code> versionado</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Confiar só em quota local (sem limite no provider)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Reusar chave entre prod e dev</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3: MEMÓRIA ISOLADA -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">💾 Memória isolada — DB por usuário ou namespace</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Hermes oferece <strong class="text-purple-400">dois modos</strong> de isolar memória. Escolha errado e a Alice recebe lembrança de conversa do Bob — vazamento clássico em multi-tenancy.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-gradient-to-br from-purple-900/30 to-dark-800 rounded-xl border border-purple-500/30 p-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-3">📦 DB por usuário (default, seguro)</h3>
+          <p class="text-neutral-300 text-sm mb-3">Cada tenant tem arquivo SQLite próprio. Impossível query cruzar.</p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>~/.hermes/memory/
+  alice.db
+  bob.db
+  carol.db</code></div>
+          <p class="text-neutral-400 text-xs mt-3">Pro: zero risco. Contra: difícil migrar/agregar.</p>
+        </div>
+        <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+          <h3 class="text-lg font-semibold text-blue-400 mb-3">🏷️ DB único + namespace</h3>
+          <p class="text-neutral-300 text-sm mb-3">Tudo num <code>hermes.db</code>, toda query tem <code>WHERE tenant_id = ?</code>.</p>
+          <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono"><code>SELECT * FROM messages
+  WHERE tenant_id = 'alice'
+  ORDER BY ts DESC;</code></div>
+          <p class="text-neutral-400 text-xs mt-3">Pro: backup único, escala melhor. Contra: bug no WHERE = vazamento.</p>
+        </div>
+      </div>
+
+      <h3 class="text-lg font-semibold mb-3">Configurando o modo</h3>
+      <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/config.toml
+[memory]
+mode = "per_user"          # ou "namespaced"
+path = "~/.hermes/memory"
+backend = "sqlite"         # sqlite | postgres | duckdb
+auto_vacuum = true
+encryption = "age"         # opcional, criptografa em repouso
+
+[memory.semantic]
+enabled = true
+embeddings_model = "text-embedding-3-small"
+per_user_index = true      # NUNCA false em multi-tenant</code></pre>
+      </div>
+
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Vazamento entre usuários</h3>
+        <p class="text-neutral-300">O bug #1 em setups multi-user é <code>per_user_index = false</code> na memória semântica. O retrieval traz embeddings de TODOS os tenants — a Alice pergunta "onde guardei a senha do banco" e recebe a senha do Bob. Sempre teste:</p>
+        <div class="bg-dark-900 rounded p-3 mt-3 text-xs text-emerald-400 font-mono"><code>hermes audit leak-check --tenant alice
+  ✓ memory.sqlite: isolated
+  ✓ memory.embeddings: isolated
+  ✓ skills.private: isolated
+  ✗ logs.shared: tagged but globally readable (expected)</code></p>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — backup seletivo</h3>
+        <p class="text-neutral-300">Com DB por usuário, backup vira <code>cp alice.db alice.db.bak</code>. Você consegue dar pra Alice o backup só da memória dela quando ela pedir, sem expor dados dos outros. Compliance amigável.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4: SKILLS -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🧩 Skills compartilhadas vs privadas — Estratégias</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Skills (tools, prompts especializados, fluxos) podem ser <strong class="text-purple-400">globais</strong> (todos veem) ou <strong class="text-purple-400">privadas</strong> (só dono usa). Saber dividir reduz duplicação e vazamento.</p>
+
+      <h3 class="text-lg font-semibold mb-3">Layout de diretórios</h3>
+      <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code>~/.hermes/skills/
+├── shared/                  # disponível a TODOS os tenants
+│   ├── web-search/
+│   ├── calculator/
+│   └── translate-ptbr/
+├── alice/                   # só Alice vê
+│   ├── meu-banco-api/       # tem credenciais privadas
+│   └── agenda-trabalho/
+├── bob/                     # só Bob vê
+│   └── jogos-steam/
+└── disabled/                # tirou de circulação sem deletar
+    └── legacy-thing/</code></pre>
+      </div>
+
+      <h3 class="text-lg font-semibold mb-3">Comandos de gerência</h3>
+      <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># Instala skill compartilhada (acessível a todos)
+hermes skill install https://github.com/foo/web-search --scope shared
+
+# Instala skill privada da Alice
+hermes skill install ./meu-banco-api --scope user --user alice
+
+# Promove de privada pra compartilhada
+hermes skill promote alice/agenda-trabalho --to shared
+
+# Lista skills visíveis pra cada user
+hermes skill list --user alice
+  SCOPE    NAME                SOURCE
+  shared   web-search          github.com/foo/web-search
+  shared   calculator          builtin
+  user     meu-banco-api       local
+  user     agenda-trabalho     local
+
+# Audita o que cada skill acessa
+hermes skill audit alice/meu-banco-api
+  Network calls: api.meubanco.com.br
+  Filesystem:    read ~/.hermes/secrets/alice/banco.enc
+  Subprocess:    none
+  Tokens used:   BANCO_TOKEN (encrypted, alice-only)</code></pre>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ Compartilhar quando</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Skill é genérica (web search, calculadora)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Não tem credenciais embutidas</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Output é seguro pra qualquer audiência</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Você quer evitar 3 cópias idênticas</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ NUNCA compartilhar</h4>
+          <ul class="space-y-3 text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Skills com token de banco/email pessoal</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Skills que escrevem em path pessoal</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Skills com prompt que vaza identidade</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Skills experimentais que podem crashar</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5: QUOTAS -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📊 Quotas e budget por usuário — Limites práticos</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Sem quota, um único filho perguntando "explica detalhadamente toda física quântica" zera o budget familiar. Hermes tem 3 níveis de limite: <strong class="text-purple-400">tokens/dia, custo/mês e rate</strong>.</p>
+
+      <h3 class="text-lg font-semibold mb-3">Config completa de família (4 pessoas, real)</h3>
+      <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/config.toml
+
+[multitenancy]
+enabled = true
+strict_users = true              # rejeita ID não cadastrado
+default_tenant = false           # sem fallback inseguro
+
+[users.alice]              # mãe - power user
+display = "Alice"
+quota = { monthly_usd = 30.0, daily_tokens = 500000, rate_per_min = 30 }
+model_default = "anthropic/claude-sonnet-4.5"
+secrets_namespace = "alice"
+channels = { telegram = [123456789], discord = ["alice#0001"] }
+
+[users.bob]                # filho 14 anos - limitado
+display = "Bob"
+quota = { monthly_usd = 5.0, daily_tokens = 100000, rate_per_min = 10 }
+model_default = "meta-llama/llama-3.3-70b-instruct:free"
+secrets_namespace = "bob"
+channels = { telegram = [987654321] }
+content_filter = "strict"        # bloqueia NSFW
+
+[users.carol]              # pai - corporativo
+display = "Carol"
+quota = { monthly_usd = 50.0, daily_tokens = 1000000, rate_per_min = 60 }
+model_default = "openai/gpt-4o"
+secrets_namespace = "carol"
+channels = { slack = ["U12345"], telegram = [555444333] }
+
+[users.daniel]             # filha 8 anos - kid mode
+display = "Daniel"
+quota = { monthly_usd = 2.0, daily_tokens = 30000, rate_per_min = 5 }
+model_default = "anthropic/claude-haiku-4.5"
+content_filter = "kids"
+channels = { telegram = [111222333] }
+
+[quota.alerts]
+warn_at_pct = 80                 # avisa user em 80%
+hard_stop_at_pct = 100           # corta acesso em 100%
+notify_admin = "alice"           # quem recebe alerta</code></pre>
+      </div>
+
+      <h3 class="text-lg font-semibold mb-3">Setup família 4 pessoas — timeline</h3>
+      <div class="space-y-6 mb-6">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">1</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+            <h4 class="font-semibold text-white mb-2">Min 0-5 · Cria os 4 tenants</h4>
+            <p class="text-sm text-neutral-400 mb-2">Para cada um: <code>hermes user create &lt;nome&gt; --quota X</code></p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">2</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+            <h4 class="font-semibold text-white mb-2">Min 5-15 · Sub-keys OpenRouter</h4>
+            <p class="text-sm text-neutral-400 mb-2">openrouter.ai/settings/keys → 4 sub-keys com limite. <code>hermes user secrets set &lt;u&gt; OPENROUTER_API_KEY ...</code></p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">3</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+            <h4 class="font-semibold text-white mb-2">Min 15-25 · Pega chat_id de cada um</h4>
+            <p class="text-sm text-neutral-400 mb-2">Cada pessoa abre @userinfobot no Telegram, manda o ID pra você, você adiciona em <code>channels.telegram</code>.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">4</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+            <h4 class="font-semibold text-white mb-2">Min 25-35 · Bot único no Telegram</h4>
+            <p class="text-sm text-neutral-400 mb-2"><code>hermes channel start telegram</code> — o bot resolve cada chat_id para o tenant correto automaticamente.</p>
+          </div>
+        </div>
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center"><span class="text-purple-400 font-bold">5</span></div>
+          <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+            <h4 class="font-semibold text-white mb-2">Min 35-45 · Teste e audit</h4>
+            <p class="text-sm text-neutral-400 mb-2"><code>hermes audit leak-check --all-tenants</code> + cada pessoa manda "oi, qual meu nome?" e confirma a resposta certa.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Dashboard de uso</h3>
+        <p class="text-neutral-300 mb-2">Rode <code>hermes usage --month</code> e veja consumo por user:</p>
+        <div class="bg-dark-900 rounded p-3 text-xs text-emerald-400 font-mono mt-2"><code>USER     TOKENS_IN   TOKENS_OUT   COST_USD   REQUESTS   MODEL_TOP
+alice    1,240,512   382,109      $12.40     412        claude-sonnet-4.5
+bob        92,103     14,221      $0.18      89         llama-3.3-70b:free
+carol    3,012,440   980,331      $47.10     203        gpt-4o
+daniel     22,310      4,012      $0.42      54         claude-haiku-4.5</code></div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6: ROTEAMENTO -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🚪 Roteamento por canal — Telegram chat_id, Discord user_id</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cada canal entrega um identificador próprio. O <strong class="text-purple-400">tenant resolver</strong> mapeia esse ID externo → tenant interno. Errar isso = mensagem da Alice cai no contexto do Bob.</p>
+
+      <h3 class="text-lg font-semibold mb-3">Identificadores por canal</h3>
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full text-sm border border-dark-600 rounded-lg overflow-hidden">
+          <thead class="bg-dark-700/50">
+            <tr>
+              <th class="text-left p-3 border-b border-dark-600">Canal</th>
+              <th class="text-left p-3 border-b border-dark-600">ID estável</th>
+              <th class="text-left p-3 border-b border-dark-600">Como obter</th>
+            </tr>
+          </thead>
+          <tbody class="text-neutral-300">
+            <tr class="border-b border-dark-600"><td class="p-3">Telegram</td><td class="p-3"><code>chat_id</code> (int)</td><td class="p-3"><a href="https://t.me/userinfobot" target="_blank" class="text-sky-400">@userinfobot</a></td></tr>
+            <tr class="border-b border-dark-600"><td class="p-3">Discord</td><td class="p-3"><code>user.id</code> (snowflake)</td><td class="p-3">Dev Mode ON → click direito → "Copiar ID"</td></tr>
+            <tr class="border-b border-dark-600"><td class="p-3">Slack</td><td class="p-3"><code>user_id</code> (U...)</td><td class="p-3">Perfil → Mais → "Copiar member ID"</td></tr>
+            <tr class="border-b border-dark-600"><td class="p-3">CLI (TUI)</td><td class="p-3"><code>$USER</code> do SO</td><td class="p-3"><code>whoami</code></td></tr>
+            <tr><td class="p-3">HTTP API</td><td class="p-3">Header <code>X-Hermes-Tenant</code></td><td class="p-3">Cliente envia explicitamente</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-lg font-semibold mb-3">Config do roteador</h3>
+      <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/config.toml — bloco de routing
+
+[router]
+strategy = "exact_match"   # exact_match | regex | callback
+unknown_action = "deny"    # deny | default_tenant | prompt_admin
+
+[router.telegram]
+# chat_id -> tenant
+mapping = {
+  123456789 = "alice",
+  987654321 = "bob",
+  555444333 = "carol",
+  111222333 = "daniel"
+}
+
+[router.discord]
+mapping = {
+  "281234567890123456" = "alice",
+  "291234567890123456" = "bob"
+}
+
+[router.slack]
+mapping = {
+  "U01ABCDE" = "carol"     # só Carol usa Slack
+}
+
+# Caso especial: grupo no Telegram com vários users
+[router.telegram.groups]
+"-1001234567890" = "carol"   # grupo "Trabalho", tudo cai no tenant carol</code></pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Como testar o roteamento</h3>
+        <ul class="space-y-2 text-neutral-300">
+          <li><code>hermes route test telegram 123456789</code> → mostra qual tenant resolveria</li>
+          <li><code>hermes route trace --tail</code> → loga em tempo real toda resolução</li>
+          <li><code>hermes audit cross-tenant-msgs --last 7d</code> → detecta se algo escapou pro tenant errado</li>
+        </ul>
+      </div>
+
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Grupo do Telegram = caso ESPECIAL</h3>
+        <p class="text-neutral-300">Em group chat o <code>chat_id</code> é do GRUPO, não da pessoa. Se mapear pro tenant errado, todo mundo no grupo vira "aquela pessoa". Decida: ou força <code>from_user.id</code> como chave (cada um tem contexto próprio), ou aceita que o grupo todo é UM tenant (contexto compartilhado). Configure com <code>router.telegram.group_strategy = "per_user" | "shared"</code>.</p>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center'"><span class="mr-2">💡</span> Dica — auditoria contínua</h3>
+        <p class="text-neutral-300">Adicione <code>hermes audit weekly-report --email admin@familia.local</code> no cron. Toda sexta você recebe: gastos por user, top skills usadas, alertas de quota, anomalias de roteamento, vazamentos suspeitos. 10 minutos pra prevenir 10 horas de bagunça.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Modelo de tenant</strong><p class="text-neutral-400 text-sm">1 instância, N usuários, cada um com namespace próprio</p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">API keys isoladas</strong><p class="text-neutral-400 text-sm">Sub-keys OpenRouter por pessoa com limite no provider</p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Memória sem vazamento</strong><p class="text-neutral-400 text-sm"><code>per_user</code> DB + <code>per_user_index</code> nos embeddings</p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Skills bem divididas</strong><p class="text-neutral-400 text-sm">Genéricas compartilhadas, com credencial sempre privadas</p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Quotas em 3 níveis</strong><p class="text-neutral-400 text-sm">tokens/dia, custo/mês, rate/min — com alerta em 80%</p></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 text-xl">✓</span><div><strong class="text-neutral-100">Roteador testado</strong><p class="text-neutral-400 text-sm"><code>hermes route test</code> + <code>audit cross-tenant-msgs</code></p></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Próximo módulo:</h3>
+          <p class="text-neutral-300">3.4 — 🚨 Troubleshooting de setup — Top 20 erros: sintoma → diagnóstico → fix.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+          <a href="modulo-3-4.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">Próximo →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTopic(button) {
+      const item = button.closest('.topic-item');
+      const exp = item.querySelector('.topic-explanation');
+      const card = button.closest('.bg-dark-800');
+      card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+      exp.classList.toggle('active');
+    }
+    function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+    function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    const themeToggle = document.getElementById('theme-toggle');
+    const dIcon = document.getElementById('theme-toggle-dark-icon');
+    const lIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+    else { lIcon.classList.remove('hidden'); }
+    themeToggle.addEventListener('click', () => {
+      dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>

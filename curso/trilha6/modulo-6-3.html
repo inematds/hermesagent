@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 6.3 — Padrões avançados de skills | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-rose-400 { color: #9f1239; }
+    html:not(.dark) .bg-rose-500\/20 { background-color: rgba(225,29,72,0.12); }
+    html:not(.dark) .bg-rose-500\/10 { background-color: rgba(225,29,72,0.08); }
+    html:not(.dark) .border-rose-500\/30 { border-color: rgba(225,29,72,0.25); }
+    html:not(.dark) .hover\:bg-rose-500\/30:hover { background-color: rgba(225,29,72,0.18); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-rose-400 bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-rose-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-rose-400">Trilha 6</a><span>/</span>
+    <span class="text-rose-400">Módulo 6.3</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-rose-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full mb-4">MÓDULO 6.3</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🧠 Padrões avançados de skills</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Skills que chamam skills, máquinas de estado com checkpoints, RAG embutido com vector store local, routers que escolhem o LLM ideal por subtarefa e tratamento sério de side-effects. Saia do hello world e veja como skills crescem em produção sem virar monólitos.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">~55</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Eng. skills</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- SEÇÃO 1: Composition -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🪆 Composition — Skill A invoca skill B</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Skills bem desenhadas são <strong class="text-rose-400">unidades pequenas e focadas</strong>. Quando uma tarefa precisa de várias capacidades, você compõe: a skill orquestradora chama outras skills via <code class="text-rose-400">hermes.invoke()</code>, recebe o resultado e segue. O resultado é um grafo de skills, não um monólito.</p>
+
+    <div class="bg-gradient-to-br from-rose-900/30 to-dark-800 rounded-xl border border-rose-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-rose-400 mb-4 flex items-center"><span class="mr-2">💡</span> Por que compor em vez de inlinar tudo</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><span><strong>Reuso real:</strong> a mesma <code>summarize-pdf</code> serve para skills de email, jurídico e research.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><span><strong>Eval isolado:</strong> testa <code>fetch-prices</code> sozinha sem rodar a skill pai inteira.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><span><strong>Substituição barata:</strong> troca a implementação de <code>send-email</code> sem mexer em quem chama.</span></li>
+      </ul>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Exemplo real: skill <code class="text-rose-400">briefing-diario</code> que compõe outras três skills já existentes:</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/skills/briefing-diario/skill.py
+from hermes import skill, invoke
+from datetime import date
+
+@skill(
+    name="briefing-diario",
+    description="Use when the user asks for the daily briefing, morning summary, or 'what's new today'.",
+)
+def run(ctx):
+    # Cada invoke roda outra skill registrada e retorna structured output
+    calendar = invoke("calendar-today", {"user": ctx.user})
+    inbox    = invoke("inbox-triage",   {"since": "08:00", "max": 20})
+    news     = invoke("news-digest",    {"topics": ctx.prefs["topics"], "n": 5})
+
+    return ctx.render(
+        "briefing.md.j2",
+        date=date.today().isoformat(),
+        calendar=calendar,
+        inbox=inbox,
+        news=news,
+    )
+</code></pre>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Grafo resultante visualizado pelo CLI:</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-rose-400 font-mono"><code>$ hermes skill graph briefing-diario
+
+briefing-diario
+├── calendar-today        (deps: mcp/google-calendar)
+├── inbox-triage          (deps: mcp/gmail, skill/summarize-thread)
+│   └── summarize-thread  (deps: llm/haiku)
+└── news-digest           (deps: tool/rss-fetch, skill/dedupe-articles)
+    └── dedupe-articles   (deps: llm/haiku)
+
+5 skills · 4 MCP/tool deps · depth=2 · no cycles ✓
+</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica</h3>
+      <p class="text-neutral-300">Rode <code class="text-primary">hermes skill graph &lt;name&gt;</code> antes de publicar. Ele detecta ciclos, mede profundidade e mostra dependências externas. Profundidade &gt; 4 quase sempre indica que você precisa repensar a separação.</p>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Cuidado: loop infinito de composition</h3>
+      <p class="text-neutral-300">Se <code>A</code> chama <code>B</code> e <code>B</code> chama <code>A</code> (mesmo indiretamente), você cria um ciclo. O Hermes detecta ciclos diretos via <code>skill graph</code>, mas ciclos condicionais (só sob certo input) escapam. Defina <code>max_depth</code> no <code>invoke()</code> e tenha kill switch: <code>invoke("b", args, max_depth=3)</code>.</p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 2: State machines -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">🤖 State machines — Workflows de N passos com estado</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Quando a skill precisa de <strong class="text-rose-400">vários passos sequenciais com estado persistente</strong> (cada passo lê o output do anterior, pode falhar e retomar), você sai do "uma chamada e responde" e entra em state machine. O Hermes oferece <code class="text-rose-400">@hermes.step</code> com checkpointing automático.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/skills/onboard-customer/skill.py
+from hermes import skill, step, invoke
+
+@skill(name="onboard-customer",
+       description="Use when onboarding a new B2B customer end-to-end.")
+class Onboard:
+
+    @step(order=1)
+    def validate_input(self, ctx, state):
+        assert state["email"] and "@" in state["email"]
+        state["domain"] = state["email"].split("@")[1]
+        return state
+
+    @step(order=2, retries=3, backoff=2.0)
+    def create_account(self, ctx, state):
+        resp = ctx.tools.crm.create_account(
+            email=state["email"], domain=state["domain"]
+        )
+        state["account_id"] = resp["id"]
+        return state
+
+    @step(order=3, depends_on=["create_account"])
+    def send_welcome(self, ctx, state):
+        invoke("send-email", {
+            "to": state["email"],
+            "template": "welcome-b2b",
+            "vars": {"account_id": state["account_id"]},
+        })
+        state["welcomed_at"] = ctx.now().isoformat()
+        return state
+
+    @step(order=4, depends_on=["create_account"], on_error="skip")
+    def schedule_kickoff(self, ctx, state):
+        slot = invoke("calendar-find-slot", {"duration_min": 30})
+        state["kickoff"] = slot
+        return state
+</code></pre>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Em execução, o estado é serializado entre passos. Se <code>send_welcome</code> falhar no passo 3, ao retomar o Hermes lê o checkpoint e pula direto para o passo 3 — <code>account_id</code> já está no estado.</p>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Quando vale state machine</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>3+ passos</strong> com dependências entre si</li>
+        <li>Pelo menos um passo com <strong>chamada externa instável</strong> (HTTP, fila, banco remoto)</li>
+        <li>Necessidade de <strong>retomar</strong> após crash sem refazer trabalho</li>
+        <li>Auditoria: quem perguntar "onde está o cliente X?" deve ver o passo atual</li>
+      </ul>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica</h3>
+      <p class="text-neutral-300">Inspecione o estado de uma run com <code class="text-primary">hermes run inspect &lt;run_id&gt;</code>. Para retomar: <code class="text-primary">hermes run resume &lt;run_id&gt;</code>. O checkpoint fica em <code>~/.hermes/state/runs/&lt;run_id&gt;.json</code>.</p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 3: RAG dentro de skill -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">📚 RAG dentro de skill — Embedding + vector store local</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Skills frequentemente precisam <strong class="text-rose-400">consultar um corpus específico</strong> (docs internos, base de produtos, jurisprudência). Embutir RAG na skill — em vez de depender de um MCP externo — dá controle total sobre o chunking, embedding e relevância.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/skills/policy-qa/skill.py
+import chromadb
+from chromadb.utils import embedding_functions
+from hermes import skill
+
+EMB = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name="all-MiniLM-L6-v2"
+)
+_client = chromadb.PersistentClient(path=".hermes_data/policy")
+_coll = _client.get_or_create_collection(
+    name="policies", embedding_function=EMB
+)
+
+@skill(
+    name="policy-qa",
+    description=("Use when the user asks about internal HR, security, "
+                 "travel or expense policies."),
+)
+def run(ctx, question: str):
+    hits = _coll.query(query_texts=[question], n_results=5)
+    snippets = [
+        f"[{m['source']}] {d}"
+        for d, m in zip(hits["documents"][0], hits["metadatas"][0])
+    ]
+
+    prompt = (
+        "Answer ONLY from the policy snippets below. "
+        "If unsure, say you don't know.\n\n"
+        + "\n---\n".join(snippets)
+        + f"\n\nQuestion: {question}"
+    )
+    return ctx.llm.complete(prompt, model="hermes-3-llama-3.1-70b")
+
+
+def ingest(path):
+    """Run once via:  hermes skill exec policy-qa:ingest ./policies/"""
+    import pathlib, uuid
+    for f in pathlib.Path(path).glob("*.md"):
+        text = f.read_text()
+        chunks = [text[i:i+800] for i in range(0, len(text), 600)]
+        _coll.add(
+            ids=[str(uuid.uuid4()) for _ in chunks],
+            documents=chunks,
+            metadatas=[{"source": f.name} for _ in chunks],
+        )
+</code></pre>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ FAZER em RAG embutido</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Versionar o índice junto da skill (path relativo)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Expor função <code>ingest()</code> separada do <code>run()</code></span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Retornar fontes (metadados) junto da resposta</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Setar <code>n_results</code> entre 3 e 8 — mais é ruído</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ NÃO fazer</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Re-embedar todo o corpus em cada <code>run()</code></span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mandar 50 chunks pro modelo — context blow</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Chunks de 50 palavras (perde contexto) ou 5000 (perde precisão)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Esconder que a resposta veio de RAG — usuário precisa saber</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 4: Multi-LLM router -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🔀 Multi-LLM skills — Router escolhendo modelo por subtarefa</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Nem toda subtarefa merece o modelo grande. Classificar intenção, extrair JSON ou reescrever uma linha são tarefas que o <strong class="text-rose-400">modelo pequeno faz por 10% do custo</strong>. Skills sérias roteiam internamente: Haiku para triagem, Hermes 70B para o trabalho pesado, GPT-4o para visão.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/skills/smart-reply/skill.py
+from hermes import skill
+
+MODELS = {
+    "classify":   "claude-haiku-4",
+    "extract":    "claude-haiku-4",
+    "draft":      "hermes-3-llama-3.1-70b",
+    "vision":     "gpt-4o-mini",
+    "long_form":  "hermes-3-llama-3.1-405b",
+}
+
+def pick(task: str, payload: dict) -> str:
+    if payload.get("has_image"):     return MODELS["vision"]
+    if task == "classify":           return MODELS["classify"]
+    if task == "extract":            return MODELS["extract"]
+    if payload.get("tokens", 0) > 8000: return MODELS["long_form"]
+    return MODELS["draft"]
+
+@skill(name="smart-reply",
+       description="Use when drafting a reply to an incoming customer email.")
+def run(ctx, email: dict):
+    # 1. classify intent — cheap model
+    intent = ctx.llm.complete(
+        f"Intent (one of: question, complaint, sales, spam)?\n{email['body']}",
+        model=pick("classify", email),
+        max_tokens=10,
+    ).strip().lower()
+
+    if intent == "spam":
+        return {"action": "discard"}
+
+    # 2. extract structured facts — cheap model
+    facts = ctx.llm.json(
+        f"Extract: order_id, sentiment(-1..1), urgency(low/med/high)\n{email['body']}",
+        model=pick("extract", email),
+    )
+
+    # 3. draft reply — big model, has full context
+    draft = ctx.llm.complete(
+        ctx.render("reply.j2", email=email, intent=intent, facts=facts),
+        model=pick("draft", {**email, "tokens": len(email["body"]) // 4}),
+    )
+
+    return {"intent": intent, "facts": facts, "draft": draft}
+</code></pre>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Tabela de roteamento típica de uma skill madura:</p>
+
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border border-dark-600 rounded-lg overflow-hidden">
+        <thead class="bg-dark-700 text-rose-400"><tr><th class="px-4 py-2 text-left">Subtarefa</th><th class="px-4 py-2 text-left">Modelo</th><th class="px-4 py-2 text-left">Custo rel.</th><th class="px-4 py-2 text-left">Por quê</th></tr></thead>
+        <tbody class="text-neutral-300 divide-y divide-dark-600">
+          <tr><td class="px-4 py-2">Classificar intent (1 label)</td><td class="px-4 py-2">Haiku 4</td><td class="px-4 py-2">1x</td><td class="px-4 py-2">Output curto, decisão simples</td></tr>
+          <tr><td class="px-4 py-2">Extrair JSON estruturado</td><td class="px-4 py-2">Haiku 4</td><td class="px-4 py-2">1x</td><td class="px-4 py-2">Schema guia o modelo</td></tr>
+          <tr><td class="px-4 py-2">Redigir resposta natural</td><td class="px-4 py-2">Hermes 70B</td><td class="px-4 py-2">8x</td><td class="px-4 py-2">Tom e nuance importam</td></tr>
+          <tr><td class="px-4 py-2">Síntese de 50k tokens</td><td class="px-4 py-2">Hermes 405B</td><td class="px-4 py-2">25x</td><td class="px-4 py-2">Contexto longo + raciocínio</td></tr>
+          <tr><td class="px-4 py-2">Descrever screenshot</td><td class="px-4 py-2">GPT-4o-mini</td><td class="px-4 py-2">3x</td><td class="px-4 py-2">Visão multimodal nativa</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Economia real medida</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>72%</strong> de redução de custo em skills <code>smart-reply</code> que rotearam classify/extract para Haiku</li>
+        <li><strong>3x</strong> mais rápido em p50 (Haiku responde em ~400ms vs Hermes 70B ~1.2s)</li>
+        <li><strong>~0%</strong> de perda de qualidade — porque classify não precisava do modelo grande</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 5: Side-effects -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🧪 Skill com side-effects — Idempotência, retries, locks</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Toda skill que <strong class="text-rose-400">muda o mundo</strong> (manda email, cria registro, debita conta) precisa tratar três coisas: o que acontece se rodar duas vezes (idempotência), o que fazer quando falha no meio (retries) e como evitar duas execuções concorrentes (lock).</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/skills/charge-customer/skill.py
+import hashlib
+from hermes import skill, lock, idempotent
+
+@skill(name="charge-customer",
+       description="Use to charge a customer for an order. Idempotent by order_id.")
+@lock(key="charge:{order_id}", timeout=30)         # 1 execução por vez
+@idempotent(key="charge:{order_id}", ttl_days=30)  # mesma chave → mesmo resultado
+def run(ctx, order_id: str, amount_cents: int, currency: str = "BRL"):
+    # idempotency_key derivado e estável
+    ikey = hashlib.sha256(
+        f"{order_id}:{amount_cents}:{currency}".encode()
+    ).hexdigest()
+
+    return ctx.tools.stripe.charge(
+        amount=amount_cents,
+        currency=currency,
+        metadata={"order_id": order_id},
+        idempotency_key=ikey,   # propaga ao provider também
+        # retries da própria SDK Stripe lidam com 5xx transitórios
+    )
+</code></pre>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Os 3 decoradores cobrem cenários distintos. Tabela de padrões clássicos:</p>
+
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border border-dark-600 rounded-lg overflow-hidden">
+        <thead class="bg-dark-700 text-rose-400"><tr><th class="px-4 py-2 text-left">Padrão</th><th class="px-4 py-2 text-left">Resolve</th><th class="px-4 py-2 text-left">Quando usar</th></tr></thead>
+        <tbody class="text-neutral-300 divide-y divide-dark-600">
+          <tr><td class="px-4 py-2"><strong>Saga</strong></td><td class="px-4 py-2">Compensação de passos parcialmente aplicados</td><td class="px-4 py-2">Workflows multi-passo sem transação distribuída</td></tr>
+          <tr><td class="px-4 py-2"><strong>Chain of responsibility</strong></td><td class="px-4 py-2">Roteamento entre handlers</td><td class="px-4 py-2">Skill que tenta N estratégias até uma resolver</td></tr>
+          <tr><td class="px-4 py-2"><strong>Mediator</strong></td><td class="px-4 py-2">Acoplamento entre N skills</td><td class="px-4 py-2">Vários produtores/consumidores via event bus</td></tr>
+          <tr><td class="px-4 py-2"><strong>Outbox</strong></td><td class="px-4 py-2">Garantia at-least-once em side-effects</td><td class="px-4 py-2">Sempre que perda silenciosa é inaceitável</td></tr>
+          <tr><td class="px-4 py-2"><strong>Circuit breaker</strong></td><td class="px-4 py-2">Cascata de falhas</td><td class="px-4 py-2">Dependência externa flutuando</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Atenção</h3>
+      <p class="text-neutral-300">Modelos <strong>retomam silenciosamente</strong> em alguns runtimes — se a skill já criou o registro e o modelo "decide" tentar de novo, sem idempotência você cobra duas vezes. <code>@idempotent</code> + <code>idempotency_key</code> propagado ao provider são <strong>obrigatórios</strong> em qualquer skill financeira ou que dispare comunicação externa.</p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 6: Anti-patterns -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🎯 Anti-patterns — Skills que viram monólitos</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">O sintoma é sempre o mesmo: <strong class="text-rose-400">SKILL.md com 500 linhas, run() com 12 ifs aninhados, description tentando descrever 8 capacidades diferentes</strong>. O roteador para de conseguir escolher, o eval vira impossível, ninguém quer mexer.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Sinais de skill saudável</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>1 skill = 1 responsabilidade</strong> verbalizável em 1 frase</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Description começa com "Use when..." e tem &lt; 200 chars</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>SKILL.md cabe em uma tela (~150 linhas)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Eval com 5-15 casos cobre 90% do uso</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Compõe outras skills via <code>invoke()</code></span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ Sinais de monólito</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Description com <strong>"Use when X, OR Y, OR Z..."</strong> (3+ ORs)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mega-skill com 500 linhas e 8 funções privadas</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><code>run()</code> com switch/if no início roteando "modos"</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Eval com 50+ casos porque a skill faz tudo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Nome genérico tipo <code>helper</code>, <code>utils</code>, <code>do-stuff</code></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Refactor típico de skill monolítica em 3 skills focadas:</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Antes: <code>email-assistant</code> (520 linhas)</h4>
+          <p class="text-sm text-neutral-400 mb-3">"Use when user wants to triage, summarize, draft a reply, schedule from email, OR archive."</p>
+          <p class="text-neutral-300 text-sm">Roteador escolhia a skill em 41% dos casos relevantes. Eval com 87 casos, 22 falhando. Ninguém mais querida tocar.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Quebra em 3 skills + 1 orquestradora</h4>
+          <p class="text-sm text-neutral-400 mb-3">inbox-triage · summarize-thread · draft-reply (+ briefing-diario as composer)</p>
+          <p class="text-neutral-300 text-sm">Cada uma com description focada, SKILL.md de 80-120 linhas, eval próprio de 8-12 casos.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Depois: trigger rate 89%, eval verde</h4>
+          <p class="text-sm text-neutral-400 mb-3">3 semanas após o refactor</p>
+          <p class="text-neutral-300 text-sm">Skills passaram a ser reutilizadas por outras orquestradoras (briefing-diario, weekly-review). Custo de manutenção caiu ~60%.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica</h3>
+      <p class="text-neutral-300">Regra prática: se você não consegue descrever a skill em <strong>uma frase sem usar "ou"</strong>, ela já é dois skills. Quebre antes de o monólito enraizar.</p>
+    </div>
+  </section>
+
+  <!-- Resumo final -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-rose-900/40 via-dark-800 to-dark-800 rounded-xl border border-rose-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Composition:</strong> <span class="text-neutral-300">skills pequenas chamando outras via <code>invoke()</code>, profundidade controlada, <code>skill graph</code> antes de publicar.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">State machines:</strong> <span class="text-neutral-300"><code>@step</code> + checkpointing automático; retoma onde parou; obrigatório quando há 3+ passos com chamadas externas.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">RAG embutido:</strong> <span class="text-neutral-300">ChromaDB local versionado junto da skill; ingest separado do run; 3-8 chunks; sempre retorne fontes.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Multi-LLM:</strong> <span class="text-neutral-300">router por subtarefa economiza ~70% mantendo qualidade — Haiku triagem/extração, Hermes 70B redação, 405B contexto longo.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Side-effects:</strong> <span class="text-neutral-300">idempotência por chave estável, lock para concorrência, retries no provider; saga/outbox para garantias fortes.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Anti-monolito:</strong> <span class="text-neutral-300">1 skill = 1 responsabilidade descritível em 1 frase sem "ou"; quebre cedo.</span></div></div>
+      </div>
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+        <h3 class="font-semibold text-rose-400 mb-2">Próximo módulo:</h3>
+        <p class="text-neutral-300">6.4 — 🏗️ Construindo um MCP server próprio. Vamos do zero, em Python e Node, expor uma API interna da empresa para o Hermes. É o caminho mais comum de adoção corporativa.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+        <a href="modulo-6-4.html" class="flex-1 text-center px-6 py-3 bg-rose-600 text-white rounded-lg font-semibold hover:bg-rose-500 transition-colors">Próximo: 6.4 MCP server próprio →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>

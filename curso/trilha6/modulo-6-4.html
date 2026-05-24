@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 6.4 — Construindo um MCP server próprio | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-rose-400 { color: #9f1239; }
+    html:not(.dark) .bg-rose-500\/20 { background-color: rgba(225,29,72,0.12); }
+    html:not(.dark) .bg-rose-500\/10 { background-color: rgba(225,29,72,0.08); }
+    html:not(.dark) .border-rose-500\/30 { border-color: rgba(225,29,72,0.25); }
+    html:not(.dark) .hover\:bg-rose-500\/30:hover { background-color: rgba(225,29,72,0.18); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-rose-400 bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-rose-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-rose-400">Trilha 6</a><span>/</span>
+    <span class="text-rose-400">Módulo 6.4</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-rose-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full mb-4">MÓDULO 6.4</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🏗️ Construindo um MCP server próprio</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Do zero, em Python (FastMCP) ou Node (<code class="text-rose-400">@modelcontextprotocol/sdk</code>), expor a API interna da sua empresa para o Hermes. Cobrimos quando vale criar o server, anatomia do protocolo, implementação, autenticação, deploy via Docker e publicação no ecossistema. É o caminho mais comum de adoção corporativa.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">~60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Integração</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- SEÇÃO 1: Quando criar -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🎯 Quando criar MCP próprio — vs usar tool direta</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Nem todo problema precisa de um MCP server. Para uma chamada HTTP pontual numa skill, <code class="text-rose-400">requests.get()</code> resolve. MCP brilha quando há <strong class="text-rose-400">reuso entre skills</strong>, <strong class="text-rose-400">portabilidade entre agentes</strong> (Hermes, Claude Desktop, Cursor) e <strong class="text-rose-400">superfície estável</strong> para a empresa expor.</p>
+
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full text-sm border border-dark-600 rounded-lg overflow-hidden">
+        <thead class="bg-dark-700 text-rose-400"><tr><th class="px-4 py-2 text-left">Critério</th><th class="px-4 py-2 text-left">MCP server</th><th class="px-4 py-2 text-left">REST API</th><th class="px-4 py-2 text-left">gRPC</th></tr></thead>
+        <tbody class="text-neutral-300 divide-y divide-dark-600">
+          <tr><td class="px-4 py-2">Discovery de tools</td><td class="px-4 py-2">✅ nativa</td><td class="px-4 py-2">❌ manual</td><td class="px-4 py-2">⚠️ via reflection</td></tr>
+          <tr><td class="px-4 py-2">Schema declarativo</td><td class="px-4 py-2">✅ JSON Schema</td><td class="px-4 py-2">⚠️ OpenAPI</td><td class="px-4 py-2">✅ protobuf</td></tr>
+          <tr><td class="px-4 py-2">Suporte LLM agents</td><td class="px-4 py-2">✅ first-class</td><td class="px-4 py-2">❌ via wrapper</td><td class="px-4 py-2">❌ raro</td></tr>
+          <tr><td class="px-4 py-2">Streaming</td><td class="px-4 py-2">✅ SSE / stdio</td><td class="px-4 py-2">⚠️ SSE/WS</td><td class="px-4 py-2">✅ nativo</td></tr>
+          <tr><td class="px-4 py-2">Latência mín.</td><td class="px-4 py-2">~5ms (stdio)</td><td class="px-4 py-2">~20ms</td><td class="px-4 py-2">~2ms</td></tr>
+          <tr><td class="px-4 py-2">Ecossistema</td><td class="px-4 py-2">Crescendo rápido</td><td class="px-4 py-2">Universal</td><td class="px-4 py-2">Backend interno</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Criar MCP server quando</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>5+ skills vão consumir o mesmo backend</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Quer expor para Claude Desktop / Cursor também</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Domínio bem definido (1 server = 1 sistema)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Time terceiro vai consumir sem ler seu código</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ Não criar — usar tool direta</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>1 skill, 1 endpoint — overhead não vale</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mega-server "do everything" para 8 sistemas diferentes</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Prova de conceito que você vai jogar fora em 2 semanas</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Dado público que já tem MCP pronto na comunidade</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 2: Anatomia -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">📐 Anatomia de um MCP server — Protocol overview</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">MCP é um <strong class="text-rose-400">protocolo JSON-RPC 2.0</strong> sobre stdio (para servers locais) ou HTTP+SSE (para remotos). O server expõe três tipos de capability: <code class="text-rose-400">tools</code> (funções chamáveis), <code class="text-rose-400">resources</code> (dados leves) e <code class="text-rose-400">prompts</code> (templates reutilizáveis). O cliente descobre tudo via <code>initialize</code> + <code>list_*</code> e invoca via <code>call_*</code>.</p>
+
+    <div class="bg-gradient-to-br from-rose-900/30 to-dark-800 rounded-xl border border-rose-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-rose-400 mb-4 flex items-center"><span class="mr-2">🧩</span> Três capabilities, três usos</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><span><strong>tools</strong> — side-effects e queries com parâmetros: <code>search_orders</code>, <code>create_ticket</code>, <code>send_email</code></span></li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><span><strong>resources</strong> — leitura idempotente por URI: <code>customer://12345</code>, <code>file:///etc/config.yaml</code></span></li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><span><strong>prompts</strong> — templates parametrizáveis que viram mensagens do user: <code>review_pr</code>, <code>onboard_qa</code></span></li>
+      </ul>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Handshake JSON-RPC típico (Hermes ↔ server):</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-rose-400 font-mono"><code>→ {"jsonrpc":"2.0","id":1,"method":"initialize",
+   "params":{"protocolVersion":"2024-11-05","capabilities":{}}}
+← {"jsonrpc":"2.0","id":1,"result":{"serverInfo":{"name":"acme-crm","version":"0.3.1"},
+   "capabilities":{"tools":{},"resources":{}}}}
+
+→ {"jsonrpc":"2.0","id":2,"method":"tools/list"}
+← {"jsonrpc":"2.0","id":2,"result":{"tools":[
+    {"name":"search_orders","description":"...","inputSchema":{...}},
+    {"name":"get_user",      "description":"...","inputSchema":{...}},
+    {"name":"send_email",    "description":"...","inputSchema":{...}}
+  ]}}
+
+→ {"jsonrpc":"2.0","id":3,"method":"tools/call",
+   "params":{"name":"search_orders","arguments":{"customer_id":"42","status":"open"}}}
+← {"jsonrpc":"2.0","id":3,"result":{"content":[
+    {"type":"text","text":"3 orders found: #1041, #1056, #1098"}
+  ]}}
+</code></pre>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 3: Python FastMCP -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">🐍 Implementação Python — FastMCP step-by-step</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed"><strong class="text-rose-400">FastMCP</strong> é o jeito mais rápido — um decorator transforma função em tool, type hints viram schema. Vamos expor 3 tools reais de um CRM fictício: buscar pedidos, obter usuário e mandar email transacional.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># servers/acme-crm/server.py
+import os
+from typing import Literal
+from fastmcp import FastMCP
+import httpx
+
+mcp = FastMCP("acme-crm")
+
+CRM_BASE  = os.environ["ACME_CRM_BASE_URL"]
+CRM_TOKEN = os.environ["ACME_CRM_TOKEN"]
+
+_client = httpx.Client(
+    base_url=CRM_BASE,
+    headers={"Authorization": f"Bearer {CRM_TOKEN}"},
+    timeout=10.0,
+)
+
+@mcp.tool()
+def search_orders(
+    customer_id: str,
+    status: Literal["open", "paid", "shipped", "all"] = "open",
+    limit: int = 20,
+) -> list[dict]:
+    """Search orders for a given customer. Returns at most `limit` rows."""
+    r = _client.get(
+        "/v2/orders",
+        params={"customer": customer_id, "status": status, "limit": limit},
+    )
+    r.raise_for_status()
+    return r.json()["data"]
+
+@mcp.tool()
+def get_user(user_id: str) -> dict:
+    """Fetch full user profile (name, email, tier, lifetime_value)."""
+    r = _client.get(f"/v2/users/{user_id}")
+    r.raise_for_status()
+    return r.json()
+
+@mcp.tool()
+def send_email(
+    to: str,
+    subject: str,
+    body_markdown: str,
+    template: str | None = None,
+) -> dict:
+    """Send a transactional email via the CRM mailer. Idempotent by subject+to within 24h."""
+    r = _client.post("/v2/email/send", json={
+        "to": to, "subject": subject,
+        "body": body_markdown, "template": template,
+    })
+    r.raise_for_status()
+    return {"message_id": r.json()["id"], "queued": True}
+
+if __name__ == "__main__":
+    mcp.run()   # default: stdio transport
+</code></pre>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Testar local com o <code class="text-rose-400">mcp-inspector</code> antes mesmo de plugar no Hermes:</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-rose-400 font-mono"><code>$ pip install fastmcp httpx
+$ ACME_CRM_BASE_URL=https://crm.acme.internal \
+  ACME_CRM_TOKEN=sk_test_xxx \
+  npx @modelcontextprotocol/inspector python server.py
+
+# Abre UI em http://localhost:5173 — lista tools, executa call, mostra JSON-RPC bruto
+</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — mcp-inspector é seu melhor amigo</h3>
+      <p class="text-neutral-300">O <code class="text-primary">@modelcontextprotocol/inspector</code> roda local e mostra exatamente o que o agent vê: schema gerado, requests/responses, erros. Sempre debug aqui <strong>antes</strong> de plugar no Hermes — economiza horas.</p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 4: Node implementation -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🟢 Implementação Node — @modelcontextprotocol/sdk</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Mesmo server, em TypeScript, usando o SDK oficial. Mais verboso que FastMCP — schemas declarados com <strong class="text-rose-400">Zod</strong> — mas idêntico em capabilities. Use Node quando o time já vive no ecossistema JS ou quando precisa rodar em runtime serverless (Cloudflare Workers, Vercel).</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code>// servers/acme-crm/server.ts
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import { z } from "zod";
+
+const CRM_BASE  = process.env.ACME_CRM_BASE_URL!;
+const CRM_TOKEN = process.env.ACME_CRM_TOKEN!;
+
+async function crm(path: string, init: RequestInit = {}) {
+  const r = await fetch(`${CRM_BASE}${path}`, {
+    ...init,
+    headers: { Authorization: `Bearer ${CRM_TOKEN}`, "content-type": "application/json", ...(init.headers || {}) },
+  });
+  if (!r.ok) throw new Error(`CRM ${r.status}: ${await r.text()}`);
+  return r.json();
+}
+
+const tools = {
+  search_orders: {
+    description: "Search orders for a given customer.",
+    schema: z.object({
+      customer_id: z.string(),
+      status: z.enum(["open", "paid", "shipped", "all"]).default("open"),
+      limit: z.number().int().min(1).max(100).default(20),
+    }),
+    handler: async (a: any) => crm(`/v2/orders?customer=${a.customer_id}&status=${a.status}&limit=${a.limit}`),
+  },
+  get_user: {
+    description: "Fetch full user profile.",
+    schema: z.object({ user_id: z.string() }),
+    handler: async (a: any) => crm(`/v2/users/${a.user_id}`),
+  },
+  send_email: {
+    description: "Send transactional email. Idempotent by subject+to within 24h.",
+    schema: z.object({
+      to: z.string().email(),
+      subject: z.string(),
+      body_markdown: z.string(),
+      template: z.string().optional(),
+    }),
+    handler: async (a: any) => crm("/v2/email/send", {
+      method: "POST",
+      body: JSON.stringify({ to: a.to, subject: a.subject, body: a.body_markdown, template: a.template }),
+    }),
+  },
+};
+
+const server = new Server({ name: "acme-crm", version: "0.3.1" }, { capabilities: { tools: {} } });
+
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: Object.entries(tools).map(([name, t]) => ({
+    name, description: t.description, inputSchema: zodToJsonSchema(t.schema),
+  })),
+}));
+
+server.setRequestHandler(CallToolRequestSchema, async (req) => {
+  const t = (tools as any)[req.params.name];
+  if (!t) throw new Error(`unknown tool ${req.params.name}`);
+  const args = t.schema.parse(req.params.arguments ?? {});
+  const result = await t.handler(args);
+  return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+
+await server.connect(new StdioServerTransport());
+</code></pre>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Plugando no Hermes (igual para Python ou Node):</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-rose-400 font-mono"><code># ~/.hermes/config.yaml
+mcpServers:
+  acme-crm:
+    command: python
+    args: ["/opt/mcp/acme-crm/server.py"]
+    env:
+      ACME_CRM_BASE_URL: https://crm.acme.internal
+      ACME_CRM_TOKEN: ${secrets.ACME_CRM_TOKEN}   # resolve de ~/.hermes/secrets
+
+  # ou versão Node
+  acme-crm-node:
+    command: node
+    args: ["/opt/mcp/acme-crm/dist/server.js"]
+    env:
+      ACME_CRM_BASE_URL: https://crm.acme.internal
+      ACME_CRM_TOKEN: ${secrets.ACME_CRM_TOKEN}
+</code></pre>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 5: Auth -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🔐 Auth e secrets — OAuth, JWT, service accounts</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Server interno corporativo precisa autenticar — e <strong class="text-rose-400">jamais ter token em código</strong>. Três caminhos comuns: <strong>service account</strong> com token estático (mais simples, ok para CI), <strong>JWT por usuário</strong> (quando ações precisam de auditoria por pessoa) e <strong>OAuth 2.0 / OIDC</strong> (necessário para acessos a 3rd party em nome do user).</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># Versão JWT por usuário — Hermes passa user_email no contexto
+from fastmcp import FastMCP, Context
+import jwt, time, os
+
+mcp = FastMCP("acme-crm")
+SIGNING_KEY = os.environ["ACME_JWT_PRIVATE_KEY"]   # PEM, carregado de secret
+
+def mint_jwt(user_email: str) -> str:
+    return jwt.encode(
+        {
+            "sub": user_email,
+            "iss": "hermes-mcp",
+            "aud": "acme-crm",
+            "iat": int(time.time()),
+            "exp": int(time.time()) + 300,   # 5 min
+        },
+        SIGNING_KEY,
+        algorithm="RS256",
+    )
+
+@mcp.tool()
+def get_user(ctx: Context, user_id: str) -> dict:
+    """Fetch user — runs AS the calling agent's user, audited downstream."""
+    token = mint_jwt(ctx.session.user_email)
+    r = httpx.get(
+        f"{CRM_BASE}/v2/users/{user_id}",
+        headers={"Authorization": f"Bearer {token}"},
+        timeout=10.0,
+    )
+    r.raise_for_status()
+    return r.json()
+</code></pre>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> PII e blast radius</h3>
+      <p class="text-neutral-300">Tools que retornam <strong>PII</strong> (CPF, email pessoal, endereço) devem: (1) ter scope explícito no <code>description</code> para o roteador, (2) registrar quem acessou o quê — log estruturado com <code>user_email</code> + <code>tool_name</code> + <code>args_redacted</code>, (3) sempre validar permissão do <em>user real</em>, nunca confiar no agente. O agente é confused deputy potencial — você é o gatekeeper.</p>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> MCP servers populares na comunidade (referência)</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>filesystem</strong> — leitura/escrita escopada (oficial Anthropic)</li>
+        <li><strong>github</strong> — issues, PRs, código (oficial)</li>
+        <li><strong>postgres / sqlite</strong> — query read-only por padrão</li>
+        <li><strong>slack</strong> — mensagens, canais, search</li>
+        <li><strong>puppeteer</strong> — browser headless</li>
+        <li><strong>brave-search / tavily</strong> — web search</li>
+      </ul>
+      <p class="text-neutral-300 text-sm mt-3">Lista completa e curada em <a href="https://github.com/modelcontextprotocol/servers" target="_blank" class="text-blue-400 hover:underline">modelcontextprotocol/servers</a>. Antes de criar o seu, sempre cheque se já existe.</p>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 6: Deploy -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🚀 Deploy e publicação — Docker, npm, pip, share</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">MCP servers locais rodam como subprocess do agente — basta um binário ou script. Para distribuir em escala, três caminhos: <strong class="text-rose-400">Docker</strong> (server rodando isolado, qualquer transport), <strong class="text-rose-400">npm/pip</strong> (instalação trivial, server roda como subprocess), <strong class="text-rose-400">SaaS</strong> (server remoto via HTTP+SSE, vários clientes compartilham).</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># servers/acme-crm/Dockerfile
+FROM python:3.12-slim
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY server.py .
+
+# stdio mode: Hermes spawns this as subprocess via docker run -i
+# SSE mode: expose 8080 e troca para mcp.run(transport="sse")
+ENV PYTHONUNBUFFERED=1
+ENTRYPOINT ["python", "server.py"]
+</code></pre>
+    </div>
+
+    <p class="text-neutral-300 mb-4">Construção típica do server, do esqueleto ao deploy, em ~90 minutos:</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Esqueleto (10 min)</h4>
+          <p class="text-sm text-neutral-400 mb-3"><code>pip install fastmcp</code> + <code>FastMCP("name")</code> + <code>mcp.run()</code></p>
+          <p class="text-neutral-300 text-sm">Server vazio já responde a <code>initialize</code> e <code>tools/list</code> (lista vazia). Inspector já abre.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Primeira tool real (20 min)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Endpoint mais usado do backend, type hints completos, docstring clara</p>
+          <p class="text-neutral-300 text-sm">Testar via inspector. Esta tool é o gabarito de qualidade — descrição, args, output.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Auth real (20 min)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Sai do token hardcoded; passa por env var / secret manager; smoke test</p>
+          <p class="text-neutral-300 text-sm">Aqui é onde 60% dos servers caseiros morrem — não pule.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">4</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Dockerfile + publish (20 min)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Build, push para registry interno, tag semver</p>
+          <p class="text-neutral-300 text-sm">Imagem &lt; 100MB com python:3.12-slim. Para pip/npm: configure pyproject.toml ou package.json com bin entry.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">5</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Integrar Hermes + onboarding (20 min)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Atualizar config.yaml, escrever README com snippet copia-cola, anunciar no Discord interno</p>
+          <p class="text-neutral-300 text-sm">Total: ~90 min do nada ao server em produção interna. Replicável.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica final</h3>
+      <p class="text-neutral-300">Publique no <a href="https://github.com/modelcontextprotocol/servers" target="_blank" class="text-primary hover:underline">awesome-mcp-servers</a> via PR quando o server for útil para a comunidade. Mesmo servers internos costumam ter um "core" genérico extraível — isso multiplica feedback, atrai contribuições e fortalece o ecossistema.</p>
+    </div>
+  </section>
+
+  <!-- Resumo final — CURSO COMPLETO -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-rose-900/40 via-dark-800 to-dark-800 rounded-xl border border-rose-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Quando MCP:</strong> <span class="text-neutral-300">5+ consumidores, portabilidade entre agentes, domínio único — caso contrário use tool direta.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Anatomia:</strong> <span class="text-neutral-300">JSON-RPC 2.0 + stdio/SSE; capabilities = tools, resources, prompts.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Python FastMCP:</strong> <span class="text-neutral-300">decorator + type hints = schema automático; menor cerimônia.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Node SDK:</strong> <span class="text-neutral-300">mais verboso mas igual em poder; ótimo para serverless edge.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Auth:</strong> <span class="text-neutral-300">JWT por usuário para auditoria; secrets via Hermes secret manager; PII com log e gatekeeping no server.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Deploy:</strong> <span class="text-neutral-300">Docker para infra interna; pip/npm para distribuição; ~90 min do zero ao production-ready.</span></div></div>
+      </div>
+
+      <div class="bg-dark-800/50 rounded-lg p-6 mb-8 border border-rose-500/30">
+        <h3 class="text-xl font-bold text-rose-400 mb-3 flex items-center"><span class="mr-2">🎉</span> Curso completo!</h3>
+        <p class="text-neutral-300 mb-4">Você terminou as <strong>6 trilhas e 14 módulos</strong> do curso Hermes Agent — dos fundamentos do agente, passando pela arquitetura, instalação, manutenção, deploy e agora extensibilidade avançada. Você sabe construir, operar, customizar e estender o agente para qualquer cenário.</p>
+        <p class="text-neutral-300 mb-4">Próximos passos recomendados:</p>
+        <ul class="space-y-2 text-neutral-300 mb-2">
+          <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">→</span><span>Publique uma skill ou MCP server no GitHub e divulgue no Discord</span></li>
+          <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">→</span><span>Abra uma issue ou PR para o repo oficial — bug, doc, exemplo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">→</span><span>Compartilhe o curso com um colega e construam algo juntos</span></li>
+        </ul>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <a href="https://github.com/NousResearch/hermes-agent" target="_blank" class="text-center px-4 py-3 bg-dark-700 hover:bg-dark-600 text-neutral-200 rounded-lg font-semibold transition-colors border border-dark-600">⭐ Repo Nous Research</a>
+        <a href="https://discord.gg/NousResearch" target="_blank" class="text-center px-4 py-3 bg-dark-700 hover:bg-dark-600 text-neutral-200 rounded-lg font-semibold transition-colors border border-dark-600">💬 Discord da comunidade</a>
+        <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" class="text-center px-4 py-3 bg-dark-700 hover:bg-dark-600 text-neutral-200 rounded-lg font-semibold transition-colors border border-dark-600">📚 Documentação oficial</a>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha 6</a>
+        <a href="../../index.html" class="flex-1 text-center px-6 py-3 bg-rose-600 text-white rounded-lg font-semibold hover:bg-rose-500 transition-colors">🪽 Voltar à landing do curso</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>

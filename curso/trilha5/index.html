@@ -106,9 +106,9 @@
     <h1 class="text-3xl sm:text-4xl font-bold mb-4">🚀 Implementação e Deployment</h1>
     <p class="text-lg text-neutral-400 max-w-3xl">Coloque o Hermes Agent em produção. Compare 7 backends de execução (local, Docker, SSH, Singularity, Modal, Daytona, Vercel Sandbox) e mergulhe no sample oficial da AWS no Bedrock AgentCore com Firecracker microVMs.</p>
     <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">2</div><div class="text-xs text-neutral-400">Módulos</div></div>
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">12</div><div class="text-xs text-neutral-400">Tópicos</div></div>
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">~2h</div><div class="text-xs text-neutral-400">Duração</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">4</div><div class="text-xs text-neutral-400">Módulos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">24</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">~4h</div><div class="text-xs text-neutral-400">Duração</div></div>
       <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
     </div>
   </div>
@@ -128,6 +128,16 @@
         <div class="flex items-center justify-between mb-2"><span class="text-teal-400 font-bold text-sm">5.2</span><span class="text-xs text-neutral-500">~60 min</span></div>
         <h3 class="font-semibold mb-1 group-hover:text-teal-400 transition-colors">☁️ AWS Bedrock AgentCore</h3>
         <p class="text-xs text-neutral-400">Sample oficial, Firecracker, CDK</p>
+      </a>
+      <a href="#modulo-5-3" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-teal-400 font-bold text-sm">5.3</span><span class="text-xs text-neutral-500">~55 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-teal-400 transition-colors">📡 Observabilidade em produção</h3>
+        <p class="text-xs text-neutral-400">OTel, Grafana, SLOs, alertas</p>
+      </a>
+      <a href="#modulo-5-4" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-teal-400 font-bold text-sm">5.4</span><span class="text-xs text-neutral-500">~55 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-teal-400 transition-colors">🔁 CI/CD para Hermes Agent</h3>
+        <p class="text-xs text-neutral-400">GitHub Actions, canary, rollback</p>
       </a>
     </div>
   </section>
@@ -346,6 +356,218 @@
     </div>
   </div>
 
+  <!-- Módulo 5.3 -->
+  <div id="modulo-5-3" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-teal-400 font-bold">5.3</span><span class="text-xs text-neutral-500">~55 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">📡 Observabilidade em produção</h3>
+      <p class="text-neutral-400 text-sm">OpenTelemetry, Grafana, logs estruturados, SLOs, alertas PagerDuty/ntfy. Sem isso, prod é caixa-preta.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">📊</span>
+          <div><span class="font-medium">Os 3 pilares</span><span class="text-neutral-500 text-sm ml-2">- Logs, métricas, traces</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Os três sinais que compõem observabilidade moderna: eventos discretos (logs), séries temporais agregadas (métricas) e timeline multi-serviço (traces).</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cada turno do Hermes envolve LLM call + tool + sandbox; só os 3 juntos respondem "o que aconteceu, com que frequência, e onde está o gargalo".</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">RED (Rate/Errors/Duration), USE (Utilization/Saturation/Errors), correlation via trace_id.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">🔭</span>
+          <div><span class="font-medium">OpenTelemetry</span><span class="text-neutral-500 text-sm ml-2">- Instrumentação no Hermes</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Padrão CNCF (SDK + collector) para emitir telemetria. Instrumenta uma vez, troca o backend sem mudar código.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">É a maneira vendor-neutral de instrumentar o Hermes — Tempo, Jaeger, Datadog, Honeycomb falam OTLP.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">TracerProvider, BatchSpanProcessor, OTLP gRPC, auto-instrumentação de httpx/openai.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">📈</span>
+          <div><span class="font-medium">Grafana dashboards</span><span class="text-neutral-500 text-sm ml-2">- Templates prontos para Hermes</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Frontend único com 3 datasources (Prometheus, Loki, Tempo) e dashboards de Overview, Per-User e Cost.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Dashboards prontos reduzem MTTR — quem olha 3 painéis bem desenhados resolve mais rápido que quem grep'a log.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">PromQL para RED, heatmaps, drill-down para Tempo, templates do grafana.com (ID 20100).</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🎯</span>
+          <div><span class="font-medium">SLOs práticos</span><span class="text-neutral-500 text-sm ml-2">- Latência P95, error rate, custo</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Promessa numérica (P95 &lt; 3s, error &lt; 1%, custo/req &lt; $0.02) em janelas rolling com error budget definido.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem SLO, alertas viram ruído; com SLO, alertas atacam só quando o budget queima rápido.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">SLI vs SLO, error budget, burn rate multi-window, Sloth/Pyrra para geração de regras.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🚨</span>
+          <div><span class="font-medium">Alerting</span><span class="text-neutral-500 text-sm ml-2">- PagerDuty, ntfy, Discord webhook</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Roteamento por severidade (page vs ticket) via Alertmanager para ntfy, Discord webhook ou PagerDuty.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Alerta sem ação é ruído; cada alerta precisa de severidade clara, runbook e owner.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">burn-rate alerts, repeat_interval, runbook annotation, cardinality bomb (NUNCA user_id em label).</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🔍</span>
+          <div><span class="font-medium">Distributed tracing</span><span class="text-neutral-500 text-sm ml-2">- Seguir request multi-hop</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Árvore com timing exato de cada span: webhook → router → 3 LLM calls → sandbox → tool → S3.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Reduz MTTR de horas para minutos: heatmap mostra a tool culpada, trace confirma a root cause em segundos.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">trace_id propagação, log↔trace correlation, Grafana Tempo, span attributes.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-5-3')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-5-3.html" class="px-4 py-2 text-sm bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
+  <!-- Módulo 5.4 -->
+  <div id="modulo-5-4" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-teal-400 font-bold">5.4</span><span class="text-xs text-neutral-500">~55 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">🔁 CI/CD para Hermes Agent</h3>
+      <p class="text-neutral-400 text-sm">GitHub Actions buildando + testando skills + deploy automático no AWS/Docker/Modal. Profissionaliza o ciclo de release.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">🏗️</span>
+          <div><span class="font-medium">Pipeline anatomy</span><span class="text-neutral-500 text-sm ml-2">- Build, test, security, deploy</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">7 estágios canônicos: lint, unit, eval, security, build, deploy staging, deploy prod com canary.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cada estágio é um quality gate; ordenação correta faz pipeline falhar rápido e barato.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Fail fast, artefato imutável, deploy declarativo, concurrency groups.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">✅</span>
+          <div><span class="font-medium">Testes de skill</span><span class="text-neutral-500 text-sm ml-2">- Eval framework, regressão semântica</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Suite de avaliação (promptfoo/Inspect) que roda casos representativos medindo fidelidade, safety e latência.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Teste unit não pega regressão de prompt; eval bloqueia PR que degrada qualidade semântica.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Pass rate, regression delta, cost per eval, llm-rubric assertions.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">🔒</span>
+          <div><span class="font-medium">Security gates</span><span class="text-neutral-500 text-sm ml-2">- pip-audit, secrets scan, SAST</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">3 scans obrigatórios em todo PR: dependências (pip-audit), secrets (gitleaks), SAST (bandit/Semgrep).</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Rápidos e baratos; o custo de não ter é uma chave AWS no histórico do git.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">SARIF upload, ::add-mask::, OIDC para credenciais, scan no PR e no main.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🐳</span>
+          <div><span class="font-medium">Build &amp; push</span><span class="text-neutral-500 text-sm ml-2">- Docker multi-arch, registry</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Dockerfile multi-stage (builder + runtime slim) + buildx multi-arch (amd64+arm64) + push ECR/GHCR.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Imagem menor = cold start mais rápido; arm64 destrava Graviton (~20% mais barato).</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">buildx QEMU, cache-from/to gha, provenance + SBOM, healthcheck no Dockerfile.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🚀</span>
+          <div><span class="font-medium">Deploy strategies</span><span class="text-neutral-500 text-sm ml-2">- Blue/green, canary, rolling</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Canary (5% → 25% → 100%) com SLO watch entre etapas é o default sensato; B/G é overkill para stateless.</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Reduz blast radius — quando algo dá errado, só 5% dos usuários veem.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">ECSCanary10Percent5Minutes, feature flags, healthcheck profundo, janela diurna.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🔙</span>
+          <div><span class="font-medium">Rollback automático</span><span class="text-neutral-500 text-sm ml-2">- Health check failed → revert</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">CodeDeploy/Argo/Spinnaker faz auto-revert quando alarm CloudWatch dispara (error, latência, sandbox fail).</p></div>
+            <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Reverter em &lt;2 min &gt; diagnosticar em &gt;30 min. Treine como game day mensal.</p></div>
+            <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">--auto-rollback-configuration, alarms compostos, deployment group, post-deploy SLO watch.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-5-4')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-5-4.html" class="px-4 py-2 text-sm bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
 </main>
 
 <div id="modal-5-1" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
@@ -365,6 +587,26 @@
       <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
     </div>
     <iframe src="modulo-5-2.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-5-3" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-teal-400 font-bold">5.3</span><span class="font-semibold">Observabilidade em produção</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-5-3.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-5-4" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-teal-400 font-bold">5.4</span><span class="font-semibold">CI/CD para Hermes Agent</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-5-4.html" class="flex-1 w-full rounded-b-xl"></iframe>
   </div>
 </div>
 

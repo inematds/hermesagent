@@ -108,9 +108,9 @@
     <h1 class="text-3xl sm:text-4xl font-bold mb-4">🧩 Extensibilidade e Novos Recursos</h1>
     <p class="text-lg text-neutral-400 max-w-3xl">Incorpore novos recursos no Hermes Agent. Crie Skills próprias seguindo o padrão aberto <strong class="text-rose-400">agentskills.io</strong>, integre MCP servers de terceiros, construa tools via Tool Gateway, adicione novos canais de mensagem, agende jobs com Cron e contribua de volta para a comunidade.</p>
     <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">2</div><div class="text-xs text-neutral-400">Módulos</div></div>
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">12</div><div class="text-xs text-neutral-400">Tópicos</div></div>
-      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">~2h</div><div class="text-xs text-neutral-400">Duração</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">4</div><div class="text-xs text-neutral-400">Módulos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">24</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">~4h</div><div class="text-xs text-neutral-400">Duração</div></div>
       <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
     </div>
   </div>
@@ -130,6 +130,16 @@
         <div class="flex items-center justify-between mb-2"><span class="text-rose-400 font-bold text-sm">6.2</span><span class="text-xs text-neutral-500">~60 min</span></div>
         <h3 class="font-semibold mb-1 group-hover:text-rose-400 transition-colors">🔌 MCP, Gateway, canais e Cron</h3>
         <p class="text-xs text-neutral-400">Conectar, customizar, contribuir</p>
+      </a>
+      <a href="#modulo-6-3" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-rose-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-rose-400 font-bold text-sm">6.3</span><span class="text-xs text-neutral-500">~55 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-rose-400 transition-colors">🧠 Padrões avançados de skills</h3>
+        <p class="text-xs text-neutral-400">Composition, state, RAG, multi-LLM</p>
+      </a>
+      <a href="#modulo-6-4" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-rose-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-rose-400 font-bold text-sm">6.4</span><span class="text-xs text-neutral-500">~60 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-rose-400 transition-colors">🏗️ MCP server próprio</h3>
+        <p class="text-xs text-neutral-400">Python, Node, auth, Docker</p>
       </a>
     </div>
   </section>
@@ -348,6 +358,218 @@
     </div>
   </div>
 
+  <!-- MÓDULO 6.3 -->
+  <div id="modulo-6-3" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-rose-400 font-bold">6.3</span><span class="text-xs text-neutral-500">~55 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">🧠 Padrões avançados de skills</h3>
+      <p class="text-neutral-400 text-sm">Composition (skill chamando skill), state machines, RAG embutido em skill, skills que usam outros LLMs. Saia do hello world.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">🪆</span>
+          <div><span class="font-medium">Composition</span><span class="text-neutral-500 text-sm ml-2">- Skill A invoca skill B</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Skill orquestradora chamando outras skills via <code>hermes.invoke()</code> e compondo seus resultados num grafo controlado.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Reuso real (a mesma skill atende múltiplos casos), eval isolado, troca barata de implementação.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">invoke() com max_depth, hermes skill graph, detecção de ciclos, profundidade controlada.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">🤖</span>
+          <div><span class="font-medium">State machines</span><span class="text-neutral-500 text-sm ml-2">- Workflows com checkpoint</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Workflow de N passos sequenciais com estado serializado entre eles, retomada automática após falha e auditoria por passo.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Skills que chamam APIs externas precisam sobreviver a crashes sem refazer trabalho já cobrado.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">@hermes.step, depends_on, retries+backoff, hermes run resume, checkpoint em ~/.hermes/state/runs/.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">📚</span>
+          <div><span class="font-medium">RAG embutido</span><span class="text-neutral-500 text-sm ml-2">- Vector store local</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Embedding model + ChromaDB local versionado junto da skill para consultar corpus específico (políticas, docs, FAQs).</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Controle total sobre chunking, relevância e fontes — sem depender de MCP externo para conhecimento de domínio.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">ingest() separado de run(), 3-8 chunks, sentence-transformers, retornar fontes na resposta.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🔀</span>
+          <div><span class="font-medium">Multi-LLM router</span><span class="text-neutral-500 text-sm ml-2">- Modelo certo por subtarefa</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Router interno na skill que escolhe o modelo (Haiku, Hermes 70B/405B, GPT-4o) baseado no tipo de subtarefa.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Reduz custo ~70% mantendo qualidade — classify/extract no modelo barato, redação no modelo grande.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Mapa de MODELS, função pick(), métricas de custo relativo, observabilidade por subtarefa.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🧪</span>
+          <div><span class="font-medium">Side-effects</span><span class="text-neutral-500 text-sm ml-2">- Idempotência, retries, locks</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Conjunto de decoradores (<code>@idempotent</code>, <code>@lock</code>) + propagação de idempotency_key para evitar duplicação em chamadas que alteram o mundo.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Modelo pode retomar/retentar silenciosamente — sem idempotência, você cobra o cliente duas vezes.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Chave estável (sha256 dos args), saga, outbox, circuit breaker, chain of responsibility.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🎯</span>
+          <div><span class="font-medium">Anti-patterns</span><span class="text-neutral-500 text-sm ml-2">- Skills que viram monólitos</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Sintomas (description com 3+ ORs, SKILL.md de 500 linhas, run() com switch de "modos") e padrão de refactor em skills focadas.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Monólito mata trigger rate, inviabiliza eval e afasta colaboradores. Quebrar cedo custa pouco.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Regra "1 frase sem ou", description &lt;200 chars, SKILL.md &lt;150 linhas, eval com 5-15 casos.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-6-3')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-6-3.html" class="px-4 py-2 text-sm bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
+  <!-- MÓDULO 6.4 -->
+  <div id="modulo-6-4" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-rose-400 font-bold">6.4</span><span class="text-xs text-neutral-500">~60 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">🏗️ Construindo um MCP server próprio</h3>
+      <p class="text-neutral-400 text-sm">Do zero, em Python ou Node, expor API interna da sua empresa para o Hermes. Caminho mais comum para adoção corporativa.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">🎯</span>
+          <div><span class="font-medium">Quando criar MCP</span><span class="text-neutral-500 text-sm ml-2">- vs tool direta</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Critério de decisão entre criar um MCP server completo ou apenas usar requests/tool decorator numa skill específica.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">MCP tem overhead — vale quando há reuso real entre skills, portabilidade entre agentes ou consumo por times externos.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Tabela MCP vs REST vs gRPC, 5+ consumidores como threshold, 1 server = 1 domínio.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">📐</span>
+          <div><span class="font-medium">Anatomia do protocolo</span><span class="text-neutral-500 text-sm ml-2">- JSON-RPC, tools, resources</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">MCP = JSON-RPC 2.0 sobre stdio ou HTTP+SSE; capabilities = tools (funções), resources (URIs), prompts (templates).</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Entender o handshake (initialize → list → call) é essencial para debugar quando algo não funciona.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">protocolVersion, inputSchema, content[], stdio vs SSE, capability negotiation.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">🐍</span>
+          <div><span class="font-medium">Python FastMCP</span><span class="text-neutral-500 text-sm ml-2">- Decorator + type hints</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Framework Python que transforma funções com type hints em tools MCP via <code>@mcp.tool()</code>.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Menor cerimônia para chegar a server funcional — ideal para iteração rápida e adopção pelo time.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">FastMCP("name"), Literal/Optional viram enum/optional, docstring vira description, mcp.run(transport=...).</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🟢</span>
+          <div><span class="font-medium">Node SDK</span><span class="text-neutral-500 text-sm ml-2">- TypeScript + Zod</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">SDK oficial <code>@modelcontextprotocol/sdk</code> com Server, handlers de schema e validação via Zod.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Quando o time já vive em JS/TS ou quando você precisa rodar em serverless edge (Workers, Vercel).</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Server + StdioServerTransport, setRequestHandler, ListToolsRequestSchema, zodToJsonSchema.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🔐</span>
+          <div><span class="font-medium">Auth e secrets</span><span class="text-neutral-500 text-sm ml-2">- JWT, OAuth, service accounts</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Três caminhos de auth: service account (estático), JWT por usuário (auditável), OAuth (3rd party em nome do user).</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Server interno expõe dados sensíveis — auth correta evita vazamento de PII e ações erradas em nome de usuários.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">JWT RS256 com TTL curto, secrets via env/secret manager, ctx.session.user_email, confused deputy risk.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🚀</span>
+          <div><span class="font-medium">Deploy e publicação</span><span class="text-neutral-500 text-sm ml-2">- Docker, npm, pip, share</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-rose-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Empacotamento e distribuição: Docker para infra interna, pip/npm para distribuição open, SaaS para multi-tenant.</p></div>
+            <div><span class="text-rose-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Build path bem definido leva do esqueleto ao server em produção em ~90 minutos, replicável por toda squad.</p></div>
+            <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">python:3.12-slim, ENTRYPOINT stdio, transport SSE em SaaS, awesome-mcp-servers para contribuição.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-6-4')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-6-4.html" class="px-4 py-2 text-sm bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
 </main>
 
 <div id="modal-6-1" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
@@ -367,6 +589,26 @@
       <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
     </div>
     <iframe src="modulo-6-2.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-6-3" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-rose-400 font-bold">6.3</span><span class="font-semibold">Padrões avançados de skills</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-6-3.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-6-4" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-rose-400 font-bold">6.4</span><span class="font-semibold">Construindo um MCP server próprio</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-6-4.html" class="flex-1 w-full rounded-b-xl"></iframe>
   </div>
 </div>
 
