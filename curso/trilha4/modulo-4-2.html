@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 4.2 — Backup, segurança e monitoramento | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217,119,6,0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217,119,6,0.25); }
+    html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217,119,6,0.18); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-amber-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-amber-400">Trilha 4</a><span>/</span>
+    <span class="text-amber-400">Módulo 4.2</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MÓDULO 4.2</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">💾 Backup, segurança e monitoramento</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Memória é o ativo mais caro do agente — e o mais fácil de perder. API keys vazadas são incidente recorrente e caro. Sem monitor, a fatura te avisa do problema. Este módulo cobre backup automatizado, recuperação testada, gestão de segredos, isolamento por container e o playbook para quando algo dá ruim de verdade.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">~45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Médio</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Ops</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- TÓPICO 1 -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">💾 Backup de memória — DB SQLite + skills</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">A pasta <code class="text-amber-400">~/.hermes/</code> guarda tudo: <strong class="text-amber-400">memory.db</strong> (SQLite), <strong class="text-amber-400">skills/</strong>, <strong class="text-amber-400">profiles/</strong>, <strong class="text-amber-400">config.yaml</strong> e <code class="text-amber-400">snapshots/</code>. Backup correto é um <strong>tarball cifrado</strong> com snapshot consistente do SQLite — não use <code class="text-amber-400">cp</code> direto enquanto o agente está rodando.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># 1. Snapshot consistente do banco (não trava escritas)
+$ sqlite3 ~/.hermes/memory.db "VACUUM INTO '/tmp/memory-snap.db'"
+
+# 2. Empacotar tudo (substitui memory.db pela cópia consistente)
+$ DEST=~/backups/hermes-backup-$(date +%Y%m%d).tgz
+$ tar --exclude='./logs' --exclude='./snapshots' \
+      --transform="s|memory.db|memory.db.live|" \
+      -czf "$DEST" -C ~/.hermes . \
+      -C /tmp memory-snap.db
+
+# 3. Cifrar com age (chave pública do destinatário)
+$ age -r age1ql3z7hjy54... -o "$DEST.age" "$DEST"
+$ shred -u "$DEST"   # remove o tarball claro
+
+# 4. Enviar para storage externo
+$ rclone copy "$DEST.age" remote:hermes-backups/</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — backup automático via cron</h3>
+      <p class="text-neutral-300 mb-3">Coloque em <code class="text-amber-400">crontab -e</code>:</p>
+      <div class="bg-dark-900 rounded-lg border border-dark-600 p-3 overflow-x-auto">
+        <pre class="text-sm text-emerald-400 font-mono"><code># Backup diário 03:00, mantém 14 dias
+0 3 * * * /usr/local/bin/hermes-backup.sh >> ~/.hermes/logs/backup.log 2>&1</code></pre>
+      </div>
+      <p class="text-neutral-300 mt-3 text-sm">No macOS use <code class="text-amber-400">launchd</code>. No Windows, Task Scheduler. Para servidor, prefira <code class="text-amber-400">systemd</code> timer com <code class="text-amber-400">OnCalendar=daily</code>.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 2 -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">🔄 Recuperação — Restaurar em outra máquina</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed"><strong class="text-amber-400">Backup não testado = backup que não existe.</strong> Restaure pelo menos uma vez por trimestre em máquina limpa e rode <code class="text-amber-400">hermes doctor</code>. Abaixo, o caminho completo de restore num host novo (laptop quebrou, migrou pro servidor, está montando um par dev/prod).</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-amber-400 font-bold">1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Instalar a mesma versão</h4>
+          <p class="text-sm text-neutral-400 mb-3"><code class="text-amber-400">pipx install hermes-agent==0.9.7</code></p>
+          <p class="text-neutral-300 text-sm">Skills do backup podem depender de APIs específicas da versão. Sempre alinhe a versão antes do restore.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-amber-400 font-bold">2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Decifrar e extrair</h4>
+          <p class="text-sm text-neutral-400 mb-3"><code class="text-amber-400">age -d -i ~/.age/key.txt backup.tgz.age | tar -xz -C ~/.hermes</code></p>
+          <p class="text-neutral-300 text-sm">Restaure dentro de <code class="text-amber-400">~/.hermes/</code> recém-criado, com permissões 700 (<code class="text-amber-400">chmod 700 ~/.hermes</code>).</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-amber-400 font-bold">3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Reconfigurar segredos</h4>
+          <p class="text-sm text-neutral-400 mb-3">API keys NÃO devem vir no backup. Refaça via <code class="text-amber-400">pass</code> / 1Password / Vault.</p>
+          <p class="text-neutral-300 text-sm">Esse é o motivo de separar segredos do diretório de dados: backup pode viajar; segredos não.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-amber-400 font-bold">4</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Sanity check</h4>
+          <p class="text-sm text-neutral-400 mb-3"><code class="text-amber-400">hermes doctor && hermes memory stats && hermes skills list</code></p>
+          <p class="text-neutral-300 text-sm">Confira que # de conversas, skills e perfis batem com a origem. Se bater, restore validado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TÓPICO 3 -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">🔐 Gestão de API keys — Rotação e secrets manager</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Chaves em <code class="text-amber-400">.env</code> versionado por engano é o incidente mais comum de IA generativa em 2025-2026. <strong class="text-amber-400">Tire keys do disco em claro</strong>. Use um gerenciador de segredos e injete em runtime.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Rotar keys a cada <strong>90 dias</strong> (calendário recorrente).</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Usar <code class="text-amber-400">pass</code>, <code class="text-amber-400">op</code> (1Password CLI), Vault ou AWS Secrets Manager.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Keys com escopo mínimo (uma key por projeto).</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Rodar <code class="text-amber-400">gitleaks detect</code> em pre-commit.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Logar somente os últimos 4 caracteres da key.</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Commitar <code class="text-amber-400">.env</code> (mesmo em repo privado).</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Compartilhar a key no Slack/Discord.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Usar a mesma key em dev, staging e prod.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Postar saída de <code class="text-amber-400">env</code> em screenshot.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Reutilizar a key depois de "achar que vazou".</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Com pass (password-store)
+$ pass insert hermes/openrouter
+$ export OPENROUTER_API_KEY="$(pass hermes/openrouter)"
+$ hermes chat
+
+# Com 1Password CLI
+$ op signin
+$ op run --env-file=.env.template -- hermes chat
+# .env.template usa: OPENROUTER_API_KEY=op://Personal/openrouter/credential
+
+# Wrapper reusável
+$ cat > ~/bin/hermes-secure <<'EOF'
+#!/usr/bin/env bash
+export OPENROUTER_API_KEY="$(pass hermes/openrouter)"
+export ANTHROPIC_API_KEY="$(pass hermes/anthropic)"
+exec hermes "$@"
+EOF
+$ chmod +x ~/bin/hermes-secure</code></pre>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Atenção — key vazada é incidente</h3>
+      <p class="text-neutral-300">Se a key foi commitada, postada ou apareceu em log público, o relógio começou. Revogue <strong>antes</strong> de qualquer outra coisa: OpenRouter → Settings → Keys → Revoke. Anthropic → Console → API Keys → Revoke. <strong>Não tente "limpar o histórico do git" sem antes revogar</strong> — atacantes monitoram pushes em real time.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 4 -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🛡️ Isolamento — sandbox e containers</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Agente com acesso a shell + arquivos + internet é uma arma poderosa <em>e</em> uma superfície de ataque enorme. <strong class="text-amber-400">Prompt injection</strong> via documento/site pode tentar roubar arquivos ou exfiltrar dados. Isolamento contém o estrago.</p>
+
+    <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">🛡️</span> Camadas de isolamento (do mais leve ao mais forte)</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Workdir restrito:</strong> tools só leem/escrevem dentro de <code class="text-amber-400">~/work/hermes/</code>.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>firejail / bubblewrap:</strong> sandbox no nível do processo (Linux).</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Container Docker/Podman:</strong> filesystem, rede e usuário isolados.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>VM efêmera:</strong> microVM (Firecracker) ou Lima — máxima contenção.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><strong>Allowlist de domínios:</strong> network namespace + proxy só libera APIs conhecidas.</span></li>
+      </ul>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Docker isolado, sem rede além das APIs necessárias
+$ docker run --rm -it \
+    --name hermes-sbx \
+    -v ~/.hermes:/root/.hermes \
+    -v $(pwd):/work:ro \
+    --workdir /work \
+    --cap-drop ALL \
+    --security-opt no-new-privileges \
+    --read-only --tmpfs /tmp \
+    --env-file <(pass hermes/env) \
+    ghcr.io/nousresearch/hermes-agent:0.9.7 hermes chat
+
+# firejail (rápido, Linux desktop)
+$ firejail --net=none --whitelist=~/.hermes --whitelist=~/work \
+           --read-only=/etc --caps.drop=all hermes chat</code></pre>
+    </div>
+  </section>
+
+  <!-- TÓPICO 5 -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">📊 Monitoramento — Métricas, alertas, custos</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Você só gerencia o que mede. Hermes expõe métricas via <code class="text-amber-400">/metrics</code> (Prometheus) quando rodando em modo serviço, e o comando <code class="text-amber-400">hermes stats</code> dá um snapshot pontual. Combine com alertas de custo no painel do provedor.</p>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Checklist mínimo de monitoramento</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>Custo OpenRouter / Anthropic mensal</strong> — alerta em 70% do budget.</li>
+        <li><strong># de skills instaladas</strong> — anomalia se aumentar sozinho.</li>
+        <li><strong># de sessões / dia</strong> — baseline ajuda a detectar abuso.</li>
+        <li><strong>Latência p95</strong> — alerta se subir &gt; 2× a média móvel de 7 dias.</li>
+        <li><strong>Taxa de erro por tool</strong> — alerta se &gt; 5% em janela de 15 min.</li>
+        <li><strong>Tokens/sessão p99</strong> — picos podem indicar loop ou prompt injection.</li>
+        <li><strong>Tamanho do memory.db</strong> — cresce muito rápido = compactar.</li>
+      </ul>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Exemplo de regra Prometheus (alertmanager)
+groups:
+- name: hermes
+  rules:
+  - alert: HermesHighErrorRate
+    expr: rate(hermes_tool_errors_total[15m]) / rate(hermes_tool_calls_total[15m]) > 0.05
+    for: 10m
+    annotations:
+      summary: "Taxa de erro de tools > 5% por 10 minutos"
+
+  - alert: HermesDailyCostBudget
+    expr: sum(increase(hermes_provider_cost_usd[24h])) > 25
+    annotations:
+      summary: "Custo diário ultrapassou US$ 25"</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — alertas leves via ntfy</h3>
+      <p class="text-neutral-300">Para projetos pessoais sem Grafana/PagerDuty, um script cron que dispara push pro <a href="https://ntfy.sh" target="_blank" class="text-sky-400 hover:text-sky-300">ntfy.sh</a> quando o custo diário passa de US$ 5 já evita a fatura-surpresa. <code class="text-amber-400">curl -d "Hermes US$ 7 hoje" ntfy.sh/seu-topico</code>.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 6 -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🚨 Incident response — Quando dá ruim</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Em incidente, decisão lenta custa. <strong class="text-amber-400">Playbook escrito</strong> vira piloto automático. Os quatro cenários mais comuns no Hermes: <strong>key vazada</strong>, <strong>fatura disparada</strong>, <strong>loop infinito</strong>, <strong>memória corrompida</strong>.</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center"><span class="text-red-400 font-bold">🔥</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Key vazada (commit, post, screenshot)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Contenção em &lt; 5 minutos</p>
+          <p class="text-neutral-300 text-sm">1. Revogar a key no painel do provedor. 2. Emitir nova key, guardar em secret manager. 3. Buscar uso anômalo nas últimas 24h. 4. Só depois, rebase do git ou remoção do post.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center"><span class="text-red-400 font-bold">💸</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Fatura disparada (10× do baseline)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Conter primeiro, investigar depois</p>
+          <p class="text-neutral-300 text-sm">1. Pausar / revogar a key. 2. Rodar <code class="text-amber-400">hermes stats --since=24h</code> e <code class="text-amber-400">jq</code> nos logs por correlation_id mais caro. 3. Identificar se foi loop, abuse, ou skill nova. 4. Aplicar limite (rate-limit) e voltar.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center"><span class="text-red-400 font-bold">♾️</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Loop infinito de tools</h4>
+          <p class="text-sm text-neutral-400 mb-3">Sintoma: agente chama a mesma tool sem parar</p>
+          <p class="text-neutral-300 text-sm">1. <code class="text-amber-400">Ctrl-C</code> ou <code class="text-amber-400">hermes kill &lt;sess_id&gt;</code>. 2. Ativar <code class="text-amber-400">HERMES_DEBUG=1</code> e reproduzir. 3. Setar <code class="text-amber-400">max_tool_iterations: 8</code> em <code class="text-amber-400">config.yaml</code>. 4. Pedir issue no repo se for bug do core.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center"><span class="text-red-400 font-bold">🗃️</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Memória corrompida (DB lock, integrity check falhou)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Sintoma: <code class="text-amber-400">database disk image is malformed</code></p>
+          <p class="text-neutral-300 text-sm">1. <code class="text-amber-400">hermes stop</code>. 2. Tentar <code class="text-amber-400">sqlite3 memory.db ".recover" | sqlite3 memory-recovered.db</code>. 3. Se falhar, restaurar do último backup. 4. Rodar <code class="text-amber-400">hermes doctor</code> antes de voltar a usar.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — post-mortem blame-free</h3>
+      <p class="text-neutral-300">Depois de cada incidente acima de 30 minutos, escreva 1 página: <strong>o que aconteceu</strong>, <strong>impacto</strong>, <strong>linha do tempo</strong>, <strong>causa raiz</strong>, <strong>ações de prevenção</strong>. Sem nomes, sem culpados. Vire pasta no repo (<code class="text-amber-400">docs/postmortems/</code>) e revisite trimestralmente.</p>
+    </div>
+  </section>
+
+  <!-- RESUMO -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Backup com VACUUM INTO + age + rclone</strong> — automatize com cron diário e teste o restore.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Backup não testado = backup que não existe.</strong> Restore trimestral é regra.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Keys em secret manager</strong> (pass, 1Password, Vault) e rotação ≤ 90 dias.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Isolamento por container/firejail</strong> contém estrago de prompt injection.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Monitoramento mínimo:</strong> custo diário, erro por tool, latência p95, tamanho do DB.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Playbook de incidente</strong> revogar primeiro, investigar depois. Post-mortem blame-free.</div></div>
+      </div>
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+        <h3 class="font-semibold text-amber-400 mb-2">Próxima trilha:</h3>
+        <p class="text-neutral-300">Trilha 5 — Deploy. Levar Hermes Agent para produção: containers, orquestração, observabilidade ponta-a-ponta, escala horizontal e padrões de deploy seguro.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+        <a href="../trilha5/index.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Próxima Trilha: T5 →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>

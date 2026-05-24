@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 1 — Fundamentos | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">TRILHA 1</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🪽 Fundamentos do Hermes Agent</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Entenda o que é o Hermes Agent, por que ele existe, como se posiciona contra Claude Code, Cursor e OpenClaw, e em que cenários ele realmente brilha. Sem hype — análise honesta com base nas docs oficiais da Nous Research.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">2</div><div class="text-xs text-neutral-400">Módulos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">12</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">~1h30</div><div class="text-xs text-neutral-400">Duração</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Básico</div><div class="text-xs text-neutral-400">Nível</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-6">Mapa da trilha</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <a href="#modulo-1-1" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-emerald-400 font-bold text-sm">1.1</span><span class="text-xs text-neutral-500">~45 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-emerald-400 transition-colors">🪽 O que é Hermes Agent</h3>
+        <p class="text-xs text-neutral-400">Definição, origem, licença, diferenciais</p>
+      </a>
+      <a href="#modulo-1-2" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-emerald-400 font-bold text-sm">1.2</span><span class="text-xs text-neutral-500">~45 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-emerald-400 transition-colors">🎯 Quando usar Hermes Agent</h3>
+        <p class="text-xs text-neutral-400">Casos de uso, custo, limites reais</p>
+      </a>
+    </div>
+  </section>
+
+  <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+  <!-- MÓDULO 1.1 -->
+  <div id="modulo-1-1" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-emerald-400 font-bold">1.1</span><span class="text-xs text-neutral-500">~45 min · Teoria</span></div>
+      <h3 class="text-2xl font-bold mb-2">🪽 O que é Hermes Agent</h3>
+      <p class="text-neutral-400 text-sm">Definição, origem na Nous Research, licença MIT e diferenciais centrais frente aos concorrentes.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">🎯</span>
+          <div><span class="font-medium">Definição</span><span class="text-neutral-500 text-sm ml-2">- O agente que cresce com você</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Hermes Agent é um runtime de agente conversacional open source criado pela Nous Research, que combina raciocínio em LLM, memória persistente (Honcho) e criação autônoma de skills para evoluir com o uso.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">É a base conceitual de tudo: sem entender o que ele é (e o que NÃO é), você confunde com Claude Code, Cursor ou um wrapper de OpenAI.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Runtime · skills dinâmicas · memória persistente · multi-backend de modelo · multi-canal de interação.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">🏛️</span>
+          <div><span class="font-medium">Nous Research</span><span class="text-neutral-500 text-sm ml-2">- Quem criou e por quê</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Nous Research é um laboratório independente de IA conhecido pela família de modelos Hermes (fine-tunes de Llama, Mistral, Qwen). O Hermes Agent é o runtime oficial que materializa essa filosofia: modelos abertos, ferramentas abertas, sem trava de fornecedor.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Conhecer a origem ajuda a entender as decisões de design: priorizar OpenRouter, evitar lock-in, abraçar comunidade ao invés de paywall.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Filosofia open · família Hermes de LLMs · independência de cloud · pesquisa pública.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">📜</span>
+          <div><span class="font-medium">Licença MIT</span><span class="text-neutral-500 text-sm ml-2">- Open source de verdade</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Hermes Agent é distribuído sob licença MIT — você pode usar comercialmente, modificar, redistribuir e até fork sem pagar royalties ou pedir permissão.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Diferente de Cursor (proprietário) ou OpenClaw (BSL com cláusulas), MIT é o padrão menos restritivo. Garante portabilidade do conhecimento e investimento.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">MIT vs BSL vs proprietário · vendor lock-in · risco de descontinuação · fork como seguro.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🆚</span>
+          <div><span class="font-medium">vs Claude Code</span><span class="text-neutral-500 text-sm ml-2">- Diferenciais práticos</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Claude Code é CLI proprietário da Anthropic, focado em Claude. Hermes Agent é runtime open multi-modelo, com memória persistente nativa e aprendizado de skills.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Quem vem de Claude Code precisa entender o que ganha (modelos múltiplos, memória entre sessões, canais externos) e o que perde (integração nativa com Anthropic, polimento de IDE).</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Multi-modelo · memória persistente · canais externos · skills dinâmicas · trade-off de polimento.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🆚</span>
+          <div><span class="font-medium">vs OpenClaw / Cursor</span><span class="text-neutral-500 text-sm ml-2">- Como se posiciona</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Cursor é IDE com IA embutida (foco em código). OpenClaw é fork open de Cursor. Hermes Agent não é IDE — é um agente conversacional general-purpose, integrável a qualquer canal.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Saber quando usar IDE-com-IA vs agente-com-skills evita escolha errada de ferramenta. Para tarefas de devops, pesquisa e automação pessoal, Hermes ganha; para code review denso em IDE, Cursor brilha.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Agente vs IDE · escopo de tarefa · integração com canais · ROI por caso de uso.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🌍</span>
+          <div><span class="font-medium">Comunidade</span><span class="text-neutral-500 text-sm ml-2">- Discord, GitHub, ecossistema</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">A comunidade Hermes vive no Discord da Nous Research, no GitHub (issues + PRs ativos) e no agentskills.io, hub onde usuários publicam skills reutilizáveis.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">A maior parte do conhecimento prático ainda mora em conversas. Saber onde perguntar acelera 10x a curva inicial.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Discord Nous · GitHub issues · agentskills.io · contribuições · ecossistema de plugins.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-1-1')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-1-1.html" class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
+  <!-- MÓDULO 1.2 -->
+  <div id="modulo-1-2" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-emerald-400 font-bold">1.2</span><span class="text-xs text-neutral-500">~45 min · Prática</span></div>
+      <h3 class="text-2xl font-bold mb-2">🎯 Quando usar Hermes Agent</h3>
+      <p class="text-neutral-400 text-sm">Casos de uso reais, comparação de custos via OpenRouter, multi-canal e limitações honestas.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">💼</span>
+          <div><span class="font-medium">Casos de uso</span><span class="text-neutral-500 text-sm ml-2">- Pesquisa, automação pessoal, devops</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Hermes Agent brilha em três frentes: pesquisa profunda (multi-step + memória), automação pessoal (rotinas integradas a canais) e devops leve (executar scripts, monitorar serviços, abrir PRs).</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Mapear caso de uso ao perfil da ferramenta evita 80% das frustrações de "achei que ele fazia isso".</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Tarefas long-running · agente reativo via canal · scripts agendados · fluxos com confirmação humana.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">💰</span>
+          <div><span class="font-medium">Custo via OpenRouter</span><span class="text-neutral-500 text-sm ml-2">- Uma chave, todos os modelos</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">OpenRouter é o backend recomendado: uma única chave dá acesso a 200+ modelos (Claude Sonnet 4.6, GPT-5, Gemini 2.5, Llama 4, Qwen 3) com preço pay-per-token.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Entender o modelo de custo evita surpresa de fatura. Você troca modelo por tarefa: barato para classificação, caro para raciocínio profundo.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Pay-per-token · roteamento por tarefa · billing centralizado · fallback automático.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">📱</span>
+          <div><span class="font-medium">Multi-canal nativo</span><span class="text-neutral-500 text-sm ml-2">- Telegram, Discord, Slack, WhatsApp</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Hermes traz adapters de canal já feitos: você fala com o mesmo agente via Telegram, Discord, Slack, WhatsApp ou CLI, e a memória é compartilhada.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Esse é o diferencial de produtividade real: pedir algo no celular pelo Telegram e continuar no Slack do trabalho sem perder contexto.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Channel adapter · sessão unificada · webhooks · push notifications.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🧠</span>
+          <div><span class="font-medium">Aprendizado autônomo</span><span class="text-neutral-500 text-sm ml-2">- Cria skills sozinho</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Quando você pede uma tarefa repetitiva, o agente pode propor uma skill (snippet de instruções + ferramentas) e salvá-la para reuso. Próxima vez, ele já sabe.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Esse loop é o que diferencia Hermes de wrappers triviais — ele literalmente "cresce com você".</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Skill = instrução + ferramenta · registro local · sincronização opcional via agentskills.io.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">🚫</span>
+          <div><span class="font-medium">Quando NÃO usar</span><span class="text-neutral-500 text-sm ml-2">- Limitações honestas</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Hermes NÃO é IDE — para refactor pesado em monorepo, use Cursor/Claude Code. NÃO é low-code visual — para fluxos sem código, prefira n8n/Make. NÃO é mágico — exige config inicial e curadoria de skills.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Saber os limites evita gastar 3 dias forçando o agente a fazer algo onde outra ferramenta resolve em 30 min.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Escopo · custo de setup · curadoria humana · ferramenta certa para o trabalho.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🛣️</span>
+          <div><span class="font-medium">Roadmap pessoal</span><span class="text-neutral-500 text-sm ml-2">- Por onde começar</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-emerald-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Sequência sugerida: dia 1 instalar + chave OpenRouter, semana 1 ligar a 1 canal (Telegram), semana 2 escrever a primeira skill, semana 3 hospedar em VPS, semana 4 conectar Honcho para memória de longo prazo.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Roadmap evita "tudo ao mesmo tempo" — o caminho mais comum de desistir nos primeiros 5 dias.</p></div>
+            <div><span class="text-emerald-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Setup mínimo · vitória rápida · skill própria · deploy estável · memória de longo prazo.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-1-2')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-1-2.html" class="px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAIS -->
+<div id="modal-1-1" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-emerald-400 font-bold">1.1</span><span class="font-semibold">🪽 O que é Hermes Agent</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-1-1.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-1-2" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-emerald-400 font-bold">1.2</span><span class="font-semibold">🎯 Quando usar Hermes Agent</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-1-2.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+
+</body>
+</html>

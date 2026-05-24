@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 6.2 — MCP, Tool Gateway, canais e Cron | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-rose-400 { color: #9f1239; }
+    html:not(.dark) .bg-rose-500\/20 { background-color: rgba(225,29,72,0.12); }
+    html:not(.dark) .bg-rose-500\/10 { background-color: rgba(225,29,72,0.08); }
+    html:not(.dark) .border-rose-500\/30 { border-color: rgba(225,29,72,0.25); }
+    html:not(.dark) .hover\:bg-rose-500\/30:hover { background-color: rgba(225,29,72,0.18); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-rose-400 bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-rose-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-rose-400">Trilha 6</a><span>/</span>
+    <span class="text-rose-400">Módulo 6.2</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-rose-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full mb-4">MÓDULO 6.2</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔌 MCP, Tool Gateway, canais e Cron</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Quatro vetores de extensibilidade abaixo do nível de skills: <strong class="text-rose-400">MCP servers</strong> para conectar fontes externas, <strong class="text-rose-400">Tool Gateway</strong> para tools em Python, <strong class="text-rose-400">novos canais</strong> de mensagem e <strong class="text-rose-400">cron jobs</strong> para tornar o agente proativo. Encerre contribuindo de volta.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">~60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Dev+</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- TÓPICO 1 -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🔌 MCP servers</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed"><strong class="text-rose-400">Model Context Protocol</strong> é um padrão aberto da Anthropic para conectar agentes a fontes de dados e ferramentas externas. Hermes conecta a qualquer MCP server (stdio ou SSE) declarativamente, abrindo todo o ecossistema MCP — filesystem, GitHub, Postgres, Slack, web search e centenas mais.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/config.yaml
+mcpServers:
+  filesystem:
+    command: npx
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "/home/nei/projetos"]
+    scope: user
+
+  github:
+    command: npx
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: ${GH_TOKEN}
+    scope: project
+
+  postgres-prod:
+    command: npx
+    args: ["-y", "@modelcontextprotocol/server-postgres", "${PG_URL}"]
+    scope: user
+    enabled: false   # liga via: hermes mcp enable postgres-prod</code></pre>
+    </div>
+
+    <div class="bg-gradient-to-br from-rose-900/30 to-dark-800 rounded-xl border border-rose-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-rose-400 mb-4 flex items-center"><span class="mr-2">💡</span> Comandos essenciais</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><code>hermes mcp list</code> — servers configurados e estado</li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><code>hermes mcp enable &lt;name&gt;</code> / <code>disable</code> — toggle sem editar YAML</li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><code>hermes mcp call &lt;server&gt; &lt;tool&gt; --args '...'</code> — testar tool manualmente</li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><code>hermes mcp logs &lt;server&gt;</code> — debug de stdio/handshake</li>
+      </ul>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Cuidado com escopo</h3>
+      <p class="text-neutral-300">MCP server filesystem com <code>scope: user</code> dá acesso ao path para <strong>qualquer projeto</strong>. Para repositórios sensíveis (cliente, financeiro), use <code>scope: project</code> e configure por workspace. Nunca commite tokens — sempre <code>${VAR}</code>.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 2 -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">🛠️ Tool Gateway</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Quando você quer lógica imperativa rápida — chamar uma API interna, ler um banco, processar dados — sem o overhead de empacotar um MCP server, use o <strong class="text-rose-400">Tool Gateway</strong>. Decore uma função Python com <code>@hermes.tool</code> e o schema é inferido por type hints.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/tools/internal.py
+from hermes import tool
+from typing import Literal
+import httpx
+
+@tool
+def jira_create_ticket(
+    project: str,
+    summary: str,
+    description: str,
+    priority: Literal["low", "medium", "high"] = "medium",
+) -> dict:
+    """Cria um ticket no Jira interno e devolve url + key.
+
+    Use quando o usuário pedir 'abre ticket', 'cria task no jira'
+    ou descrever um bug que precisa ser rastreado.
+    """
+    r = httpx.post(
+        "https://jira.empresa.com/rest/api/3/issue",
+        json={
+            "fields": {
+                "project": {"key": project},
+                "summary": summary,
+                "description": description,
+                "priority": {"name": priority.capitalize()},
+                "issuetype": {"name": "Task"},
+            }
+        },
+        auth=(os.getenv("JIRA_USER"), os.getenv("JIRA_TOKEN")),
+        timeout=10,
+    )
+    r.raise_for_status()
+    data = r.json()
+    return {"key": data["key"], "url": f"https://jira.empresa.com/browse/{data['key']}"}</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica: type hints viram schema</h3>
+      <p class="text-neutral-300"><code>Literal["low","medium","high"]</code> vira <code>enum</code> no JSON Schema. <code>Optional[str]</code> vira parâmetro opcional. A <strong>docstring vira description</strong> da tool. Capricho aqui economiza muito YAML.</p>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Quando usar o quê</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>Skill:</strong> processo multi-passo, instruções para o modelo</li>
+        <li><strong>Tool Gateway:</strong> 1 função imperativa, chamada de API/DB interna</li>
+        <li><strong>MCP server:</strong> capacidade compartilhada entre múltiplos agentes/projetos</li>
+        <li><strong>Channel:</strong> integração com plataforma de mensagem nova</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TÓPICO 3 -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">📡 Adicionar novo canal</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Um <strong class="text-rose-400">canal</strong> é o adapter entre uma plataforma de mensagem (Telegram, Discord, WhatsApp, Slack) e o core do Hermes. Implementa uma interface mínima — receber mensagem, enviar resposta — e o agente passa a "morar" onde seus usuários já estão.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># ~/.hermes/channels/discord_channel.py
+from hermes.channels import Channel, IncomingMessage, OutgoingMessage
+import discord
+
+class DiscordChannel(Channel):
+    name = "discord"
+
+    def __init__(self, token: str, allowed_guild: int):
+        self.client = discord.Client(intents=discord.Intents.default())
+        self.token = token
+        self.allowed_guild = allowed_guild
+
+    async def start(self):
+        @self.client.event
+        async def on_message(msg):
+            if msg.author.bot or msg.guild.id != self.allowed_guild:
+                return
+            await self.on_message(IncomingMessage(
+                conversation_id=f"discord:{msg.channel.id}",
+                user_id=str(msg.author.id),
+                text=msg.content,
+                attachments=[a.url for a in msg.attachments],
+            ))
+        await self.client.start(self.token)
+
+    async def send_message(self, out: OutgoingMessage):
+        channel_id = int(out.conversation_id.split(":")[1])
+        chan = self.client.get_channel(channel_id)
+        await chan.send(out.text)</code></pre>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Canais oficialmente suportados</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>CLI</strong> — terminal interativo (default)</li>
+        <li><strong>HTTP API</strong> — REST <code>/v1/chat</code> compatível OpenAI</li>
+        <li><strong>Telegram</strong> — bot via Bot API</li>
+        <li><strong>Discord</strong> — bot com slash commands</li>
+        <li><strong>Slack</strong> — Events API + Socket Mode</li>
+        <li><strong>WhatsApp</strong> — via WhatsApp Cloud API (beta)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TÓPICO 4 -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">⏰ Cron jobs</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Cron transforma o agente de <strong>reativo</strong> em <strong class="text-rose-400">proativo</strong>: briefings matinais, relatórios semanais, checagens periódicas de status. Hermes embute um agendador com expressão cron padrão, retry automático e logs persistentes.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Briefing às 9h em dias úteis, executa a skill morning-briefing
+$ hermes cron add "0 9 * * 1-5" --skill morning-briefing \
+    --channel telegram --user @nei
+
+✓ Job criado: cron-7f3a (próxima execução: amanhã 09:00 BRT)
+
+# Listar jobs
+$ hermes cron list
+ID         SCHEDULE       TARGET                  LAST RUN    STATUS
+cron-7f3a  0 9 * * 1-5    skill:morning-briefing  hoje 09:00  ✓ OK
+cron-b21e  */15 * * * *   skill:health-check      14:45       ✓ OK
+cron-d8c1  0 18 * * 5     skill:weekly-report     sex 18:00   ✓ OK
+
+# Ver logs de um job
+$ hermes cron logs cron-7f3a --tail 5
+
+# Remover
+$ hermes cron rm cron-7f3a</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica: timezone explícito</h3>
+      <p class="text-neutral-300">Por default Hermes usa o TZ do sistema. Em servidor em UTC isso te trai. Passe <code>--tz America/Sao_Paulo</code> ao criar o job para deixar explícito e evitar surpresa no horário de verão.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 5 -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🤝 Contribuindo</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Bug que você encontrou hoje é bug que <strong>todo mundo</strong> terá amanhã. Devolver para o upstream multiplica seu impacto. O repo é <a href="https://github.com/NousResearch/hermes-agent" target="_blank" class="text-rose-400 hover:underline">github.com/NousResearch/hermes-agent</a> e segue fluxo open source padrão.</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Issue primeiro</h4>
+          <p class="text-sm text-neutral-400 mb-3">Discussão antes de código</p>
+          <p class="text-neutral-300 text-sm">Para mudanças não-triviais, abra issue descrevendo problema + proposta. Evita PR fechado por estar fora de escopo.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Fork + branch</h4>
+          <p class="text-sm text-neutral-400 mb-3">Branch descritiva</p>
+          <p class="text-neutral-300 text-sm"><code>git checkout -b fix/cron-tz-handling</code>. Não trabalhe direto em <code>main</code> do seu fork.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Testes</h4>
+          <p class="text-sm text-neutral-400 mb-3">Verde local antes de PR</p>
+          <p class="text-neutral-300 text-sm"><code>pytest tests/ -q</code> + <code>ruff check .</code>. Adicione teste cobrindo o bug que você corrigiu.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">4</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">PR pequeno</h4>
+          <p class="text-sm text-neutral-400 mb-3">Foco em uma coisa</p>
+          <p class="text-neutral-300 text-sm">PR pequeno revisa em horas. PR grande dorme semanas. Conventional commits (<code>fix:</code>, <code>feat:</code>, <code>docs:</code>).</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">5</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Review</h4>
+          <p class="text-sm text-neutral-400 mb-3">Responda rápido</p>
+          <p class="text-neutral-300 text-sm">Maintainers comentam — não vire defensivo, ajuste e responda. PRs ficam órfãos quando autor some.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-rose-500/20 flex items-center justify-center"><span class="text-rose-400 font-bold">6</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Merge</h4>
+          <p class="text-sm text-neutral-400 mb-3">Sai no próximo release</p>
+          <p class="text-neutral-300 text-sm">Sua mudança vira parte oficial do Hermes. Anuncie no Discord, compartilhe nas redes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+        <ul class="space-y-3 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Issue antes de PR grande</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Testes cobrindo a mudança</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>PR pequeno, foco único</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Atualizar docs/CHANGELOG junto</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+        <ul class="space-y-3 text-neutral-300 text-sm">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Breaking change sem discussão</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>PR de 50 arquivos misturando tudo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>"refactor geral" sem motivo claro</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Ignorar reviews por semanas</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Atenção: licença MIT</h3>
+      <p class="text-neutral-300">Hermes Agent é MIT. Se você fizer fork ou redistribuir (mesmo modificado), <strong>mantenha o LICENSE original</strong> e os avisos de copyright. É curto, é trivial — e é obrigatório.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 6 -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🌐 Comunidade</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Hermes vive num ecossistema vibrante. Discord da Nous é o <strong>primeiro stop</strong> para perguntas em tempo real, GitHub Discussions para tópicos longos, e marketplaces de skills/MCPs crescendo a cada semana.</p>
+
+    <div class="bg-gradient-to-br from-rose-900/30 to-dark-800 rounded-xl border border-rose-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-rose-400 mb-4 flex items-center"><span class="mr-2">🔗</span> Recursos oficiais</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><strong>Discord:</strong> <a href="https://discord.gg/NousResearch" target="_blank" class="text-rose-400 hover:underline">discord.gg/NousResearch</a> — canal #hermes-agent</li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><strong>Repo:</strong> <a href="https://github.com/NousResearch/hermes-agent" target="_blank" class="text-rose-400 hover:underline">github.com/NousResearch/hermes-agent</a></li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><strong>Docs:</strong> <a href="https://hermes-agent.nousresearch.com/docs/" target="_blank" class="text-rose-400 hover:underline">hermes-agent.nousresearch.com/docs</a></li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><strong>PyPI:</strong> <a href="https://pypi.org/project/hermes-agent/" target="_blank" class="text-rose-400 hover:underline">pypi.org/project/hermes-agent</a></li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><strong>AWS sample:</strong> <a href="https://github.com/aws-samples/sample-host-hermesagent-on-amazon-bedrock-agentcore" target="_blank" class="text-rose-400 hover:underline">aws-samples/sample-host-hermesagent-on-amazon-bedrock-agentcore</a></li>
+        <li class="flex items-start space-x-2"><span class="text-rose-400 mt-1">•</span><strong>Spec skills:</strong> <a href="https://agentskills.io" target="_blank" class="text-rose-400 hover:underline">agentskills.io</a></li>
+      </ul>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica: Discord é o primeiro stop</h3>
+      <p class="text-neutral-300">Antes de abrir issue, faça search no Discord. 70% das dúvidas já foram respondidas. Quando perguntar, traga MRE (mínimo, reproduzível, exemplo): versão, comando, output, expected. Retribua respondendo outros — é assim que reputação se forma e maintainers te notam.</p>
+    </div>
+  </section>
+
+  <!-- Resumo final -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-rose-900/40 via-dark-800 to-dark-800 rounded-xl border border-rose-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">MCP servers:</strong> <span class="text-neutral-300">conecte qualquer fonte externa declarativamente via <code>mcpServers</code> no YAML.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Tool Gateway:</strong> <span class="text-neutral-300">decore Python com <code>@hermes.tool</code> — type hints viram schema, docstring vira description.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Canais novos:</strong> <span class="text-neutral-300">implemente <code>on_message</code> + <code>send_message</code> e o agente mora onde seus usuários estão.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Cron:</strong> <span class="text-neutral-300">expressão cron + skill alvo = agente proativo. Sempre passe <code>--tz</code> explícito.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Contribuir:</strong> <span class="text-neutral-300">issue antes de PR grande, testes verdes, PR pequeno e focado, mantenha LICENSE MIT.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Comunidade:</strong> <span class="text-neutral-300">Discord Nous Research é first stop; search antes de perguntar, retribua respondendo outros.</span></div></div>
+      </div>
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+        <h3 class="font-semibold text-rose-400 mb-2">Fim da trilha — e do curso!</h3>
+        <p class="text-neutral-300">Você completou as 6 trilhas do Hermes Agent: dos fundamentos à extensibilidade. Próximo passo natural: contribuir uma skill ou um PR para o <a href="https://github.com/NousResearch/hermes-agent" target="_blank" class="text-rose-400 hover:underline">repo oficial</a>.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+        <a href="../../index.html" class="flex-1 text-center px-6 py-3 bg-rose-600 text-white rounded-lg font-semibold hover:bg-rose-500 transition-colors">Voltar à landing →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>

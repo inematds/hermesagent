@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 5.2 — AWS Bedrock AgentCore | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13,148,136,0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13,148,136,0.25); }
+    html:not(.dark) .hover\:bg-teal-500\/30:hover { background-color: rgba(13,148,136,0.18); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-teal-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-teal-400">Trilha 5</a><span>/</span>
+    <span class="text-teal-400">Módulo 5.2</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-teal-500/20 text-teal-400 text-xs font-semibold rounded-full mb-4">MÓDULO 5.2</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">☁️ AWS Bedrock AgentCore (sample oficial)</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Mergulho no <a href="https://github.com/aws-samples/sample-host-hermesagent-on-amazon-bedrock-agentcore" target="_blank" class="text-teal-400 hover:underline">sample oficial AWS</a>: arquitetura multi-canal com API Gateway, Lambda router, AgentCore Runtime em Firecracker microVMs, estado em S3 e CDK organizado em 4 stacks.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">Enterprise</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- 1. Arquitetura -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🏛️ Arquitetura AWS — API Gateway → Router → AgentCore</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">O sample expõe <strong class="text-teal-400">um único endpoint HTTPS</strong> via API Gateway que recebe webhooks de Telegram, Slack, Discord e Feishu. O Lambda router normaliza o payload e invoca o AgentCore Runtime, onde o <code>main.py</code> do Hermes roda dentro de uma microVM Firecracker dedicada.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-xs text-teal-400 font-mono"><code>┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐
+│   Telegram   │   │    Slack     │   │   Discord    │   │    Feishu    │
+└──────┬───────┘   └──────┬───────┘   └──────┬───────┘   └──────┬───────┘
+       │ webhook          │ events           │ interactions     │ event
+       └───────────┬──────┴──────────┬───────┴──────────┬───────┘
+                   ▼                 ▼                  ▼
+              ┌─────────────────────────────────────────────┐
+              │      Amazon API Gateway (HTTP API)          │
+              │  /telegram  /slack  /discord  /feishu       │
+              └────────────────────┬────────────────────────┘
+                                   │ POST + signature
+                                   ▼
+              ┌─────────────────────────────────────────────┐
+              │      Lambda Router (Node 20 / Python)       │
+              │  - verify signature   - normalize payload   │
+              │  - load S3 state      - invoke AgentCore    │
+              └────────────────────┬────────────────────────┘
+                                   │ InvokeAgentRuntime
+                                   ▼
+              ┌─────────────────────────────────────────────┐
+              │   Bedrock AgentCore Runtime                 │
+              │   ┌──────────────────────────────────────┐  │
+              │   │  Firecracker microVM (per session)   │  │
+              │   │     └─► main.py (Hermes Agent)       │  │
+              │   │             ├─► tools (shell/py)     │  │
+              │   │             └─► Bedrock LLM API      │  │
+              │   └──────────────────────────────────────┘  │
+              └────────────────────┬────────────────────────┘
+                                   │ persist state
+                                   ▼
+                          ┌─────────────────┐
+                          │   S3 bucket     │
+                          │  sessions/...   │
+                          └─────────────────┘</code></pre>
+    </div>
+
+    <div class="bg-gradient-to-br from-teal-900/30 to-dark-800 rounded-xl border border-teal-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-teal-400 mb-4 flex items-center"><span class="mr-2">💡</span> Por que essa arquitetura</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-teal-400 mt-1">•</span><span><strong>Um endpoint, N canais:</strong> adicionar WhatsApp = só implementar adapter no router.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-teal-400 mt-1">•</span><span><strong>Pagamento por uso real:</strong> Lambda + AgentCore só cobram quando há mensagem.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-teal-400 mt-1">•</span><span><strong>IAM nativo:</strong> roles separadas por componente — router NÃO acessa o bucket todo.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-teal-400 mt-1">•</span><span><strong>Observabilidade unificada:</strong> tudo em CloudWatch com trace ID cruzando os 3 serviços.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 2. Firecracker -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">🔥 Firecracker microVMs — 1 VM por sessão</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">O AgentCore Runtime usa o mesmo <strong class="text-teal-400">Firecracker</strong> que roda Lambda e Fargate por trás — mas o expõe como ambiente persistente por sessão. Cada usuário ganha uma microVM dedicada com isolamento de hypervisor (KVM), cold-start em ~125ms e snapshot/restore nativo.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Modelo correto</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>1 microVM por sessão</strong> de usuário</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Snapshot ao final, restore na próxima msg</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Idle TTL configurável (default 15min)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Limite hard de CPU/MEM por VM</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ Anti-padrões</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>1 VM compartilhada</strong> entre usuários (vaza estado)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Manter VM viva 24/7 — perde a vantagem de custo</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Persistir creds dentro da VM (fica no snapshot)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>VM sem limite — bug de loop come orçamento</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica</h3>
+      <p class="text-neutral-300">Use o sample <strong>como referência de mapeamento sessão→VM</strong>, não copie idle TTL às cegas. Para chatbot conversacional, 15min é alto; para agente de longa execução (CI bot), 60min faz sentido. Ajuste por canal.</p>
+    </div>
+  </section>
+
+  <!-- 3. CDK 4 fases -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">📦 CDK em 4 fases — como o sample organiza</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">O sample divide a infra em 4 stacks CDK independentes. Cada um pode ser destruído e recriado sem tocar nos outros — você itera nas integrações sem refazer VPC.</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-teal-500/20 flex items-center justify-center"><span class="text-teal-400 font-bold">1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">NetworkStack</h4>
+          <p class="text-sm text-neutral-400 mb-3">VPC, subnets privadas, NAT, VPC endpoints para Bedrock e S3.</p>
+          <p class="text-neutral-300 text-sm">Exporta <code>vpcId</code> e <code>privateSubnetIds</code> para os stacks seguintes.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-teal-500/20 flex items-center justify-center"><span class="text-teal-400 font-bold">2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">IamStack</h4>
+          <p class="text-sm text-neutral-400 mb-3">Roles separadas: <code>RouterLambdaRole</code>, <code>AgentCoreExecutionRole</code>, <code>StateBucketReadWriteRole</code>.</p>
+          <p class="text-neutral-300 text-sm">Princípio de menor privilégio — router não pode invocar Bedrock, só AgentCore pode.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-teal-500/20 flex items-center justify-center"><span class="text-teal-400 font-bold">3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">AgentCoreStack</h4>
+          <p class="text-sm text-neutral-400 mb-3">Recurso <code>AWS::BedrockAgentCore::Runtime</code> com imagem do Hermes, S3 bucket de estado, KMS key.</p>
+          <p class="text-neutral-300 text-sm">Aqui mora o <code>main.py</code> empacotado — versione com tag git.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-teal-500/20 flex items-center justify-center"><span class="text-teal-400 font-bold">4</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">IntegrationsStack</h4>
+          <p class="text-sm text-neutral-400 mb-3">API Gateway HTTP API + Lambda router + Secrets Manager (tokens Telegram/Slack/Discord/Feishu).</p>
+          <p class="text-neutral-300 text-sm">É o stack que você mexe ao adicionar canal novo — sem tocar os outros 3.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># Snippet CDK (TypeScript) — AgentCoreStack simplificado
+import { Stack, StackProps, Duration } from 'aws-cdk-lib';
+import { Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
+import { CfnRuntime } from 'aws-cdk-lib/aws-bedrockagentcore';
+
+export class AgentCoreStack extends Stack {
+  constructor(scope: Construct, id: string, props: StackProps) {
+    super(scope, id, props);
+
+    const stateBucket = new Bucket(this, 'HermesState', {
+      encryption: BucketEncryption.KMS_MANAGED,
+      versioned: true,
+      lifecycleRules: [{ expiration: Duration.days(90) }],
+    });
+
+    new CfnRuntime(this, 'HermesRuntime', {
+      runtimeName: 'hermes-agent-prod',
+      containerImage: `${ecrRepo.repositoryUri}:${imageTag}`,
+      executionRoleArn: agentRole.roleArn,
+      idleTimeoutSeconds: 900,
+      environmentVariables: {
+        HERMES_STATE_BUCKET: stateBucket.bucketName,
+        BEDROCK_MODEL_ID: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+      },
+    });
+  }
+}
+
+# deploy
+$ npm ci && npm run build
+$ npx cdk deploy --all --require-approval never</code></pre>
+    </div>
+  </section>
+
+  <!-- 4. S3 -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">💾 Estado em S3 — persistência entre invocações</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Como microVMs são <strong class="text-teal-400">efêmeras por design</strong>, o sample persiste tudo que precisa sobreviver entre mensagens em um bucket S3 particionado por <code>user_id/session_id</code>: histórico de conversa, memórias de longo prazo, arquivos gerados pelo agente.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code># layout do bucket
+hermes-state-prod/
+├── sessions/
+│   └── telegram/
+│       └── user_123456/
+│           └── session_abc/
+│               ├── history.jsonl       # mensagens
+│               ├── memory.json         # facts persistentes
+│               └── workspace/          # arquivos do agente
+│                   ├── output.csv
+│                   └── analysis.png
+└── snapshots/
+    └── user_123456/
+        └── vm_state.bin                # snapshot Firecracker</code></pre>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Padrão de persistência</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>history.jsonl</strong> — append-only, lido inteiro no início da sessão</li>
+        <li><strong>memory.json</strong> — sobrescrito a cada turno, contém facts extraídos</li>
+        <li><strong>workspace/</strong> — sincronizado bidirecionalmente (download início, upload fim)</li>
+        <li><strong>Lifecycle:</strong> sessions/* → IA após 30d, Glacier após 90d, expira em 365d</li>
+        <li><strong>KMS:</strong> bucket key encryption ativo (1 chamada KMS por sessão, não por objeto)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 5. Lambda Router -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🚪 Lambda Router — multi-canal serverless</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">O router é a <strong class="text-teal-400">peça mais reutilizável</strong> do sample: uma Lambda Node.js que recebe webhooks dos 4 canais, valida assinatura, normaliza para um schema interno e invoca o AgentCore. Adicionar WhatsApp = ~80 linhas no router, zero mudança no resto.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+<pre class="text-sm text-emerald-400 font-mono"><code>// router.ts (estrutura simplificada do sample)
+import { verifyTelegram, verifySlack, verifyDiscord, verifyFeishu } from './adapters';
+import { invokeAgentRuntime } from './agentcore';
+
+export async function handler(event: APIGatewayProxyEventV2) {
+  const channel = event.rawPath.replace('/', '');   // telegram | slack | ...
+  const adapter = adapters[channel];
+
+  // 1. verifica assinatura (HMAC ou OAuth)
+  if (!adapter.verify(event)) return { statusCode: 401 };
+
+  // 2. normaliza payload
+  const msg = adapter.normalize(event);
+  // { channel, userId, sessionId, text, attachments }
+
+  // 3. invoca AgentCore (async se demorado)
+  const result = await invokeAgentRuntime({
+    sessionId: msg.sessionId,
+    input: msg.text,
+    metadata: { channel: msg.channel, userId: msg.userId },
+  });
+
+  // 4. responde de volta no canal
+  return adapter.reply(msg, result.output);
+}</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica de produção</h3>
+      <p class="text-neutral-300">Mensagens longas (treino de modelo, scraping pesado) <strong>NÃO devem responder síncrono</strong> no webhook. Use <code>InvokeAsync</code> + DLQ + responda "processando..." em &lt;3s para evitar timeout do Telegram/Slack (que retentam após 5-10s).</p>
+    </div>
+  </section>
+
+  <!-- 6. Custos -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">💰 Custos AWS — estimativa real para 1k usuários/mês</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Premissa de cálculo: <strong class="text-teal-400">1.000 usuários ativos mensais</strong>, 30 msgs/usuário/mês = 30k invocações, sessão média de 90s, região <code>us-east-1</code>, modelo Claude 3.5 Sonnet via Bedrock.</p>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Breakdown de custo mensal estimado</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="text-blue-400 border-b border-blue-500/30">
+            <tr><th class="py-2 pr-4">Componente</th><th class="py-2 pr-4">Volume</th><th class="py-2 pr-4">Preço</th><th class="py-2">Total</th></tr>
+          </thead>
+          <tbody class="text-neutral-300 divide-y divide-dark-600">
+            <tr><td class="py-2 pr-4">API Gateway HTTP API</td><td>30k req</td><td>$1.00/M</td><td>$0.03</td></tr>
+            <tr><td class="py-2 pr-4">Lambda Router</td><td>30k × 200ms × 256MB</td><td>$0.20/M + GB-s</td><td>$0.18</td></tr>
+            <tr><td class="py-2 pr-4">AgentCore Runtime</td><td>30k × 90s × 1vCPU/2GB</td><td>~$0.0001/s</td><td>$270.00</td></tr>
+            <tr><td class="py-2 pr-4">Bedrock Claude 3.5 Sonnet</td><td>~600M input + 60M output</td><td>$3 / $15 per M</td><td>$2.700,00</td></tr>
+            <tr><td class="py-2 pr-4">S3 storage + requests</td><td>~50GB + 200k req</td><td>$0.023/GB + req</td><td>$1.80</td></tr>
+            <tr><td class="py-2 pr-4">CloudWatch logs</td><td>~30GB ingestion</td><td>$0.50/GB</td><td>$15.00</td></tr>
+            <tr><td class="py-2 pr-4">KMS</td><td>30k requests</td><td>$0.03/10k</td><td>$0.09</td></tr>
+            <tr class="font-bold text-teal-400"><td class="py-2 pr-4">TOTAL estimado</td><td colspan="2"></td><td>~$2.987 / mês</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-neutral-400 text-xs mt-3">O custo é <strong>dominado pelo LLM</strong> (~90%). AgentCore Runtime é &lt;10% — otimize prompts antes de mexer em infra.</p>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center'"><span class="mr-2">⚠️</span> Quotas AWS que vão te morder</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li>• <strong>Bedrock TPM</strong>: limite default de tokens/min é apertado — peça aumento ANTES de lançar</li>
+        <li>• <strong>AgentCore concurrent sessions</strong>: default ~100; precisa raise para multi-tenant sério</li>
+        <li>• <strong>Lambda concurrent executions</strong>: 1000 por região por default</li>
+        <li>• <strong>API Gateway burst</strong>: 5000 RPS — webhook de canal viral satura sem rate limit</li>
+      </ul>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — teste com LocalStack antes</h3>
+      <p class="text-neutral-300 mb-3">Antes de queimar dólares na AWS real, suba o stack inteiro localmente com <a href="https://www.localstack.cloud/" target="_blank" class="text-teal-400 hover:underline">LocalStack</a>:</p>
+      <div class="bg-dark-900 rounded-lg p-3 overflow-x-auto">
+<pre class="text-xs text-emerald-400 font-mono"><code>$ docker run -d -p 4566:4566 localstack/localstack
+$ export AWS_ENDPOINT_URL=http://localhost:4566
+$ npx cdk bootstrap --profile localstack
+$ npx cdk deploy --all --profile localstack</code></pre>
+      </div>
+      <p class="text-neutral-300 mt-3 text-sm">LocalStack Pro emula AgentCore e Bedrock; a versão Community emula só Lambda/S3/API GW — já dá pra testar o router e o S3 layout.</p>
+    </div>
+  </section>
+
+  <!-- Resumo final -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-teal-900/40 via-dark-800 to-dark-800 rounded-xl border border-teal-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-xl">✓</span><div>Arquitetura é <strong>API Gateway → Router Lambda → AgentCore Runtime → main.py do Hermes</strong>, com S3 fora.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-xl">✓</span><div>Firecracker dá <strong>1 microVM por sessão</strong> com cold-start ~125ms — nunca compartilhe VM entre usuários.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-xl">✓</span><div>CDK em <strong>4 stacks independentes</strong> (Network / IAM / AgentCore / Integrations) acelera iteração.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-xl">✓</span><div>Estado persiste em <strong>S3 particionado por user/session</strong>, com lifecycle e KMS bucket key.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-xl">✓</span><div>Lambda Router unifica <strong>4 canais</strong> com adapters — adicionar canal novo é incremental.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-teal-400 font-bold text-xl">✓</span><div>Para 1k MAU, o custo é dominado pelo <strong>LLM (~90%)</strong>, não pela infra — otimize prompt antes de infra.</div></div>
+      </div>
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+        <h3 class="font-semibold text-teal-400 mb-2">Próxima trilha:</h3>
+        <p class="text-neutral-300">T6 — Extensão e Customização: como adicionar tools, integrar APIs externas e moldar o Hermes para domínios específicos.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+        <a href="../trilha6/index.html" class="flex-1 text-center px-6 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-500 transition-colors">Próxima Trilha →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>

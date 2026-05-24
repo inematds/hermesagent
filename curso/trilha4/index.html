@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 4 — Manutenção e Operação | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217,119,6,0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217,119,6,0.25); }
+    html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217,119,6,0.18); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">TRILHA 4</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🛠️ Manutenção e Operação</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Manter Hermes Agent saudável em produção. <code class="text-amber-400">hermes doctor</code> para diagnóstico, <code class="text-amber-400">hermes update</code> para atualizar, gestão de logs, backup de memória/skills, gestão de API keys e troubleshooting dos erros mais comuns.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">2</div><div class="text-xs text-neutral-400">Módulos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">12</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">~1h30</div><div class="text-xs text-neutral-400">Duração</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Médio</div><div class="text-xs text-neutral-400">Nível</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <section class="mb-12">
+    <h2 class="text-2xl font-bold mb-6">Mapa da trilha</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <a href="#modulo-4-1" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold text-sm">4.1</span><span class="text-xs text-neutral-500">~45 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-amber-400 transition-colors">🩺 Diagnóstico e atualização</h3>
+        <p class="text-xs text-neutral-400">Doctor, update, logs, debug</p>
+      </a>
+      <a href="#modulo-4-2" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-5 transition-all">
+        <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold text-sm">4.2</span><span class="text-xs text-neutral-500">~45 min</span></div>
+        <h3 class="font-semibold mb-1 group-hover:text-amber-400 transition-colors">💾 Backup, segurança e monitoramento</h3>
+        <p class="text-xs text-neutral-400">Backup, keys, incident response</p>
+      </a>
+    </div>
+  </section>
+
+  <h2 class="text-2xl font-bold mb-6">Conteúdo detalhado</h2>
+
+  <div id="modulo-4-1" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold">4.1</span><span class="text-xs text-neutral-500">~45 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">🩺 Diagnóstico e atualização</h3>
+      <p class="text-neutral-400 text-sm">hermes doctor, update, logs, debug, perfis e rollback seguro.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">🩺</span>
+          <div><span class="font-medium">hermes doctor</span><span class="text-neutral-500 text-sm ml-2">- Checagem automática</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Comando que percorre Python, dependências, API keys, permissões de pastas, banco SQLite e conectividade com provedores. Imprime ✓/✗ por checagem.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">90% dos bugs em produção viram triviais quando você roda doctor antes de pedir ajuda. É a primeira coisa a fazer quando algo quebra.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Checks bloqueantes vs avisos, exit code (0=ok, 1=warn, 2=fail), flag <code class="text-amber-400">--verbose</code>, integração com CI.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">⬆️</span>
+          <div><span class="font-medium">hermes update</span><span class="text-neutral-500 text-sm ml-2">- Atualizar com segurança</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Atualizador interno que respeita canais (stable/beta/nightly), faz pin de versão e migra schema do banco quando necessário.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Update mal feito apaga skills, corrompe memória ou quebra integrações. Saber escolher canal e ler changelog evita dor.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Canais (stable, beta, nightly), <code class="text-amber-400">--dry-run</code>, snapshot antes do upgrade, breaking changes no CHANGELOG.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">📋</span>
+          <div><span class="font-medium">Sistema de logs</span><span class="text-neutral-500 text-sm ml-2">- Onde ficam e como ler</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Hermes mantém logs estruturados (JSONL) em <code class="text-amber-400">~/.hermes/logs/</code> (Linux/Mac) ou <code class="text-amber-400">%APPDATA%\hermes\logs\</code> (Windows). Rotação diária, retenção 14 dias.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Logs são o único registro do que o agente fez. Sem ler logs você fica chutando bug. Com logs, debug é metódico.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Níveis (DEBUG/INFO/WARN/ERROR), filtrar com <code class="text-amber-400">jq</code>, correlation_id por sessão, log shipping (Loki, Datadog).</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🐛</span>
+          <div><span class="font-medium">Modo debug</span><span class="text-neutral-500 text-sm ml-2">- DEBUG=1 e além</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Variável <code class="text-amber-400">HERMES_DEBUG=1</code> ativa logs verbose, dump de prompts, traces de chamadas a tools e exibição do raciocínio (chain-of-thought) quando disponível.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem debug você vê o efeito, não a causa. Com debug você vê exatamente qual prompt foi enviado, qual tool falhou e por quê.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Variáveis HERMES_TRACE, HERMES_PROFILE, sanitização de tokens em dumps, debug seletivo por módulo.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">⚡</span>
+          <div><span class="font-medium">Performance</span><span class="text-neutral-500 text-sm ml-2">- Latência, tokens, cache</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Tuning de latência (provedor, modelo, streaming), gestão de janela de contexto, cache de prompt e de embeddings.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem performance, agente fica caro e lento. Cache certo derruba custo em 60-80%.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Prompt caching, p50/p95, time-to-first-token, batching, RAG eficiente.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🔄</span>
+          <div><span class="font-medium">Rollback</span><span class="text-neutral-500 text-sm ml-2">- Desfazendo update problemático</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Mecanismo para voltar à versão anterior preservando memória e skills. Cada update grava snapshot em <code class="text-amber-400">~/.hermes/snapshots/</code>.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Update ruim acontece. Saber reverter em 30 segundos é a diferença entre incidente e catástrofe.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm"><code class="text-amber-400">hermes rollback --to LAST</code>, snapshot ID, migração reversa de schema, retenção de snapshots.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-4-1')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-4-1.html" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
+  <div id="modulo-4-2" class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+    <div class="p-6 border-b border-dark-600">
+      <div class="flex items-center justify-between mb-2"><span class="text-amber-400 font-bold">4.2</span><span class="text-xs text-neutral-500">~45 min</span></div>
+      <h3 class="text-2xl font-bold mb-2">💾 Backup, segurança e monitoramento</h3>
+      <p class="text-neutral-400 text-sm">Backup, recuperação, gestão de keys, isolamento e observabilidade.</p>
+    </div>
+    <div class="divide-y divide-dark-600">
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span class="text-lg">💾</span>
+          <div><span class="font-medium">Backup de memória</span><span class="text-neutral-500 text-sm ml-2">- DB SQLite + skills</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Empacotar <code class="text-amber-400">~/.hermes/</code> (memória SQLite + skills + configs) em um tarball cifrado.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Perder memória é perder o agente que você treinou por meses. Backup vira investimento.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm"><code class="text-amber-400">VACUUM INTO</code> no SQLite (backup hot), cifragem com <code class="text-amber-400">age</code>, frequência (diário) e teste de restore.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+          <span class="text-lg">🔄</span>
+          <div><span class="font-medium">Recuperação</span><span class="text-neutral-500 text-sm ml-2">- Restaurar em outra máquina</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Procedimento para subir Hermes do zero em outra máquina/SO usando o backup.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Backup que não foi testado não existe. Restore é o teste real.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Paths diferentes por SO, recompilação de venv, migração de schema, sanity check com <code class="text-amber-400">hermes doctor</code>.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+          <span class="text-lg">🔐</span>
+          <div><span class="font-medium">Gestão de API keys</span><span class="text-neutral-500 text-sm ml-2">- Rotação e secrets manager</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Tirar keys de <code class="text-amber-400">.env</code> e mover para password-store (<code class="text-amber-400">pass</code>), 1Password CLI, AWS Secrets Manager ou Vault.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Key vazada em repo público é incidente comum e caro. Rotação automática protege.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Princípio do menor privilégio, rotação ≤90 dias, escopo por projeto, scan de segredos (gitleaks).</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+          <span class="text-lg">🛡️</span>
+          <div><span class="font-medium">Isolamento</span><span class="text-neutral-500 text-sm ml-2">- sandbox e containers</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Rodar Hermes dentro de container Docker/Podman ou sandbox com firejail/bubblewrap para limitar o que tools podem ler/escrever.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Agente com shell e sem sandbox é arma carregada. Isolamento contém estrago de prompt injection.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Volumes read-only, seccomp, network namespaces, allowlist de domínios.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+          <span class="text-lg">📊</span>
+          <div><span class="font-medium">Monitoramento</span><span class="text-neutral-500 text-sm ml-2">- Métricas, alertas, custos</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Métricas (Prometheus/OpenTelemetry), alertas (PagerDuty, ntfy) e dashboards de custo do provedor LLM.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Sem monitor, surpresa de fatura de US$ 800 vira regra. Com monitor, vira anomalia detectada.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">SLI/SLO, budget de tokens, taxa de erro por tool, alertas por threshold de custo diário.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topic-item">
+        <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+          <span class="text-lg">🚨</span>
+          <div><span class="font-medium">Incident response</span><span class="text-neutral-500 text-sm ml-2">- Quando dá ruim</span></div>
+        </button>
+        <div class="topic-explanation px-6 pb-4">
+          <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+            <div><span class="text-amber-400 font-semibold">O que é:</span> <p class="text-neutral-300 text-sm">Playbook para incidentes: key vazada, fatura disparada, loop infinito, memória corrompida.</p></div>
+            <div><span class="text-amber-400 font-semibold">Por que aprender:</span> <p class="text-neutral-300 text-sm">Em incidente, decisão sob pressão tende ao erro. Playbook escrito vira piloto automático.</p></div>
+            <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span> <p class="text-neutral-300 text-sm">Contenção, erradicação, recuperação, post-mortem blame-free, runbooks versionados.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+      <button onclick="openModal('modal-4-2')" class="px-4 py-2 text-sm bg-dark-600 hover:bg-dark-500 rounded-lg transition-colors">Ver em Modal</button>
+      <a href="modulo-4-2.html" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors">Ver Completo</a>
+    </div>
+  </div>
+
+</main>
+
+<div id="modal-4-1" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-amber-400 font-bold">4.1</span><span class="font-semibold">Diagnóstico e atualização</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-4-1.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<div id="modal-4-2" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80" onclick="if(event.target === this) closeModal()">
+  <div class="bg-dark-800 rounded-xl w-full max-w-6xl h-[95vh] flex flex-col border border-dark-600">
+    <div class="p-4 border-b border-dark-600 flex justify-between items-center flex-shrink-0">
+      <div class="flex items-center space-x-3"><span class="text-amber-400 font-bold">4.2</span><span class="font-semibold">Backup, segurança e monitoramento</span></div>
+      <button onclick="closeModal()" class="text-neutral-400 hover:text-white text-2xl leading-none">&times;</button>
+    </div>
+    <iframe src="modulo-4-2.html" class="flex-1 w-full rounded-b-xl"></iframe>
+  </div>
+</div>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>

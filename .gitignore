@@ -1,0 +1,4 @@
+.build-instructions.md
+.claude/
+.DS_Store
+*.log

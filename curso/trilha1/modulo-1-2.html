@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 1.2 — Quando usar Hermes Agent | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .bg-emerald-500\/10 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:bg-emerald-500\/30:hover { background-color: rgba(5,150,105,0.18); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-emerald-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-emerald-400">Trilha 1</a><span>/</span>
+    <span class="text-emerald-400">Módulo 1.2</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">MÓDULO 1.2</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎯 Quando usar Hermes Agent</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Casos de uso reais, comparação de custos via OpenRouter, multi-canal nativo e — sobretudo — limitações honestas que os fanboys evitam contar.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">~45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Básico</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Prática</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- TÓPICO 1: Casos de uso -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">💼 Casos de uso — Pesquisa, automação pessoal, devops</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Hermes Agent rende mais quando a tarefa tem <strong class="text-emerald-400">múltiplas etapas, atravessa fontes diferentes e se beneficia de memória</strong>. Três frentes onde ele costuma compensar o investimento de setup:</p>
+
+    <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">🔍</span> Frente 1 — Pesquisa profunda</h3>
+      <p class="text-neutral-300 mb-4">Você pede "compare arquiteturas de RAG e me indique a melhor para 50k documentos jurídicos". O agente busca, lê, sintetiza, salva fontes e da próxima vez já sabe seu domínio.</p>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Multi-step: busca + sumarização + ranqueamento</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Memória de contexto: lembra que você é da área jurídica</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Fontes citadas via skill "research" do agentskills.io</span></li>
+      </ul>
+    </div>
+
+    <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">📅</span> Frente 2 — Automação pessoal</h3>
+      <p class="text-neutral-300 mb-4">"Toda segunda, me mande no Telegram o resumo dos PRs abertos e abra issue no GitHub para os que estão sem revisor há mais de 3 dias."</p>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Roda em VPS ou desktop ligado</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Aciona ferramentas (GitHub API, Telegram)</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Pode pedir confirmação antes de agir</span></li>
+      </ul>
+    </div>
+
+    <div class="bg-gradient-to-br from-emerald-900/30 to-dark-800 rounded-xl border border-emerald-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-emerald-400 mb-4 flex items-center"><span class="mr-2">🛠️</span> Frente 3 — Devops leve</h3>
+      <p class="text-neutral-300 mb-4">"Olha o uso de CPU dos containers, se algum passou de 80% por mais de 5 minutos, escala e me avisa." Não substitui Prometheus, mas substitui scripts soltos.</p>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Executa comandos via skill "shell" (com sandbox)</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Lê logs e correlaciona com mudança recente</span></li>
+        <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-1">•</span><span>Confirma ação destrutiva em canal humano</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TÓPICO 2: Custo via OpenRouter -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">💰 Custo via OpenRouter — Uma chave, todos os modelos</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Em vez de manter chave separada em cada provider, o Hermes Agent usa <strong class="text-emerald-400">OpenRouter como hub</strong>. Você abastece um saldo lá e roteia por preço, latência ou capacidade.</p>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Preços típicos (USD por 1M tokens)</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>Claude Sonnet 4.6</strong> — entrada ~$3 / saída ~$15 (raciocínio top, usar com critério)</li>
+        <li><strong>Claude Haiku 4.6</strong> — entrada ~$0.80 / saída ~$4 (default para tarefas curtas)</li>
+        <li><strong>GPT-5</strong> — entrada ~$2.50 / saída ~$10 (excelente para código)</li>
+        <li><strong>Gemini 2.5 Pro</strong> — entrada ~$1.25 / saída ~$5 (janela de contexto enorme)</li>
+        <li><strong>Llama 4 Scout (free)</strong> — $0 com rate limit (rascunho/draft)</li>
+        <li><strong>Qwen 3 Coder</strong> — entrada ~$0.30 / saída ~$1.50 (ótimo custo-benefício)</li>
+      </ul>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># config.yaml — roteamento por tipo de tarefa
+models:
+  default: anthropic/claude-haiku-4.6     # rápido e barato
+  reasoning: anthropic/claude-sonnet-4.6  # tarefas longas
+  code: openai/gpt-5                      # geração de código
+  draft: meta-llama/llama-4-scout:free    # rascunhos sem custo
+  long_context: google/gemini-2.5-pro     # &gt;200k tokens
+
+# o agente escolhe o modelo conforme a skill ativa
+$ hermes chat --task reasoning "explique implicações do PL 2630"</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Regra de bolso</h3>
+      <p class="text-neutral-300">Comece com <strong>Haiku/Qwen como default</strong> e suba para Sonnet/GPT-5 só quando o resultado vier ruim. Em uso pessoal típico (50 mensagens/dia), espere gastar entre <strong>USD 3 e USD 15 por mês</strong>.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 3: Multi-canal -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">📱 Multi-canal nativo — Telegram, Discord, Slack, WhatsApp</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">O grande "ahá" do Hermes Agent aparece quando você liga o <strong class="text-emerald-400">primeiro canal externo</strong>. De repente o agente está no seu bolso, no Slack do trabalho e no Discord do grupo de estudos — todos compartilhando a mesma memória.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Canais que valem ligar cedo</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>Telegram</strong> — setup mais simples (BotFather), ótimo no celular</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>CLI local</strong> — sempre disponível, baseline de teste</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>Discord</strong> — bom para uso compartilhado em servidor</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span><strong>Slack</strong> — se a empresa já usa</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ Canais que não vale a pena no início</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>WhatsApp Business API</strong> — burocracia da Meta, custo alto</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>SMS</strong> — caro e sem rich content</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>Email</strong> — latência alta, threading complica</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>Voz (Whisper)</strong> — exige infra extra</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Conectando Telegram em 30 segundos
+$ hermes channel add telegram \
+    --token 1234567890:AAEt6ZJ...your_bot_token \
+    --user @seu_handle
+
+# A memória é compartilhada entre canais por padrão.
+# Para isolar contextos (ex: trabalho vs pessoal):
+$ hermes channel add slack --token xoxb-... --memory-scope work
+$ hermes channel add telegram --token ... --memory-scope personal</code></pre>
+    </div>
+  </section>
+
+  <!-- TÓPICO 4: Aprendizado autônomo -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🧠 Aprendizado autônomo — Cria skills sozinho</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">A funcionalidade mais distintiva: quando você repete um pedido três vezes, o agente <strong class="text-emerald-400">propõe transformar aquilo numa skill durável</strong>. Você aprova, ele salva no diretório local e da próxima vez aciona com um comando.</p>
+
+    <h3 class="text-xl font-bold mb-4">Como o ciclo funciona</h3>
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Detecção de padrão</h4>
+          <p class="text-sm text-neutral-400 mb-3">A cada N turnos, o agente analisa a memória recente</p>
+          <p class="text-neutral-300 text-sm">Se identifica repetição ("você pediu resumo de PRs 3x esta semana"), gera uma proposta.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Proposta humana</h4>
+          <p class="text-sm text-neutral-400 mb-3">Skill rascunho com nome, descrição e instruções</p>
+          <p class="text-neutral-300 text-sm">Você aprova, edita ou descarta. Nada é instalado sem consentimento explícito.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Registro local</h4>
+          <p class="text-sm text-neutral-400 mb-3">Skill salva em ~/.hermes/skills/</p>
+          <p class="text-neutral-300 text-sm">Arquivo SKILL.md versionável, fácil de editar à mão e — se quiser — publicar no agentskills.io.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">4</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Uso recorrente</h4>
+          <p class="text-sm text-neutral-400 mb-3">Triggers descritos na própria skill</p>
+          <p class="text-neutral-300 text-sm">Quando você pede algo parecido, a skill carrega automática e dá ao modelo o contexto exato.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Cuidado com skill bloat</h3>
+      <p class="text-neutral-300">Aceitar toda sugestão polui o diretório e atrapalha o trigger. Aprove só quando for algo que você realmente vai repetir. Faça revisão mensal com <code>hermes skill audit</code>.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 5: Quando NÃO usar -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">🚫 Quando NÃO usar — Limitações honestas</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Hermes Agent <strong class="text-emerald-400">não é mágico</strong>. Algumas situações em que outra ferramenta vence ele com sobras — saber disso poupa frustração.</p>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Atenção — Cenários onde Hermes perde</h3>
+      <p class="text-neutral-300 mb-4">Antes de forçar a barra, considere:</p>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-red-400 mt-1">•</span><span><strong>Refactor grande em monorepo</strong> — Cursor/Claude Code com indexação semântica ganham.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400 mt-1">•</span><span><strong>Fluxos visuais sem código</strong> — n8n, Make.com, Zapier resolvem com menos setup.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400 mt-1">•</span><span><strong>Compliance pesado / auditoria</strong> — ferramentas enterprise (Azure AI Studio etc.) já vêm com trilha pronta.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400 mt-1">•</span><span><strong>Chatbot público de alto volume</strong> — você quer um SaaS managed, não rodar agente no seu servidor.</span></li>
+        <li class="flex items-start space-x-2"><span class="text-red-400 mt-1">•</span><span><strong>Tarefa de 1 minuto</strong> — abrir o ChatGPT no navegador é mais rápido que configurar skill.</span></li>
+      </ul>
+    </div>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Custo escondido a considerar</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>Setup inicial</strong> — 2 a 4 horas até primeira automação fluir</li>
+        <li><strong>Curadoria de skills</strong> — 15 a 30 min por semana</li>
+        <li><strong>Hospedagem</strong> — VPS de USD 5/mês se quiser 24/7 (Hetzner, DigitalOcean)</li>
+        <li><strong>Comunidade menor</strong> — busca no Google ainda traz menos resultados que para Cursor/Claude Code</li>
+      </ul>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Vale a pena se você</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Gosta de configurar e ter controle</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Tem 5+ tarefas repetitivas por semana</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Já paga pelo menos USD 20/mês em IA</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Vive entre vários canais de mensagem</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ Não vale a pena se você</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Quer só "perguntar coisas pro ChatGPT"</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Não tem paciência para YAML/CLI</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Precisa de SLA contratado</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Trabalha em ambiente regulado sem aval de segurança</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TÓPICO 6: Roadmap pessoal -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🛣️ Roadmap pessoal — Por onde começar</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Para evitar o "tudo ao mesmo tempo agora" — onde 80% desiste no quinto dia — siga esta <strong class="text-emerald-400">sequência de 30 dias</strong>:</p>
+
+    <h3 class="text-xl font-bold mb-4">Roteiro recomendado</h3>
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">D1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Dia 1 — Instalar e conversar</h4>
+          <p class="text-sm text-neutral-400 mb-3">Setup mínimo viável</p>
+          <p class="text-neutral-300 text-sm"><code>pip install hermes-agent</code> → <code>hermes setup</code> → chave OpenRouter → 30 min de conversa CLI para sentir o produto.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">S1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Semana 1 — Primeiro canal externo</h4>
+          <p class="text-sm text-neutral-400 mb-3">Vitória rápida visível</p>
+          <p class="text-neutral-300 text-sm">Ligar Telegram. Mandar mensagens do celular e ver responder. É aqui que a maioria "compra a ideia".</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">S2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Semana 2 — Sua primeira skill</h4>
+          <p class="text-sm text-neutral-400 mb-3">Curva de aprendizado real</p>
+          <p class="text-neutral-300 text-sm">Aceitar a primeira sugestão de skill, ou escrever uma pequena à mão. Ex: "resumir e-mail" ou "agendar tarefa no Todoist".</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">S3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Semana 3 — Deploy estável</h4>
+          <p class="text-sm text-neutral-400 mb-3">Sai do laptop, vai pro servidor</p>
+          <p class="text-neutral-300 text-sm">Subir em VPS (USD 5/mês), configurar systemd ou Docker. Agora ele responde mesmo com seu computador desligado.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center"><span class="text-emerald-400 font-bold">S4</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Semana 4 — Memória de longo prazo</h4>
+          <p class="text-sm text-neutral-400 mb-3">Honcho entra em cena</p>
+          <p class="text-neutral-300 text-sm">Configurar Honcho (local ou cloud) para memória durável. Aqui o agente vira "ele me conhece" em vez de "ele só sabe desta sessão".</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Métrica de sucesso aos 30 dias</h3>
+      <p class="text-neutral-300">No final do mês você deve conseguir descrever <strong>uma rotina sua que mudou por causa do agente</strong>. Se não consegue, refaça o roteiro — provavelmente pulou a Semana 2 (que é a mais difícil e a mais importante).</p>
+    </div>
+  </section>
+
+  <!-- Resumo final -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Três frentes nobres:</strong> <span class="text-neutral-300">pesquisa profunda, automação pessoal e devops leve. Fora delas, considere alternativa.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">OpenRouter é o atalho de custo:</strong> <span class="text-neutral-300">uma chave dá acesso a 200+ modelos, com gasto típico de USD 3–15/mês.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Telegram primeiro, WhatsApp depois:</strong> <span class="text-neutral-300">menos burocracia, mais experiência rápida.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Skills automáticas exigem curadoria:</strong> <span class="text-neutral-300">aceitar tudo polui; reveja mensalmente.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Não use em refactor pesado nem em compliance estrito:</strong> <span class="text-neutral-300">há ferramentas melhores para esses cenários.</span></div></div>
+        <div class="flex items-start space-x-3"><span class="text-emerald-400 text-xl">✓</span><div><strong class="text-white">Roadmap de 30 dias:</strong> <span class="text-neutral-300">instalar (D1) → canal externo (S1) → primeira skill (S2) → VPS (S3) → Honcho (S4).</span></div></div>
+      </div>
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+        <h3 class="font-semibold text-emerald-400 mb-2">Próxima trilha:</h3>
+        <p class="text-neutral-300">Trilha 2 — Arquitetura Interna. Vamos abrir a caixa preta: como o loop de raciocínio se encaixa com Honcho, skills e channel adapters.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+        <a href="../trilha2/index.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">Próxima Trilha →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+
+</body>
+</html>

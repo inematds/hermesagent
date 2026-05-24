@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 4.1 — Diagnóstico e atualização | Hermes Agent</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } } }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(217,119,6,0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(217,119,6,0.25); }
+    html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(217,119,6,0.18); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(217,119,6,0.08); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0d9488; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(225,29,72,0.08); }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-900\/20 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .text-red-400 { color: #dc2626; }
+    html:not(.dark) .bg-red-900\/20 { background-color: rgba(220,38,38,0.08); }
+    html:not(.dark) .border-red-500\/30 { border-color: rgba(220,38,38,0.25); }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-900\/20 { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .border-primary\/30 { border-color: rgba(161,98,7,0.20); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+    .dark .border-dark-600 { border-color: #374151; }
+    .dark .divide-dark-600 > :not([hidden]) ~ :not([hidden]) { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+<nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-14">
+      <div class="flex items-center space-x-4">
+        <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+          <span class="text-2xl">🪽</span>
+          <span class="font-bold text-lg hidden sm:inline">Hermes Agent</span>
+        </a>
+        <span class="text-neutral-600">|</span>
+        <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+      </div>
+      <div class="flex items-center space-x-1 sm:space-x-2">
+        <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+        <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Arquitetura</span></a>
+        <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Instalação</span></a>
+        <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Manutenção</span></a>
+        <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Deploy</span></a>
+        <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Extensão</span></a>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <div class="flex items-center space-x-2 text-sm text-neutral-400">
+    <a href="../../index.html" class="hover:text-amber-400">Início</a><span>/</span>
+    <a href="index.html" class="hover:text-amber-400">Trilha 4</a><span>/</span>
+    <span class="text-amber-400">Módulo 4.1</span>
+  </div>
+</nav>
+
+<header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MÓDULO 4.1</span>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4">🩺 Diagnóstico e atualização</h1>
+    <p class="text-lg text-neutral-400 max-w-3xl">Antes de pedir socorro, rode <code class="text-amber-400">hermes doctor</code>. Antes de atualizar, leia o changelog. Antes de debugar no escuro, ative <code class="text-amber-400">HERMES_DEBUG=1</code>. Este módulo cobre as ferramentas de diagnóstico, o ciclo de update seguro, a leitura prática de logs e o rollback quando algo dá errado.</p>
+    <div class="grid grid-cols-4 gap-4 mt-8 max-w-2xl">
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">~45</div><div class="text-xs text-neutral-400">Minutos</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Médio</div><div class="text-xs text-neutral-400">Nível</div></div>
+      <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Ops</div><div class="text-xs text-neutral-400">Tipo</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- TÓPICO 1 -->
+  <section id="topico-1" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+      <h2 class="text-2xl font-bold">🩺 hermes doctor — Checagem automática</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">O <strong class="text-amber-400">hermes doctor</strong> é a primeira ferramenta de qualquer plantão. Em poucos segundos ele audita Python, dependências, API keys, permissões do diretório <code class="text-amber-400">~/.hermes/</code>, integridade do SQLite e conectividade com cada provedor LLM configurado. Cada item sai com ✓ (ok), ⚠ (aviso) ou ✗ (falha).</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code>$ hermes doctor
+Hermes Agent v0.9.4 — diagnóstico
+
+[ENVIRONMENT]
+  ✓ Python 3.11.7 (>= 3.10 required)
+  ✓ Virtualenv ativo: ~/.hermes/venv
+  ✓ Plataforma: Linux 6.14.0 (x86_64)
+
+[CONFIG]
+  ✓ Config carregada de ~/.hermes/config.yaml
+  ✓ Perfil ativo: prod
+  ⚠ HERMES_LOG_LEVEL não definida (usando INFO)
+
+[CREDENTIALS]
+  ✓ OPENROUTER_API_KEY presente (sk-or-v1-...c4a2)
+  ✓ ANTHROPIC_API_KEY presente (sk-ant-...9e10)
+  ✗ TAVILY_API_KEY ausente — skill 'web_search' não funcionará
+
+[STORAGE]
+  ✓ ~/.hermes/ permissões OK (700)
+  ✓ memory.db íntegro (PRAGMA integrity_check)
+  ✓ Espaço livre: 47 GiB
+
+[CONNECTIVITY]
+  ✓ openrouter.ai respondendo (142 ms)
+  ✓ api.anthropic.com respondendo (98 ms)
+
+[SKILLS]
+  ✓ 14 skills instaladas, 0 com manifest inválido
+
+Resultado: 2 avisos, 1 falha. Exit 2.</code></pre>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ O que FAZER</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Rodar <code class="text-amber-400">hermes doctor</code> antes de qualquer <code class="text-amber-400">hermes update</code>.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Tratar <strong>exit 2</strong> como bloqueante em CI (<code class="text-amber-400">|| exit 1</code>).</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Anexar saída do doctor ao abrir issue no GitHub.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Rodar com <code class="text-amber-400">--verbose</code> quando algum check falhar.</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ O que NÃO fazer</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Ignorar ⚠ avisos — viram ✗ falhas em pouco tempo.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Editar <code class="text-amber-400">~/.hermes/</code> com <code class="text-amber-400">sudo</code> e quebrar as permissões 700.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Pular doctor "porque ontem funcionava".</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Postar a saída pública com a key inteira — só os últimos 4 chars.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica</h3>
+      <p class="text-neutral-300">No seu <code class="text-amber-400">~/.bashrc</code> / <code class="text-amber-400">~/.zshrc</code> coloque um alias: <code class="text-amber-400">alias hdoc='hermes doctor --verbose | tee ~/.hermes/last-doctor.log'</code>. Toda execução vira evidência arquivada.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 2 -->
+  <section id="topico-2" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+      <h2 class="text-2xl font-bold">⬆️ hermes update — Atualizar com segurança</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Update no Hermes não é só <code class="text-amber-400">pip install -U</code>. O comando <strong class="text-amber-400">hermes update</strong> respeita o <strong>canal</strong> configurado (stable, beta, nightly), tira <strong>snapshot</strong> antes de mexer, aplica <strong>migração de schema</strong> do banco de memória quando necessário e revalida as skills instaladas. Update certo é update boring.</p>
+
+    <div class="bg-gradient-to-br from-amber-900/30 to-dark-800 rounded-xl border border-amber-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-amber-400 mb-4 flex items-center"><span class="mr-2">💡</span> Fluxo recomendado de upgrade</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span>Rodar <code class="text-amber-400">hermes doctor</code> (estado base limpo)</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span>Fazer backup (<code class="text-amber-400">hermes backup create</code>)</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><code class="text-amber-400">hermes update --channel stable --dry-run</code> (ver o plano)</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span>Ler CHANGELOG na URL impressa</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><code class="text-amber-400">hermes update --channel stable</code> (executar)</span></li>
+        <li class="flex items-start space-x-2"><span class="text-amber-400 mt-1">•</span><span><code class="text-amber-400">hermes doctor</code> de novo (validar)</span></li>
+      </ul>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code>$ hermes update --channel stable --dry-run
+[DRY-RUN] Canal: stable
+  Atual:  0.9.4
+  Alvo:   0.9.7
+  Snapshot que será criado: snap-2026-05-24T14-03Z
+  Migrações de schema: memory.db v7 → v8 (adiciona índice em conversations.thread_id)
+  Skills afetadas: 0 (todas compatíveis)
+  Breaking changes: ver https://hermes-agent.nousresearch.com/docs/changelog#0-9-7
+
+Use sem --dry-run para aplicar.
+
+$ hermes update --channel stable
+[1/5] Snapshot criado em ~/.hermes/snapshots/snap-2026-05-24T14-03Z (12 MiB)
+[2/5] Baixando 0.9.7 ......... OK
+[3/5] Migrando memory.db v7 → v8 ......... OK
+[4/5] Revalidando skills ......... 14/14 OK
+[5/5] Reinstalando comando ......... OK
+Atualizado para 0.9.7. Rode 'hermes doctor' para validar.</code></pre>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Atenção: não atualize durante sessão ativa</h3>
+      <p class="text-neutral-300">Update fecha conexões e migra schema. Se houver uma sessão de agente rodando em outro terminal, ela vai falhar no meio com erro de banco. Finalize sessões abertas antes de <code class="text-amber-400">hermes update</code>.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 3 -->
+  <section id="topico-3" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+      <h2 class="text-2xl font-bold">📋 Sistema de logs — Onde ficam e como ler</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Hermes escreve <strong class="text-amber-400">logs estruturados JSONL</strong>: cada linha é um JSON com <code class="text-amber-400">ts</code>, <code class="text-amber-400">level</code>, <code class="text-amber-400">module</code>, <code class="text-amber-400">correlation_id</code> e <code class="text-amber-400">msg</code>. Rotação diária, retenção padrão de 14 dias, configurável em <code class="text-amber-400">config.yaml</code>.</p>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Localização dos logs por SO</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>Linux:</strong> <code class="text-blue-400">~/.hermes/logs/YYYY-MM-DD.jsonl</code></li>
+        <li><strong>macOS:</strong> <code class="text-blue-400">~/Library/Logs/Hermes/YYYY-MM-DD.jsonl</code></li>
+        <li><strong>Windows:</strong> <code class="text-blue-400">%APPDATA%\hermes\logs\YYYY-MM-DD.jsonl</code></li>
+        <li><strong>Docker:</strong> stdout (capturado via <code class="text-blue-400">docker logs</code>)</li>
+      </ul>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Últimos 50 ERROR
+$ jq -c 'select(.level == "ERROR")' ~/.hermes/logs/2026-05-24.jsonl | tail -50
+
+# Todas as linhas de uma sessão específica
+$ jq -c 'select(.correlation_id == "sess_8f3e2a")' ~/.hermes/logs/*.jsonl
+
+# Tempo médio por chamada de tool
+$ jq -r 'select(.event=="tool_call") | "\(.tool) \(.duration_ms)"' \
+    ~/.hermes/logs/2026-05-24.jsonl \
+  | awk '{s[$1]+=$2; n[$1]++} END {for (t in s) print t, s[t]/n[t]"ms"}'
+
+# Streaming em tempo real
+$ tail -f ~/.hermes/logs/$(date +%F).jsonl | jq .</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — shipping para Loki</h3>
+      <p class="text-neutral-300">Para times com mais de uma máquina, vale subir <strong>Grafana Loki</strong> e apontar um Promtail para <code class="text-amber-400">~/.hermes/logs/</code>. Você ganha busca cross-host e dashboards em minutos. Alternativas: Datadog, Elastic, ou um simples <code class="text-amber-400">vector.dev</code>.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 4 -->
+  <section id="topico-4" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+      <h2 class="text-2xl font-bold">🐛 Modo debug — DEBUG=1 e além</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Quando o agente "faz coisa estranha", você precisa ver o <strong class="text-amber-400">prompt exato</strong> que foi enviado e a <strong class="text-amber-400">resposta crua</strong> do LLM. As variáveis de ambiente abaixo abrem o capô.</p>
+
+    <div class="space-y-6 mb-6">
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-amber-400 font-bold">1</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Sintoma</h4>
+          <p class="text-sm text-neutral-400 mb-3">Usuário relata: "o agente respondeu em inglês mesmo eu pedindo PT-BR"</p>
+          <p class="text-neutral-300 text-sm">Sem debug, você ficaria adivinhando se foi a system prompt, o modelo, ou um tool injetando texto.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-amber-400 font-bold">2</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Ativar debug e reproduzir</h4>
+          <p class="text-sm text-neutral-400 mb-3"><code class="text-amber-400">HERMES_DEBUG=1 HERMES_TRACE=prompts hermes chat</code></p>
+          <p class="text-neutral-300 text-sm">Agora cada prompt enviado vira um bloco no log, com system, contexto, ferramentas e mensagem do usuário.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-amber-400 font-bold">3</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Achar a causa</h4>
+          <p class="text-sm text-neutral-400 mb-3">Log mostra: skill <code class="text-amber-400">web_search</code> injetou contexto com "Reply in English"</p>
+          <p class="text-neutral-300 text-sm">A skill veio do marketplace com um template hardcoded em inglês. Causa identificada em 3 minutos, não em 3 horas.</p>
+        </div>
+      </div>
+      <div class="flex items-start space-x-4">
+        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center"><span class="text-amber-400 font-bold">4</span></div>
+        <div class="flex-1 bg-dark-800 rounded-xl p-6 border border-dark-600">
+          <h4 class="font-semibold text-white mb-2">Fix e validação</h4>
+          <p class="text-sm text-neutral-400 mb-3">Override do template em <code class="text-amber-400">~/.hermes/skills/web_search/overrides.yaml</code></p>
+          <p class="text-neutral-300 text-sm">Reproduzir o caso, conferir o novo prompt com debug ainda ativo, depois desligar a variável em produção.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-red-400 mb-3 flex items-center"><span class="mr-2">⚠️</span> Atenção</h3>
+      <p class="text-neutral-300">Logs em modo debug podem conter <strong>conteúdo de mensagens</strong>, <strong>system prompts</strong> e (por padrão) <strong>nomes de tools</strong>. Não envie esses logs por email/chat sem sanitizar. O Hermes mascara tokens nas variáveis sensíveis, mas não inspeciona o corpo das mensagens.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 5 -->
+  <section id="topico-5" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+      <h2 class="text-2xl font-bold">⚡ Performance — Latência, tokens, cache</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Três alavancas dominam custo e latência: <strong class="text-amber-400">escolha de modelo</strong>, <strong class="text-amber-400">tamanho de contexto</strong> e <strong class="text-amber-400">prompt caching</strong>. Ignorar a terceira é deixar 60-80% de economia na mesa.</p>
+
+    <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">📊</span> Dados — impacto típico de cada alavanca</h3>
+      <ul class="space-y-2 text-neutral-300">
+        <li><strong>Prompt caching ativado:</strong> redução de 60-80% no custo de tokens repetidos (system prompt, ferramentas).</li>
+        <li><strong>Streaming on:</strong> TTFB (time-to-first-byte) cai de ~4s para ~600ms percebidos.</li>
+        <li><strong>Janela de contexto enxuta (compactação):</strong> latência p95 cai 30-50% em sessões longas.</li>
+        <li><strong>Modelo certo para a tarefa:</strong> trocar Opus por Haiku em classificação simples corta custo 90%.</li>
+        <li><strong>Batching de embeddings:</strong> 100 docs em 1 chamada vs 100 chamadas = 10× mais rápido.</li>
+      </ul>
+    </div>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code># Ver métricas da última sessão
+$ hermes stats --last
+Sessão sess_8f3e2a (42 min)
+  Turnos:           38
+  Tokens entrada:   184.3k (cache hit: 71%)
+  Tokens saída:     12.8k
+  Latência p50:     820ms
+  Latência p95:     2.4s
+  Custo total:      US$ 0.34
+  Tools chamadas:   web_search(4) read_file(11) write_file(2)</code></pre>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — perfis por carga</h3>
+      <p class="text-neutral-300">Crie perfis em <code class="text-amber-400">~/.hermes/profiles/</code>: um <code class="text-amber-400">fast.yaml</code> com modelo barato + janela curta para classificação, e um <code class="text-amber-400">deep.yaml</code> com modelo top + ferramentas completas para investigação. Use <code class="text-amber-400">hermes --profile fast</code> e <code class="text-amber-400">--profile deep</code> conforme a tarefa.</p>
+    </div>
+  </section>
+
+  <!-- TÓPICO 6 -->
+  <section id="topico-6" class="mb-16">
+    <div class="flex items-center space-x-4 mb-6">
+      <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+      <h2 class="text-2xl font-bold">🔄 Rollback — Desfazendo update problemático</h2>
+    </div>
+    <p class="text-neutral-300 mb-6 leading-relaxed">Todo update grava um snapshot em <code class="text-amber-400">~/.hermes/snapshots/</code>. Voltar é uma linha. Snapshots contêm versão dos binários, schema do banco e <strong class="text-amber-400">cópia da memória no momento do upgrade</strong> — você não perde dados gerados depois, eles são re-migrados na direção contrária se possível.</p>
+
+    <div class="bg-dark-900 rounded-xl border border-dark-600 p-4 mb-6 overflow-x-auto">
+      <pre class="text-sm text-emerald-400 font-mono"><code>$ hermes snapshots list
+snap-2026-05-24T14-03Z   v0.9.4 → v0.9.7   12 MiB   hoje 14:03
+snap-2026-05-20T09-12Z   v0.9.3 → v0.9.4   11 MiB   há 4 dias
+snap-2026-05-12T18-44Z   v0.9.0 → v0.9.3   10 MiB   há 12 dias
+
+$ hermes rollback --to LAST --dry-run
+[DRY-RUN] Vai voltar para v0.9.4
+  Memória atual será mesclada com snapshot (3-way merge)
+  Schema migrará v8 → v7 (drop do índice thread_id; sem perda de dados)
+  Skills serão revalidadas contra v0.9.4
+
+$ hermes rollback --to LAST
+Rollback completo. Versão atual: 0.9.4.
+Rode 'hermes doctor' para validar.</code></pre>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h4 class="font-bold text-emerald-400 mb-4">✓ Rollback seguro quando…</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Versão nova quebrou skill crítica</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Latência piorou >2× sem motivo claro</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Schema novo está corrompendo escrita</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Você precisa de tempo para investigar com calma</span></li>
+        </ul>
+      </div>
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h4 class="font-bold text-red-400 mb-4">✗ Rollback NÃO resolve quando…</h4>
+        <ul class="space-y-3 text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Problema é em API key (rollback não muda key)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Provedor LLM está fora do ar</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Banco já estava corrompido antes</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Skill custom foi reescrita depois do snapshot</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-primary/10 rounded-xl border border-primary/30 p-6 mb-6">
+      <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Dica — política de retenção</h3>
+      <p class="text-neutral-300">Padrão guarda os últimos 5 snapshots. Para CI/CD e equipes maiores, ajuste em <code class="text-amber-400">config.yaml</code>: <code class="text-amber-400">snapshots.retain: 20</code>. Disco é barato; reverter para 3 versões atrás é caro sem snapshot.</p>
+    </div>
+  </section>
+
+  <!-- RESUMO -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+      <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> Resumo do Módulo</h2>
+      <div class="space-y-4 mb-8">
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>hermes doctor é o primeiro passo</strong> — em qualquer suspeita, rode antes de qualquer outra ação.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Update tem ritual:</strong> doctor → backup → dry-run → CHANGELOG → executar → doctor de novo.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Logs JSONL</strong> em <code class="text-amber-400">~/.hermes/logs/</code> com <code class="text-amber-400">jq</code> resolvem 80% dos bugs.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>HERMES_DEBUG=1</strong> mostra o prompt exato; é a ferramenta para sair de adivinhação.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Prompt caching + perfis</strong> derrubam custo e latência sem reescrever nada.</div></div>
+        <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">✓</span><div><strong>Rollback existe</strong> e é uma linha — use sem culpa quando o update piorar as coisas.</div></div>
+      </div>
+      <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+        <h3 class="font-semibold text-amber-400 mb-2">Próximo módulo:</h3>
+        <p class="text-neutral-300">4.2 — 💾 Backup, segurança e monitoramento. Como proteger memória, rotar API keys, isolar o agente e detectar incidentes antes que eles virem manchete na fatura.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha</a>
+        <a href="modulo-4-2.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Próximo: 4.2 →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="border-t border-dark-600 py-8 mt-16">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+    <p>Hermes Agent · Curso Completo · INEMA.CLUB · 2026</p>
+  </div>
+</footer>
+
+<script>
+  function toggleTopic(button) {
+    const item = button.closest('.topic-item');
+    const exp = item.querySelector('.topic-explanation');
+    const card = button.closest('.bg-dark-800');
+    card.querySelectorAll('.topic-explanation.active').forEach(e => { if (e !== exp) e.classList.remove('active'); });
+    exp.classList.toggle('active');
+  }
+  function openModal(id) { const m = document.getElementById(id); if (m) { m.classList.remove('hidden'); document.body.style.overflow = 'hidden'; } }
+  function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); document.body.style.overflow = 'auto'; }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  const themeToggle = document.getElementById('theme-toggle');
+  const dIcon = document.getElementById('theme-toggle-dark-icon');
+  const lIcon = document.getElementById('theme-toggle-light-icon');
+  const html = document.documentElement;
+  if (localStorage.getItem('theme') === 'light') { dIcon.classList.remove('hidden'); html.classList.remove('dark'); }
+  else { lIcon.classList.remove('hidden'); }
+  themeToggle.addEventListener('click', () => {
+    dIcon.classList.toggle('hidden'); lIcon.classList.toggle('hidden');
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>
